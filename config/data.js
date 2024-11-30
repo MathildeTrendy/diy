@@ -1,3 +1,5 @@
+// Product data
+
 //function to enable to return the Data
 export const getDiyData = ({ diyId, popular, deal, searchTerm }) => {
   console.log("Inputs:", { diyId, popular, deal, searchTerm });
@@ -39,7 +41,7 @@ export const diyData = [
     quantityAvailable: 35,
     popular: false,
     deal: true,
-    image: require("./../assets/diy/4.png"),
+    image: require("./../assets/diy/diy.png"),
   },
   {
     id: 5,
@@ -74,12 +76,13 @@ export const diyData = [
     image: require("./../assets/diy/6.png"),
   },
 ];
+
 export const onboardingData = [
   {
     id: 1,
     title: "Enjoy All The Finest And Popular Diys",
     summary: "Dette er ikke en vin-app",
-    image: require("./../assets/onboarding/1.jpg"),
+    image: require("./../assets/diy/diy.png"),
   },
   {
     id: 2,
@@ -89,7 +92,7 @@ export const onboardingData = [
   },
   {
     id: 3,
-    title: "Welcome to The Diy App NOT!",
+    title: "Welcome to The Diy App!",
     summary: "Dette er ikke en vin-app",
     image: require("./../assets/onboarding/3.jpg"),
   },
