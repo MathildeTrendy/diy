@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import {
   KeyboardAvoidingView,
-  ScrollView,
+  FlatList,
   StyleSheet,
   Platform,
 } from "react-native";
@@ -16,20 +16,24 @@ const ScrollableMainContainer = ({
 }) => {
   const headerHeight = useContext(HeaderHeightContext);
 
+  // FlatList kræver data, så du kan tilpasse med dummy eller faktisk data.
+  const data = React.Children.toArray(children);
+
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
       keyboardVerticalOffset={headerHeight ?? 0}
     >
-      <ScrollView
+      <FlatList
+        data={data}
+        renderItem={({ item }) => item}
+        keyExtractor={(_, index) => index.toString()}
         style={[{ flex: 1, backgroundColor: colors.primary }, style]}
-        showsVerticalScrollIndicator={false}
         contentContainerStyle={contentContainerStyle}
+        showsVerticalScrollIndicator={false}
         {...props}
-      >
-        {children}
-      </ScrollView>
+      />
     </KeyboardAvoidingView>
   );
 };
