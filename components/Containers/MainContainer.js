@@ -8,7 +8,7 @@ const MainContainer = ({ children, style, ...props }) => {
   return (
     <View
       style={[{ flex: 1, backgroundColor: colors.primary }, style]}
-      {...props}
+      {...props} //spread operator
     >
       <KeyboardAvoidingView
         behavior={onIOS ? "padding" : ""}
