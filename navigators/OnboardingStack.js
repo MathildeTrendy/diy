@@ -38,7 +38,7 @@ const OnboardingStack = () => {
             onPress={completeOnBoarding}
             isLoading={completingOnboarding}
             style={{
-              height: "auto",
+              height: "40",
               width: "auto",
               padding: 10,
               backgroundColor: "transparent",
