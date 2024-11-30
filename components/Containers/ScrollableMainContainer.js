@@ -1,12 +1,11 @@
 import React, { useContext } from "react";
 import {
-  KeyboardAdvoidingView,
+  KeyboardAvoidingView,
   ScrollView,
   StyleSheet,
   Platform,
 } from "react-native";
 import { colors } from "../../config/theme";
-import { onIOS } from "../../config/constants";
 import { HeaderHeightContext } from "@react-navigation/elements";
 
 const ScrollableMainContainer = ({
@@ -18,7 +17,7 @@ const ScrollableMainContainer = ({
   const headerHeight = useContext(HeaderHeightContext);
 
   return (
-    <KeyboardAdvoidingView
+    <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
       keyboardVerticalOffset={useContext(HeaderHeightContext) ?? 0}
@@ -31,7 +30,7 @@ const ScrollableMainContainer = ({
       >
         {children}
       </ScrollView>
-    </KeyboardAdvoidingView>
+    </KeyboardAvoidingView>
   );
 };
 

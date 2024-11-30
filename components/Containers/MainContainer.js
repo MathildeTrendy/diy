@@ -10,13 +10,13 @@ const MainContainer = ({ children, style, ...props }) => {
       style={[{ flex: 1, backgroundColor: colors.primary }, style]}
       {...props}
     >
-      <KeyboardAdvoidingView
+      <KeyboardAvoidingView
         behavior={onIOS ? "padding" : ""}
         style={{ flex: 1 }}
         keyboardVerticalOffset={useContext(HeaderHeightContext) ?? 0}
       >
         {children}
-      </KeyboardAdvoidingView>
+      </KeyboardAvoidingView>
     </View>
   );
 };
