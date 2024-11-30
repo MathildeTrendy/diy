@@ -1,23 +1,54 @@
-import { StyleSheet, View } from "react-native";
-import { StyledText } from "../components";
+import { StyleSheet, View, FlatList } from "react-native";
+import {
+  StyledText,
+  ScrollableMainContainer,
+  SectionHeader,
+  DisplayCard,
+} from "../components";
 import { getWineData } from "../config/data";
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <StyledText big>Wine app</StyledText>
-      <StyledText big>
-        {getWineData({ searchTerm: "Sweet", popular: true }).length}
-      </StyledText>
-    </View>
+    <ScrollableMainContainer contenContainerStyle={styles.container}>
+      <SectionHeader style={styles.header}>Current Deals</SectionHeader>
+
+      <FlatList 
+      data={getWineData({ deal: true})}
+      renderItem={(item) => <DisplayCard {...item}></DisplayCard> item.id.toString()}
+      keyExtractor={(item) => item.id.toString()}
+
+    />
+
+    <SectionHeader
+      style={styles.header}
+      rightText="View all"
+      rightTextOnPress={() => {}}
+      
+    >  
+      Popular
+      </SectionHeader>
+
+      <SectionHeader
+      style={styles.header}
+      rightText="View all"
+      rightTextOnPress={() => {}}
+
+    >
+      Our Collection
+      </SectionHeader>  
+    </ScrollableMainContainer>  
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    paddingTop: 5,
+    paddingBottom: 25,
+ 
+  },
+  header: {
+    paddingHorizontal: 25,
+    marginTop: 20,
+    marginBottom: 15,
   },
 });
