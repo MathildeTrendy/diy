@@ -5,8 +5,14 @@ import { colors } from "../../config/theme";
 
 //se produktdetaljer
 const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
+  console.log({ id, name, origin, year, currency, price, image });
+
+  const handleOnPress = () => {
+    alert(id);
+  };
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleOnPress}>
       <View style={styles.details}>
         <StyledText style={StyleSheet.text} big numberOfLines={2}>
           {name}
