@@ -12,15 +12,15 @@ import { storeData } from "../utils/storage";
 const Stack = createStackNavigator();
 
 const OnboardingStack = () => {
-  const { setIsWineAppOnboarded } = useContext(OnboardingContext);
+  const { setIsDiyAppOnboarded } = useContext(OnboardingContext);
   const [completingOnboarding, setCompletingOnboarding] = useState(false);
 
   const completeOnBoarding = async () => {
     try {
       setCompletingOnboarding(true);
-      await storeData("@WineApp:Onboarding", true);
+      await storeData("@DiyApp:Onboarding", true);
 
-      setIsWineAppOnboarded(true);
+      setIsDiyAppOnboarded(true);
     } catch (error) {
       console.warn(error);
     } finally {

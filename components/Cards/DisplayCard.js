@@ -3,7 +3,8 @@ import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
 
-const DisplayCard = ({ name, origin, year, currency, price, image }) => {
+//se produktdetaljer
+const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.details}>
