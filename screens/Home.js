@@ -9,34 +9,30 @@ import { getWineData } from "../config/data";
 
 export default function App() {
   return (
-    <ScrollableMainContainer contenContainerStyle={styles.container}>
+    <ScrollableMainContainer contentContainerStyle={styles.container}>
       <SectionHeader style={styles.header}>Current Deals</SectionHeader>
 
-      <FlatList 
-      data={getWineData({ deal: true})}
-      renderItem={(item) => <DisplayCard {...item}></DisplayCard> item.id.toString()}
-      keyExtractor={(item) => item.id.toString()}
-
-    />
-
-    <SectionHeader
-      style={styles.header}
-      rightText="View all"
-      rightTextOnPress={() => {}}
-      
-    >  
-      Popular
+      <FlatList
+        data={getWineData({ deal: true })}
+        renderItem={({ item }) => <DisplayCard {...item}></DisplayCard>}
+        keyExtractor={(item) => item.id.toString()}
+      />
+      <SectionHeader
+        style={styles.header}
+        rightText="View all"
+        rightTextOnPress={() => {}}
+      >
+        Popular
       </SectionHeader>
 
       <SectionHeader
-      style={styles.header}
-      rightText="View all"
-      rightTextOnPress={() => {}}
-
-    >
-      Our Collection
-      </SectionHeader>  
-    </ScrollableMainContainer>  
+        style={styles.header}
+        rightText="View all"
+        rightTextOnPress={() => {}}
+      >
+        Our Collection
+      </SectionHeader>
+    </ScrollableMainContainer>
   );
 }
 
@@ -44,7 +40,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 5,
     paddingBottom: 25,
- 
   },
   header: {
     paddingHorizontal: 25,
