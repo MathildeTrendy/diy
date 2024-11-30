@@ -38,7 +38,7 @@ export const diyData = [
       "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
     quantityAvailable: 35,
     popular: false,
-    deal: false,
+    deal: true,
     image: require("./../assets/diy/4.png"),
   },
   {
@@ -54,7 +54,7 @@ export const diyData = [
       "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
     quantityAvailable: 35,
     popular: true,
-    deal: false,
+    deal: true,
     image: require("./../assets/diy/5.png"),
   },
   {
@@ -70,7 +70,7 @@ export const diyData = [
       "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
     quantityAvailable: 35,
     popular: false,
-    deal: false,
+    deal: true,
     image: require("./../assets/diy/6.png"),
   },
 ];

@@ -1,0 +1,1 @@
+{"version":3,"file":"polyfill.js","sourceRoot":"","sources":["../src/polyfill.ts"],"names":[],"mappings":"AAAA,uBAAuB","sourcesContent":["// no-op in the browser\n"]}

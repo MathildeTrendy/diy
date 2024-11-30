@@ -1,0 +1,71 @@
+{
+  "name": "@expo/match-media",
+  "version": "0.4.0",
+  "sideEffects": true,
+  "description": "Universal polyfill for match media API using Expo APIs on mobile",
+  "main": "build/index.js",
+  "types": "build/index.d.ts",
+  "homepage": "https://github.com/expo/match-media#readme",
+  "repository": "github:expo/match-media",
+  "files": [
+    "build"
+  ],
+  "bugs": {
+    "url": "https://github.com/expo/match-media/issues"
+  },
+  "scripts": {
+    "start": "expo start",
+    "build": "expo-module build",
+    "clean": "expo-module clean",
+    "lint": "expo-module lint",
+    "test": "expo-module test",
+    "prepare": "expo-module prepare",
+    "prepublishOnly": "expo-module prepublishOnly",
+    "expo-module": "expo-module"
+  },
+  "contributors": [
+    "Evan Bacon <bacon@expo.io> (https://github.com/evanbacon)"
+  ],
+  "keywords": [
+    "css",
+    "css-in-js",
+    "match-media",
+    "expo",
+    "expo-web",
+    "react",
+    "react-native",
+    "react-native-web"
+  ],
+  "author": "Expo",
+  "license": "MIT",
+  "dependencies": {
+    "css-mediaquery": "^0.1.2"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "expo-screen-orientation": "*"
+  },
+  "jest": {
+    "preset": "jest-expo/universal"
+  },
+  "devDependencies": {
+    "@types/react": "~17.0.21",
+    "@types/react-native": "~0.64.12",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
+    "@typescript-eslint/parser": "^5.3.1",
+    "eslint-plugin-react": "^7.26.1",
+    "expo": "~44.0.3",
+    "expo-module-scripts": "^2.0.0",
+    "expo-screen-orientation": "^4.1.1",
+    "jest-expo": "^43.0.1",
+    "react": "17.0.1",
+    "react-dom": "17.0.1",
+    "react-native": "0.64.3",
+    "react-native-web": "~0.17.1",
+    "react-responsive": "^8.2.0",
+    "eslint": "^7.25.0",
+    "eslint-config-universe": "^7.0.1",
+    "prettier": "^2.0.4",
+    "typescript": "^4.2.4"
+  }
+}
