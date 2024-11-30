@@ -27,7 +27,7 @@ const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
           {currency + price}
         </StyledText>
       </View>
-      <Image source={image} style={styles.image} />
+      <Image source={image} style={styles.image} resizeMode="cover" />
     </TouchableOpacity>
   );
 };
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "30%",
-    height: "120%",
+    height: "100%",
     top: -45,
   },
 });
