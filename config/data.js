@@ -1,29 +1,30 @@
 //function to enable to return the Data
-export const getDiyData = ({ wineId, popular, deal, searchTerm }) => {
+export const getDiyData = ({ diyId, popular, deal, searchTerm }) => {
+  console.log("Inputs:", { diyId, popular, deal, searchTerm });
+
   let filterFunction;
   //hvis vi har et id, filterFunctioner
 
-  if (wineId) {
-    filterFunction = (wine) => wine.id === wineId;
+  if (diyId) {
+    filterFunction = (diy) => diy.id === diyId;
   } else if (popular && searchTerm) {
-    filterFunction = (wine) =>
-      (wine.name.includes(searchTerm) ||
-        wine.description.includes(searchTerm)) &&
-      wine.popular === true;
+    filterFunction = (diy) =>
+      (diy.name.includes(searchTerm) || diy.description.includes(searchTerm)) &&
+      diy.popular === true;
   } else if (popular) {
-    filterFunction = (wine) => wine.popular === true;
+    filterFunction = (diy) => diy.popular === true;
   } else if (deal) {
-    filterFunction = (wine) => wine.deal === true;
+    filterFunction = (diy) => diy.deal === true;
   } else if (searchTerm) {
-    filterFunction = (wine) =>
-      wine.name.includes(searchTerm) || wine.description.includes(searchTerm);
+    filterFunction = (diy) =>
+      diy.name.includes(searchTerm) || diy.description.includes(searchTerm);
   } else {
-    filterFunction = (wine) => wine;
+    filterFunction = (diy) => diy;
   }
-  return wineData.filter(filterFunction);
+  return diyData.filter(filterFunction);
 };
 
-export const wineData = [
+export const diyData = [
   {
     id: 4,
     name: "Ridge East Bench Zinfandel",
@@ -34,11 +35,11 @@ export const wineData = [
     volume: "750ml",
     year: "2020",
     description:
-      "This wine from Califonia is a mixture of the sweet grape and the bla bla bla",
+      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
     quantityAvailable: 35,
     popular: false,
     deal: false,
-    image: require("./../assets/wine/4.png"),
+    image: require("./../assets/diy/4.png"),
   },
   {
     id: 5,
@@ -50,11 +51,11 @@ export const wineData = [
     volume: "750ml",
     year: "2021",
     description:
-      "This wine from Califonia is a mixture of the sweet grape and the bla bla bla",
+      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
     quantityAvailable: 35,
     popular: true,
     deal: false,
-    image: require("./../assets/wine/5.png"),
+    image: require("./../assets/diy/5.png"),
   },
   {
     id: 6,
@@ -66,29 +67,29 @@ export const wineData = [
     volume: "750ml",
     year: "2022",
     description:
-      "This wine from Califonia is a mixture of the sweet grape and the bla bla bla",
+      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
     quantityAvailable: 35,
     popular: false,
     deal: false,
-    image: require("./../assets/wine/6.png"),
+    image: require("./../assets/diy/6.png"),
   },
 ];
 export const onboardingData = [
   {
     id: 1,
-    title: "Enjoy All The Finest And Popular Wines",
+    title: "Enjoy All The Finest And Popular Diys",
     summary: "Dette er ikke en vin-app",
     image: require("./../assets/onboarding/1.jpg"),
   },
   {
     id: 2,
-    title: "Good wine is all you need",
+    title: "Good diy is all you need",
     summary: "Dette er ikke en vin-app",
     image: require("./../assets/onboarding/2.jpg"),
   },
   {
     id: 3,
-    title: "Welcome to The Wine App NOT!",
+    title: "Welcome to The Diy App NOT!",
     summary: "Dette er ikke en vin-app",
     image: require("./../assets/onboarding/3.jpg"),
   },
