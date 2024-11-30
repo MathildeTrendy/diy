@@ -1,4 +1,4 @@
-import { View, KeyboardAdvoidingView } from "react-native";
+import { View, KeyboardAvoidingView } from "react-native";
 import { colors } from "../../config/theme";
 import { onIOS } from "../../config/constants";
 import { HeaderHeightContext } from "@react-navigation/elements";

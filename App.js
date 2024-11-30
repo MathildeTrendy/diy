@@ -12,15 +12,15 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {
-  const [isWineAppOnboarded, setIsWineAppOnboarded] = useState(false);
+  const [isDiyAppOnboarded, setIsDiyAppOnboarded] = useState(false);
   const prepareApp = async () => {
     try {
-      AsyncStorage.removeItem("@WineApp:Onboarding");
+      AsyncStorage.removeItem("@DiyApp:Onboarding");
 
       //fetch all needed data
-      /*const onboardingStatus = await getData("@WineApp:Onboarding");
+      /*const onboardingStatus = await getData("@DiyApp:Onboarding");
 
-      onboardingStatus && setIsWineAppOnboarded(onboardingStatus);*/
+      onboardingStatus && setIsDiyAppOnboarded(onboardingStatus);*/
     } catch (error) {
       console.warn(error);
     } finally {
@@ -34,12 +34,12 @@ export default function App() {
 
   return (
     <OnboardingContext.Provider
-      value={{ isWineAppOnboarded, setIsWineAppOnboarded }}
+      value={{ isDiyAppOnboarded, setIsDiyAppOnboarded }}
     >
       <NavigationContainer>
-        {isWineAppOnboarded ? <RootTabs /> : <OnboardingStack />}
+        {isDiyAppOnboarded ? <RootTabs /> : <OnboardingStack />}
         <StatusBar style="auto" />
       </NavigationContainer>
     </OnboardingContext.Provider>
-  ); //checker om wineapp er onboarded return homescreen eller onboardingstack
+  ); //checker om diyapp er onboarded return homescreen eller onboardingstack
 }

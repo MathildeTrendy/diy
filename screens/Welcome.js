@@ -47,12 +47,14 @@ const Welcome = ({ route }) => {
       <Image
         source={onboardingData[activeScreen - 1].image}
         style={styles.backgroundImage}
+        resizeMode="cover"
       />
       <View style={{ marginTop: useContext(HeaderHeightContext) }}>
         <View style={styles.imageContainer}>
           <Image
             source={onboardingData[activeScreen - 1].image}
             style={styles.image}
+            resizeMode="cover"
           />
         </View>
 
