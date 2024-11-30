@@ -5,8 +5,6 @@ import { colors } from "../../config/theme";
 
 //se produktdetaljer
 const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
-  console.log({ id, name, origin, year, currency, price, image });
-
   const handleOnPress = () => {
     alert(id);
   };
@@ -17,9 +15,11 @@ const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
         <StyledText style={StyleSheet.text} big numberOfLines={2}>
           {name}
         </StyledText>
+
         <StyledText style={StyleSheet.text} small>
           {origin}
         </StyledText>
+
         <StyledText style={StyleSheet.text} small>
           {year}
         </StyledText>
