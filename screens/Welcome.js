@@ -14,16 +14,16 @@ const Welcome = ({ route }) => {
   const navigation = useNavigation();
   const [activeScreen] = useState(route.params?.activeScreen || 1); //Hvis ikke active screen er der, falder den tilbage på 1
   const onLastScreen = activeScreen === onboardingData.length; //hvis dette er true, skal vi gemme 'skip' knappen
-  const { setIsWineAppOnboarded } = useContext(OnboardingContext);
+  const { setIsDiyAppOnboarded } = useContext(OnboardingContext);
   const [completingOnboarding, setCompletingOnboarding] = useState(false);
 
   const completeOnBoarding = async () => {
     try {
       setCompletingOnboarding(true);
-      await storeData("@WineApp:Onboarding", true);
+      await storeData("@DiyApp:Onboarding", true);
 
       setTimeout(() => {
-        setIsWineAppOnboarded(true);
+        setIsDiyAppOnboarded(true);
         setCompletingOnboarding(false);
       }, 500);
     } catch (error) {

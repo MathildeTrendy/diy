@@ -31,7 +31,7 @@ const HomeStack = () => {
       <Stack.Screen
         name="HomeScreen"
         component={Home}
-        options={{ title: "Wine App" }}
+        options={{ title: "Diy App" }}
       />
     </Stack.Navigator>
   );

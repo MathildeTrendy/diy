@@ -1,5 +1,5 @@
 //function to enable to return the Data
-export const getWineData = ({ wineId, popular, deal, searchTerm }) => {
+export const getDiyData = ({ wineId, popular, deal, searchTerm }) => {
   let filterFunction;
   //hvis vi har et id, filterFunctioner
 

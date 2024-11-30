@@ -5,7 +5,7 @@ import {
   SectionHeader,
   DisplayCard,
 } from "../components";
-import { getWineData } from "../config/data";
+import { getDiyData } from "../config/data";
 
 export default function App() {
   return (
@@ -13,7 +13,7 @@ export default function App() {
       <SectionHeader style={styles.header}>Current Deals</SectionHeader>
 
       <FlatList
-        data={getWineData({ deal: true })}
+        data={getDiyData({ deal: true })}
         renderItem={({ item }) => <DisplayCard {...item}></DisplayCard>}
         keyExtractor={(item) => item.id.toString()}
       />
