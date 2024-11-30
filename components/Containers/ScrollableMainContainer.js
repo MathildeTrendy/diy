@@ -15,6 +15,8 @@ const ScrollableMainContainer = ({
   contentContainerStyle,
   ...props
 }) => {
+  const headerHeight = useContext(HeaderHeightContext);
+
   return (
     <KeyboardAdvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
