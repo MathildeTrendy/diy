@@ -2,7 +2,6 @@ import { TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import StyledText from "../Texts/StyledText";
 import { colors } from "../../config/theme";
 import { AntDesign } from "@expo/vector-icons";
-//import { StyledButton } from "./Buttons/StyledButton";
 
 const StyledButton = ({
   children,
