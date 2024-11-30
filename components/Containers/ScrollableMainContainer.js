@@ -20,7 +20,7 @@ const ScrollableMainContainer = ({
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       style={{ flex: 1 }}
-      keyboardVerticalOffset={useContext(HeaderHeightContext) ?? 0}
+      keyboardVerticalOffset={headerHeight ?? 0}
     >
       <ScrollView
         style={[{ flex: 1, backgroundColor: colors.primary }, style]}
