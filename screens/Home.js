@@ -1,9 +1,9 @@
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
 import {
-  StyledText,
   ScrollableMainContainer,
   SectionHeader,
   DisplayCard,
+  ProductCard
 } from "../components";
 import { getDiyData } from "../config/data";
 
@@ -13,10 +13,16 @@ export default function App() {
       <SectionHeader style={styles.header}>Current Deals</SectionHeader>
 
       <FlatList
-        data={getDiyData({ deal: true })}
-        renderItem={({ item }) => <DisplayCard {...item}></DisplayCard>}
-        keyExtractor={(item) => item.id.toString()}
+        data={getDiyData({ popular: true })}
+        renderItem={({ item }) => <DisplayCard {...item} />}
+        keyExtractor={({id}) => id.toString()}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingLeft: 25,
+        }}
       />
+
       <SectionHeader
         style={styles.header}
         rightText="View all"
@@ -25,6 +31,18 @@ export default function App() {
         Popular
       </SectionHeader>
 
+      <FlatList
+        data={getDiyData({ deal: true })}
+        renderItem={({ item }) => <ProductCard {...item} />}
+        keyExtractor={({id}) => id.toString()}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingLeft: 25,
+          marginBottom: 10
+        }}
+        />
+
       <SectionHeader
         style={styles.header}
         rightText="View all"
@@ -32,6 +50,16 @@ export default function App() {
       >
         Our Collection
       </SectionHeader>
+      <FlatList
+        data={getDiyData({}).slice(0, 5)}
+        renderItem={({ item }) => <DisplayCard {...item} />}
+        keyExtractor={({id}) => id.toString()}
+        horizontal={true}
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={{
+          paddingLeft: 25,
+        }}
+      />
     </ScrollableMainContainer>
   );
 }
