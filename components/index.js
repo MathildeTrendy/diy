@@ -5,6 +5,7 @@ import MainContainer from "./Containers/MainContainer";
 import ScrollableMainContainer from "./Containers/ScrollableMainContainer";
 import SectionHeader from "./Texts/SectionHeader";
 import DisplayCard from "./Cards/DisplayCard";
+import ProductCard from "./Cards/ProductCard";
 
 export {
   StyledText,
@@ -14,4 +15,5 @@ export {
   ScrollableMainContainer,
   SectionHeader,
   DisplayCard,
+  ProductCard
 };
