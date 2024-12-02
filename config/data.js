@@ -75,6 +75,22 @@ export const diyData = [
     deal: true,
     image: require("./../assets/diy/6.png"),
   },
+  {
+    id: 2,
+    name: "Riesling",
+    origin: "Germany",
+    price: 340,
+    currency: "DKK",
+    alcohol: "14.5",
+    volume: "750ml",
+    year: "2022",
+    description:
+      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
+    quantityAvailable: 35,
+    popular: false,
+    deal: true,
+    image: require("./../assets/diy/6.png"),
+  },
 ];
 
 export const onboardingData = [
@@ -96,4 +112,5 @@ export const onboardingData = [
     summary: "Dette er ikke en vin-app",
     image: require("./../assets/onboarding/3.jpg"),
   },
+  
 ];

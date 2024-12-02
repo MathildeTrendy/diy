@@ -6,6 +6,7 @@ import ScrollableMainContainer from "./Containers/ScrollableMainContainer";
 import SectionHeader from "./Texts/SectionHeader";
 import DisplayCard from "./Cards/DisplayCard";
 import ProductCard from "./Cards/ProductCard";
+import ProductInfo from "./Texts/ProductInfo";
 
 export {
   StyledText,
@@ -15,5 +16,6 @@ export {
   ScrollableMainContainer,
   SectionHeader,
   DisplayCard,
-  ProductCard
+  ProductCard,
+  ProductInfo
 };

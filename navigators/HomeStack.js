@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home } from "./../screens";
+import { Home, Details } from "./../screens";
 import { colors } from "../config/theme";
 import { onIOS } from "../config/constants";
 import { Feather } from "@expo/vector-icons";
@@ -27,11 +27,25 @@ const HomeStack = () => {
           shadowOpacity: 0,
         },
       }}
+      initialRouteName="Details"
     >
       <Stack.Screen
         name="HomeScreen"
         component={Home}
         options={{ title: "Diy App" }}
+      />
+      <Stack.Screen
+        name="Details"
+        component={Details}
+        options={{ title: "",
+          headerStyle: {
+          backgroundColor: colors.secondary,
+          borderBottomWidth: 0,
+          elevation: 0,
+          shadowColor: "transparent",
+          shadowOpacity: 0,
+         },
+         }}
       />
     </Stack.Navigator>
   );
