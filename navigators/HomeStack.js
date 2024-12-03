@@ -27,7 +27,7 @@ const HomeStack = () => {
           shadowOpacity: 0,
         },
       }}
-      initialRouteName="Details"
+      initialRouteName="HomeScreen"
     >
       <Stack.Screen
         name="HomeScreen"
@@ -37,15 +37,16 @@ const HomeStack = () => {
       <Stack.Screen
         name="Details"
         component={Details}
-        options={{ title: "",
+        options={{
+          title: "",
           headerStyle: {
-          backgroundColor: colors.secondary,
-          borderBottomWidth: 0,
-          elevation: 0,
-          shadowColor: "transparent",
-          shadowOpacity: 0,
-         },
-         }}
+            backgroundColor: colors.secondary,
+            borderBottomWidth: 0,
+            elevation: 0,
+            shadowColor: "transparent",
+            shadowOpacity: 0,
+          },
+        }}
       />
     </Stack.Navigator>
   );

@@ -2,17 +2,19 @@ import StyledText from "../Texts/StyledText";
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
+import { useNavigation } from "@react-navigation/native";
 
 //se produktdetaljer
 const ProductCard = ({ id, name, currency, price, image }) => {
-  
+  const navigation = useNavigation();
+
   const handleOnPress = () => {
-    alert(id);
+    navigation.navigate("Details", { id });
   };
 
   return (
     <TouchableOpacity style={styles.container} onPress={handleOnPress}>
-        <Image source={image} style={styles.image} />
+      <Image source={image} style={styles.image} />
       <View style={styles.details}>
         <StyledText style={styles.text} small numberOfLines={2}>
           {name}
@@ -35,28 +37,28 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 60,
     marginRight: 25,
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   details: {
-    height: '50%',
+    height: "50%",
     padding: 10,
-    justifyContent: 'flex-end',
-    alignItems: 'center'
+    justifyContent: "flex-end",
+    alignItems: "center",
   },
   text: {
     textAlign: "center",
-    marginBottom: 5
+    marginBottom: 5,
   },
   price: {
-    color: colors.accent + "cc"
+    color: colors.accent + "cc",
   },
 
   image: {
-    width: '100%',
-    height: '87%',
+    width: "100%",
+    height: "87%",
     top: -55,
-    position: 'absolute',
-    resizeMode: 'contain'
+    position: "absolute",
+    resizeMode: "contain",
   },
 });
 

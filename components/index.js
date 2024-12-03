@@ -7,6 +7,7 @@ import SectionHeader from "./Texts/SectionHeader";
 import DisplayCard from "./Cards/DisplayCard";
 import ProductCard from "./Cards/ProductCard";
 import ProductInfo from "./Texts/ProductInfo";
+import CartCounter from "./Inputs/CartCounter";
 
 export {
   StyledText,
@@ -17,5 +18,6 @@ export {
   SectionHeader,
   DisplayCard,
   ProductCard,
-  ProductInfo
+  ProductInfo,
+  CartCounter,
 };

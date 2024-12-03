@@ -2,12 +2,14 @@ import StyledText from "../Texts/StyledText";
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
+import { useNavigation } from "@react-navigation/native";
 
 //se produktdetaljer
 const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
-  
+  const navigation = useNavigation();
+
   const handleOnPress = () => {
-    alert(id);
+    navigation.navigate("Details", { id });
   };
 
   return (
@@ -28,7 +30,7 @@ const DisplayCard = ({ id, name, origin, year, currency, price, image }) => {
           {currency + price}
         </StyledText>
       </View>
-      <Image source={image} style={styles.image}/>
+      <Image source={image} style={styles.image} />
     </TouchableOpacity>
   );
 };
@@ -46,16 +48,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   details: {
-    width: '70%',
+    width: "70%",
     padding: 15,
-    justifyContent: 'space-around',
+    justifyContent: "space-around",
   },
   text: {
     color: colors.secondary,
   },
   image: {
-    width: '30%',
-    height: '120%',
+    width: "30%",
+    height: "120%",
     top: -45,
   },
 });

@@ -1,19 +1,33 @@
-import { useState } from "react"; //hook ??
+import { useState, useEffect } from "react"; //hook ??
 import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
 import {
   ScrollableMainContainer,
   StyledText,
   ProductInfo,
   StyledButton,
+  CartCounter,
 } from "../components";
 import { getDiyData } from "../config/data";
 import { colors } from "../config/theme";
 import { AntDesign } from "@expo/vector-icons";
 
-const Details = () => {
-  const diyId = 2;
-  const fetchedDiy = getDiyData({ diyId })[0];
-  const [addedToCart, setAddedToCart] = useState(true);
+const Details = ({ route }) => {
+  const diyId = route.params?.id;
+  const [fetchedDiy, setFetchedDiy] = useState();
+  const [addedToCart, setAddedToCart] = useState(false);
+
+  const fetchDiyDetails = () => {
+    try {
+      const diyData = getDiyData({ diyId })[0];
+      setFetchedDiy(diyData);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDiyDetails();
+  }, []);
 
   return (
     <ScrollableMainContainer contentContainerStyle={styles.container}>
@@ -62,6 +76,7 @@ const Details = () => {
               >
                 Remove
               </StyledButton>
+              <CartCounter style={styles.CartCounter} />
             </>
           )}
         </View>
@@ -121,6 +136,9 @@ const styles = StyleSheet.create({
   },
   removeButtonText: {
     color: colors.tertiary + "cc",
+  },
+  CartCounter: {
+    width: "47%",
   },
 });
 
