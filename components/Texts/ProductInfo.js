@@ -7,7 +7,7 @@ const ProductInfo = ({ label, children, style }) => {
     <View style={style}>
       <StyledText
         bold
-        style={{ color: colors.darkred + "cc", marginBottom: 5 }}
+        style={{ color: colors.metallic + "cc", marginBottom: 5 }}
       >
         {label}
       </StyledText>

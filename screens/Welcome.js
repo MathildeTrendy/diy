@@ -75,7 +75,7 @@ const Welcome = ({ route }) => {
                 <MaterialCommunityIcons
                   name="checkbox-blank-circle"
                   size={15}
-                  color={colors.darkred + "cc"}
+                  color={colors.metallic + "cc"}
                   key={item.id} //hvilket id og hvilket item?
                 />
               );

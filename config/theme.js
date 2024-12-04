@@ -8,4 +8,5 @@ export const colors = {
   placeholder: "#9ca3af", //lysegrå
   amber: "#f59e0b", //orange
   green: "#16a34a",
+  metallic: "#b3cccc", //forsøg i stedet for darkRed
 };
