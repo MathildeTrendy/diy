@@ -14,7 +14,7 @@ import { AntDesign } from "@expo/vector-icons";
 const Details = ({ route }) => {
   const diyId = route.params?.id;
   const [fetchedDiy, setFetchedDiy] = useState();
-  const [addedToCart, setAddedToCart] = useState(false);
+  const [addedToCart, setAddedToCart] = useState(true); //true = viser +/-, false = 'add cart'
 
   const fetchDiyDetails = () => {
     try {
