@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     height: ScreenWidth * 0.43,
     miniWidth: 250,
     minHeight: 160,
-    backgroundColor: colors.accent + "cc",
+    backgroundColor: colors.metallic + "cc",
     borderRadius: 25,
     marginTop: 45,
     marginRight: 25,

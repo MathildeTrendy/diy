@@ -104,12 +104,12 @@ export const onboardingData = [
     id: 2,
     title: "Good diy is all you need",
     summary: "Dette er ikke en vin-app",
-    image: require("./../assets/onboarding/2.jpg"),
+    image: require("./../assets/diy/retrove.png"),
   },
   {
     id: 3,
     title: "Welcome to The Diy App!",
     summary: "Dette er ikke en vin-app",
-    image: require("./../assets/onboarding/3.jpg"),
+    image: require("./../assets/diy/retrove.png"),
   },
 ];

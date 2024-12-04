@@ -51,7 +51,7 @@ const HomeStack = () => {
       />
       <Stack.Screen
         name="Products"
-        component={Home}
+        component={Products}
         options={{ title: "Our Collection" }}
       />
     </Stack.Navigator>
