@@ -96,9 +96,9 @@ export const diyData = [
 export const onboardingData = [
   {
     id: 1,
-    title: "Enjoy All The Finest And Popular Diys",
-    summary: "Dette er ikke en vin-app",
-    image: require("./../assets/diy/diy.png"),
+    title: "",
+    summary: "",
+    image: require("./../assets/diy/retrove.png"),
   },
   {
     id: 2,

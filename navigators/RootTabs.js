@@ -27,7 +27,7 @@ const RootTabs = () => {
             paddingVertical: 5,
           },
           tabBarInactiveTintColor: colors?.tertiary + "cc",
-          tabBarActiveTintColor: colors?.accent + "cc",
+          tabBarActiveTintColor: colors?.darkred + "cc",
           tabBarIcon: ({ size, color }) => {
             let iconName;
 

@@ -75,7 +75,7 @@ const Welcome = ({ route }) => {
                 <MaterialCommunityIcons
                   name="checkbox-blank-circle"
                   size={15}
-                  color={colors.accent + "cc"}
+                  color={colors.darkred + "cc"}
                   key={item.id} //hvilket id og hvilket item?
                 />
               );
@@ -115,8 +115,8 @@ const styles = StyleSheet.create({
   },
   backgroundImage: {
     ...StyleSheet.absoluteFillObject,
-    height: "100%",
-    opacity: 0.8,
+    height: "120%",
+    opacity: 0.4,
   },
   imageContainer: {
     width: ScreenWidth - 70,
