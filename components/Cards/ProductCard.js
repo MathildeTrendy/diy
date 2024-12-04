@@ -5,7 +5,7 @@ import { colors } from "../../config/theme";
 import { useNavigation } from "@react-navigation/native";
 
 //se produktdetaljer
-const ProductCard = ({ id, name, currency, price, image }) => {
+const ProductCard = ({ id, name, currency, price, image, all }) => {
   const navigation = useNavigation();
 
   const handleOnPress = () => {
@@ -13,7 +13,10 @@ const ProductCard = ({ id, name, currency, price, image }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handleOnPress}>
+    <TouchableOpacity
+      style={all ? styles.containerPlus : styles.container}
+      onPress={handleOnPress}
+    >
       <Image source={image} style={styles.image} />
       <View style={styles.details}>
         <StyledText style={styles.text} small numberOfLines={2}>
@@ -37,6 +40,16 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 60,
     marginRight: 25,
+    justifyContent: "flex-end",
+  },
+  containerPlus: {
+    width: ScreenWidth * 0.4,
+    height: ScreenWidth * 0.5,
+    miniWidth: 150,
+    minHeight: 188,
+    backgroundColor: colors.secondary,
+    borderRadius: 15,
+    marginTop: 60,
     justifyContent: "flex-end",
   },
   details: {

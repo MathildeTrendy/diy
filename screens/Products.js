@@ -3,13 +3,13 @@ import { StyleSheet, FlatList } from "react-native";
 import { MainContainer, StyledTextInput, ProductCard } from "../components";
 import { getDiyData } from "../config/data";
 
-const Products = () => {
+const Products = ({ route }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-
   const fetchProducts = async () => {
     try {
-      let availableDiyData = getDiyData({});
+      let availableDiyData = getDiyData({
+        popular: route.name == "Popular",
+      });
       setFilteredProducts(availableDiyData);
     } catch (error) {
       console.warn(error);
@@ -29,7 +29,7 @@ const Products = () => {
       />
       <FlatList
         data={filteredProducts}
-        renderItem={({ item }) => <ProductCard {...item} />}
+        renderItem={({ item }) => <ProductCard {...item} all />}
         keyExtractor={({ id }) => id.toString()}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
@@ -37,6 +37,7 @@ const Products = () => {
           marginBottom: 10,
         }}
         numColumns={2}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
       />
     </MainContainer>
   );

@@ -28,7 +28,7 @@ const HomeStack = () => {
           shadowOpacity: 0,
         },
       }}
-      initialRouteName="Products"
+      initialRouteName="HomeScreen"
     >
       <Stack.Screen
         name="HomeScreen"
@@ -54,6 +54,7 @@ const HomeStack = () => {
         component={Products}
         options={{ title: "Our Collection" }}
       />
+      <Stack.Screen name="Popular" component={Products} />
     </Stack.Navigator>
   );
 };
