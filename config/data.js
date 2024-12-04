@@ -112,5 +112,4 @@ export const onboardingData = [
     summary: "Dette er ikke en vin-app",
     image: require("./../assets/onboarding/3.jpg"),
   },
-  
 ];

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"; //hook ??
-import { View, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import {
   ScrollableMainContainer,
   StyledText,

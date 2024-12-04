@@ -1,8 +1,9 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home, Details } from "./../screens";
+import { Home, Details, Products } from "../screens";
 import { colors } from "../config/theme";
 import { onIOS } from "../config/constants";
 import { Feather } from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
@@ -27,7 +28,7 @@ const HomeStack = () => {
           shadowOpacity: 0,
         },
       }}
-      initialRouteName="HomeScreen"
+      initialRouteName="Products"
     >
       <Stack.Screen
         name="HomeScreen"
@@ -47,6 +48,11 @@ const HomeStack = () => {
             shadowOpacity: 0,
           },
         }}
+      />
+      <Stack.Screen
+        name="Products"
+        component={Home}
+        options={{ title: "Our Collection" }}
       />
     </Stack.Navigator>
   );
