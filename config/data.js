@@ -2,16 +2,18 @@
 
 //function to enable to return the Data
 export const getDiyData = ({ diyId, popular, deal, searchTerm }) => {
-  console.log("Inputs:", { diyId, popular, deal, searchTerm });
-
   let filterFunction;
+
+  searchTerm = searchTerm?.toLowerCase();
+
   //hvis vi har et id, filterFunctioner
 
   if (diyId) {
     filterFunction = (diy) => diy.id === diyId;
   } else if (popular && searchTerm) {
     filterFunction = (diy) =>
-      (diy.name.includes(searchTerm) || diy.description.includes(searchTerm)) &&
+      (diy.name?.toLowerCase().includes(searchTerm) ||
+        diy.description?.toLowerCase().includes(searchTerm)) &&
       diy.popular === true;
   } else if (popular) {
     filterFunction = (diy) => diy.popular === true;
@@ -19,7 +21,8 @@ export const getDiyData = ({ diyId, popular, deal, searchTerm }) => {
     filterFunction = (diy) => diy.deal === true;
   } else if (searchTerm) {
     filterFunction = (diy) =>
-      diy.name.includes(searchTerm) || diy.description.includes(searchTerm);
+      diy.name?.toLowerCase().includes(searchTerm) ||
+      diy.description?.toLowerCase().includes(searchTerm);
   } else {
     filterFunction = (diy) => diy;
   }
