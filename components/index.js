@@ -8,6 +8,7 @@ import DisplayCard from "./Cards/DisplayCard";
 import ProductCard from "./Cards/ProductCard";
 import ProductInfo from "./Texts/ProductInfo";
 import CartCounter from "./Inputs/CartCounter";
+import CartCard from "./Cards/CartCard";
 
 export {
   StyledText,
@@ -20,4 +21,5 @@ export {
   ProductCard,
   ProductInfo,
   CartCounter,
+  CartCard,
 };

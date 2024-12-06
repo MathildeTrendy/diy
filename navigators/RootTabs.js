@@ -1,11 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens";
 import { colors } from "../config/theme";
-import { StatusBar } from "expo-status-bar";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import HomeStack from "./HomeStack";
 import SearchStack from "./SearchStack";
+import CartStack from "./CartStack";
+
 const Tab = createBottomTabNavigator();
 
 const RootTabs = () => {
@@ -47,7 +48,18 @@ const RootTabs = () => {
     >
       <Tab.Screen name="Home" component={HomeStack} />
       <Tab.Screen name="Search" component={SearchStack} />
-      <Tab.Screen name="Cart" component={Home} />
+      <Tab.Screen
+        name="Cart"
+        component={CartStack}
+        options={{
+          tabBarBadge: 1,
+          tabBarBadgeStyle: {
+            backgroundColor: colors.amber,
+            color: colors.primary,
+          },
+          unmountOnBlur: true,
+        }}
+      />
       <Tab.Screen name="Profile" component={Home} />
     </Tab.Navigator>
   );
