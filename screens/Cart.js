@@ -7,11 +7,25 @@ import { Feather } from "@expo/vector-icons";
 import { ScreenWidth } from "../config/constants";
 
 const Cart = () => {
-  const cartItems = getDiyData({});
+  const cartItems = [];
 
   return (
     <MainContainer style={styles.container}>
-      {cartItems.length <= 0 && <View style={styles.emptyCart}></View>}
+      {cartItems.length <= 0 && (
+        <View style={styles.emptyCart}>
+          <Feather
+            name="shopping-cart"
+            size={ScreenWidth * 0.4}
+            color={colors.tertiary}
+            style={{ marginBottom: 50 }}
+          />
+
+          <StyledText big>Your cart is empty!</StyledText>
+          <StyledText style={styles.emptyCartText}>
+            No items found in your cart
+          </StyledText>
+        </View>
+      )}
 
       {cartItems.length > 0 && (
         <>
@@ -57,6 +71,15 @@ const styles = StyleSheet.create({
   },
   checkoutButton: {
     width: "50%",
+  },
+  emptyCart: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  emptyCartText: {
+    color: colors.tertiary,
+    marginTop: 5,
   },
 });
 
