@@ -29,13 +29,19 @@ const Details = ({ route }) => {
     fetchDiyDetails();
   }, []);
 
+  const handleAddToCart = async () => {
+    try {
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
   return (
     <ScrollableMainContainer contentContainerStyle={styles.container}>
       <View style={styles.topSection}>
         <StyledText bold style={styles.name}>
           {fetchedDiy?.name}
         </StyledText>
-
         <ProductInfo label="Alcohol" style={styles.info}>
           {fetchedDiy?.alcohol + "%"}
         </ProductInfo>
@@ -63,6 +69,7 @@ const Details = ({ route }) => {
         <ProductInfo label={"Description"} style={styles.info}>
           {fetchedDiy?.description}
         </ProductInfo>
+
         <View style={styles.cartRow}>
           {!addedToCart && (
             <StyledButton icon="shoppingcart">Add to cart</StyledButton>
