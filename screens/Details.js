@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"; //hook ??
+import { useState, useEffect, useContext } from "react"; //hook ??
 import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
 import {
   ScrollableMainContainer,
@@ -10,11 +10,16 @@ import {
 import { getDiyData } from "../config/data";
 import { colors } from "../config/theme";
 import { AntDesign } from "@expo/vector-icons";
+import { CartContext } from "../utils/context";
+import { storeData } from "../utils/storage";
+import { StackRouter } from "@react-navigation/native";
 
 const Details = ({ route }) => {
   const diyId = route.params?.id;
   const [fetchedDiy, setFetchedDiy] = useState();
   const [addedToCart, setAddedToCart] = useState(true); //true = viser +/-, false = 'add cart'
+  const { cartItems, setCartItems } = useContext(CartContext);
+  const [cartCount, setCartCount] = useState(1);
 
   const fetchDiyDetails = () => {
     try {
@@ -27,12 +32,49 @@ const Details = ({ route }) => {
 
   useEffect(() => {
     fetchDiyDetails();
+    checkCartStatus();
   }, []);
 
-  const handleAddToCart = async () => {
+  const handleAddToCart = async (newCount) => {
     try {
+      let updatedCartItems = [];
+
+      if (!addedToCart) {
+        updatedCartItems = [...cartItems, { ...fetchedDiy, cartCount: 1 }];
+        newCount = 1;
+      } else {
+        if (newCount > 0) {
+          let itemIndex = cartItems.findIndex(
+            (cartItem) => cartItem.id === diyId
+          );
+          cartItems[itemIndex].cartCount = newCount;
+        }
+
+        updatedCartItems = [...cartItems];
+      }
+      saveCartItems(updatedCartItems, newCount);
+      setAddedToCart(true);
     } catch (error) {
       console.warn(error);
+    }
+  };
+
+  const saveCartItems = async (updatedCartItems, newCount) => {
+    try {
+      storeData("@DiyApp:CartItems", updatedCartItems);
+      setCartItems(updatedCartItems);
+      setCartCount(newCount);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const checkCartStatus = () => {
+    for (const cartItem of cartItems) {
+      if (cartItem.id === diyId) {
+        setAddedToCart(true);
+        setCartCount(cartItem.cartCount);
+      }
     }
   };
 
@@ -72,7 +114,9 @@ const Details = ({ route }) => {
 
         <View style={styles.cartRow}>
           {!addedToCart && (
-            <StyledButton icon="shoppingcart">Add to cart</StyledButton>
+            <StyledButton icon="shoppingcart" onPress={handleAddToCart}>
+              Add to cart
+            </StyledButton>
           )}
           {addedToCart && (
             <>
@@ -83,7 +127,12 @@ const Details = ({ route }) => {
               >
                 Remove
               </StyledButton>
-              <CartCounter style={styles.CartCounter} />
+              <CartCounter
+                style={styles.CartCounter}
+                count={cartCount}
+                setCount={handleAddToCart}
+                limit={fetchedDiy?.quantityAvailable}
+              />
             </>
           )}
         </View>
@@ -101,7 +150,7 @@ const styles = StyleSheet.create({
     paddingBottom: 25,
     backgroundColor: colors.secondary,
     borderBottomRightRadius: 15,
-    borderBottomRightRadius: 15,
+    borderBottomLeftRadius: 15,
   },
   name: {
     marginBottom: 30,
@@ -124,7 +173,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     height: "90%",
     width: "90%",
-    resizedMode: "contain",
+    resizeMode: "contain",
     right: -95,
     top: 90,
   },

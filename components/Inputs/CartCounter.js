@@ -4,32 +4,72 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../config/theme";
 import { useState } from "react";
 
-const CartCounter = ({ style, small }) => {
+const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
+  const increaseCount = () => {
+    count = parseInt(count);
+    limit = parseInt(limit);
+    let newCount = count >= limit ? limit : count + 1;
+    setCount(newCount);
+  };
+  const decreaseCount = () => {
+    count = parseInt(count);
+    let newCount = count <= 1 ? 1 : count - 1;
+    setCount(newCount);
+  };
+
+  const handleOnEndEditing = () => {
+    let newCount = count >= limit ? limit : count < 1 ? 1 : count;
+    setCount(newCount);
+  };
+
   return (
     //check: if small property is not recieved then return this view:
+    //{'${count'} converts to String
+
     <>
       {!small && (
         <View style={[styles.container, styles.smallContainer, style]}>
-          <TouchableOpacity style={[styles.button, styles.smallButton]}>
+          <TouchableOpacity
+            style={[styles.button, styles.smallButton]}
+            onPress={decreaseCount}
+          >
             <AntDesign name="minuscircle" size={30} color={colors.tertiary} />
           </TouchableOpacity>
 
-          <StyledTextInput style={styles.input} value="1" />
+          <StyledTextInput
+            style={styles.input}
+            value={"${count}"}
+            onEndEditing={handleOnEndEditing}
+            onChangeText={setCount}
+            keyboardType="number-pad"
+          />
 
-          <TouchableOpacity style={styles.button}>
+          <TouchableOpacity style={styles.button} onPress={increaseCount}>
             <AntDesign name="pluscircle" size={30} color={colors.tertiary} />
           </TouchableOpacity>
         </View>
       )}
       {small && (
         <View style={[styles.container, styles.smallContainer, style]}>
-          <TouchableOpacity style={[styles.button, styles.smallButton]}>
+          <TouchableOpacity
+            style={[styles.button, styles.smallButton]}
+            onPress={increaseCount}
+          >
             <AntDesign name="minuscircle" size={30} color={colors.tertiary} />
           </TouchableOpacity>
 
-          <StyledTextInput style={styles.smallInput} value="1" />
+          <StyledTextInput
+            style={styles.smallInput}
+            value={"${count"}
+            onEndEditing={handleOnEndEditing}
+            onChangeText={setCount}
+            keyboardType="number-pad"
+          />
 
-          <TouchableOpacity style={[styles.button, styles.smallButton]}>
+          <TouchableOpacity
+            style={[styles.button, styles.smallButton]}
+            onPress={increaseCount}
+          >
             <AntDesign name="pluscircle" size={30} color={colors.tertiary} />
           </TouchableOpacity>
         </View>
