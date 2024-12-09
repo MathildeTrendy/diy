@@ -19,7 +19,7 @@ export default function App() {
     try {
       //fetch all needed data
       const onboardingStatus = await getData("@DiyApp:Onboarding");
-      const cartItemsData = await getData("@WineApp:CartItems");
+      const cartItemsData = await getData("@DiyApp:CartItems");
 
       onboardingStatus && setIsDiyAppOnboarded(onboardingStatus);
       cartItemsData && setCartItems(cartItemsData);
