@@ -1,13 +1,31 @@
+import { useContext } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Details, Products, Cart } from "../screens";
 import { colors } from "../config/theme";
 import { onIOS } from "../config/constants";
 import { Feather } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
+import { CartContext } from "../utils/context";
+import { storeData } from "../utils/storage";
+
+
 
 const Stack = createStackNavigator();
 
 const CartStack = () => {
+  const {cartItems, setCartItems} = useContext(CartContext);
+
+
+  const clearCart = async () => {
+    try {
+      storeData("@DiyApp:CartItems", []);
+      setCartItems([]);
+    } catch (error) {
+      console.warn(error);
+      
+    }
+  };
+
   return (
     <Stack.Navigator
       screenOptions={{
@@ -36,9 +54,12 @@ const CartStack = () => {
         options={{
           title: "Cart",
           headerRight: () => (
-            <TouchableOpacity>
+            <>
+            {cartItems.length > 0 && 
+            <TouchableOpacity onPress={clearCart} style={{padding: 10}}>
               <Feather name="trash" size={20} color={colors.tertiary + "cc"} />
-            </TouchableOpacity>
+            </TouchableOpacity>}
+            </>
           ),
           headerRightContainerStyle: {
             //push icon away from the screen

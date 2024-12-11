@@ -76,7 +76,7 @@ export const diyData = [
     quantityAvailable: 35,
     popular: false,
     deal: true,
-    image: require("./../assets/diy/6.png"),
+    image: require("./../assets/diy/5.png"),
   },
   {
     id: 2,

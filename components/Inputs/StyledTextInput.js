@@ -39,6 +39,7 @@ const StyledTextInput = ({ icon, style, ...props }) => {
     </View>
   );
 };
+
 const styles = StyleSheet.create({
   inputField: {
     height: 50,

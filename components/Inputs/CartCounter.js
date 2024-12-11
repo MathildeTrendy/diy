@@ -1,9 +1,9 @@
-import { View, TouchableOpacity, StyleSheet, Text } from "react-native";
+import { TouchableOpacity, View, Image, StyleSheet, Text } from "react-native";
 import StyledTextInput from "./StyledTextInput";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../config/theme";
 
-const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
+const CartCounter = ({ style, small, count = 1, setCount = () => {}, limit = 1 }) => {
   const increaseCount = () => {
     let newCount = count >= limit ? limit : count + 1;
     setCount(newCount);
@@ -13,14 +13,11 @@ const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
     let newCount = count <= 1 ? 1 : count - 1;
     setCount(newCount);
   }
-
-
   /*const handleOnEndEditing = (value) => {
     let newCount = parseInt(value) || 1;
      newCount = newCount > limit ? limit : newCount < 1 ? 1 : newCount;
     setCount(newCount);
   };*/
-
   return (
     //check: if small property is not recieved then return this view:
     //{'${count'} converts to String
@@ -31,11 +28,10 @@ const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
             style={[styles.button]}
             onPress={decreaseCount}
           >
-            <AntDesign name="minuscircle" size={30} color={colors.tertiary} />
+            <AntDesign name="minuscircle" size={20} color={colors.tertiary} />
           </TouchableOpacity>
-
+        
           <Text style={styles.countText}>{count}</Text>
-
 
           <TouchableOpacity style={styles.button} onPress={increaseCount}>
             <AntDesign name="pluscircle" size={30} color={colors.tertiary} />
@@ -54,11 +50,12 @@ const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
           <Text style={styles.smallCountText}>{count}</Text>
 
 
+          
           <TouchableOpacity
             style={[styles.button, styles.smallButton]}
             onPress={increaseCount}
           >
-            <AntDesign name="pluscircle" size={30} color={colors.tertiary} />
+            <AntDesign name="pluscircle" size={20} color={colors.tertiary} />
           </TouchableOpacity>
         </View>
       )}

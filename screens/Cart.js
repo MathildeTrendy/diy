@@ -1,3 +1,4 @@
+import { useContext, useState, useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { MainContainer, StyledText, StyledButton } from "../components";
 import { getDiyData } from "../config/data";
@@ -5,9 +6,40 @@ import { CartCard } from "../components";
 import { colors } from "../config/theme";
 import { Feather } from "@expo/vector-icons";
 import { ScreenWidth } from "../config/constants";
+import { CartContext } from "../utils/context";
+import { storeData } from "../utils/storage";
 
 const Cart = () => {
-  const cartItems = [];
+  const {cartItems, setCartItems} = useContext(CartContext);
+  const [cartTotal, setCartTotal] = useState(0);
+
+  const calculateCartTotal = () => {
+    if(cartItems.length > 0) {
+      const cartTotal = cartItems.reduce((accumulator, cartItem ) => {
+        return accumulator + cartItem.price * cartItem.cartCount;
+      }, 0);
+      setCartTotal(cartTotal);
+    }
+  };
+
+  useEffect(() => {
+    calculateCartTotal();
+  }, [cartItems]);
+
+  const checkOut = () => {
+    alert (`Check out: $${cartTotal}`);
+    clearCart();
+  }
+
+  const clearCart = async () => {
+    try {
+      storeData("@DiyApp:CartItems", []);
+      setCartItems([]);
+    } catch (error) {
+      console.warn(error);
+      
+    }
+  };
 
   return (
     <MainContainer style={styles.container}>
@@ -31,7 +63,9 @@ const Cart = () => {
         <>
           <FlatList
             data={cartItems}
-            renderItem={({ item }) => <CartCard {...item} />}
+            renderItem={({ item }) => 
+            <CartCard id={item.id} 
+            {...item} />}
             showVerticalScrollIndicator={false}
           />
 
@@ -39,9 +73,9 @@ const Cart = () => {
 
           <View style={styles.checkoutRow}>
             <StyledText big style={styles.totalAmount}>
-              $1234
+              {`$${cartTotal}`}
             </StyledText>
-            <StyledButton style={styles.checkoutButton}>Checkout</StyledButton>
+            <StyledButton style={styles.checkoutButton}onPress={checkOut} >Checkout</StyledButton>
           </View>
         </>
       )}

@@ -40,20 +40,23 @@ const Details = ({ route }) => {
       let updatedCartItems = [];
 
       if (!addedToCart) {
-        updatedCartItems = [...cartItems, { ...fetchedDiy, cartCount: 1 }];
-        newCount = 1;
-      } else {
-        if (newCount > 0) {
-          let itemIndex = cartItems.findIndex(
-            (cartItem) => cartItem.id === diyId
-          );
-          cartItems[itemIndex].cartCount = newCount;
-        }
 
-        updatedCartItems = [...cartItems];
+        const newItem = {...fetchedDiy, cartCount: 1};
+        updatedCartItems = [newItem, ...cartItems];
+        newCount = 1;
+      } else if (newCount > 0) {
+
+        updatedCartItems = cartItems.map((cartItem) =>
+          cartItem.id === diyId 
+          ? {...cartItem, cartCount: newCount }
+          : cartItem
+        );
+      } else {
+        updatedCartItems = cartItems.filter((cartItem) => cartItem.id !== diyId);
       }
-      saveCartItems(updatedCartItems, newCount);
-      setAddedToCart(true);
+
+      await saveCartItems(updatedCartItems, newCount);
+      setAddedToCart(newCount > 0);
     } catch (error) {
       console.warn(error);
     }
@@ -77,6 +80,20 @@ const Details = ({ route }) => {
       }
     }
   };
+
+  const handleRemoveFromCart = async () => {
+    try {
+      if(addedToCart) {
+        let updatedCartItems = cartItems.filter(
+          (cartItem) => cartItem.id !== diyId);
+      saveCartItems(updatedCartItems);
+      setAddedToCart(false);
+      }
+    } catch (error) {
+      console.warn(error);
+      
+    }
+  }
 
   return (
     <ScrollableMainContainer contentContainerStyle={styles.container}>
@@ -132,6 +149,7 @@ const Details = ({ route }) => {
                 count={cartCount}
                 setCount={handleAddToCart}
                 limit={fetchedDiy?.quantityAvailable}
+                onPress={handleRemoveFromCart}
               />
             </>
           )}

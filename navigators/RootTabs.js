@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens";
 import { colors } from "../config/theme";
@@ -6,10 +7,13 @@ import React, { useEffect } from "react";
 import HomeStack from "./HomeStack";
 import SearchStack from "./SearchStack";
 import CartStack from "./CartStack";
+import { CartContext } from "../utils/context";
 
 const Tab = createBottomTabNavigator();
 
 const RootTabs = () => {
+  const {cartItems, setCartItems} = useContext(CartContext);
+
   useEffect(() => {}, []);
 
   return (
@@ -51,8 +55,10 @@ const RootTabs = () => {
       <Tab.Screen
         name="Cart"
         component={CartStack}
-        options={{
-          tabBarBadge: 1,
+        options={
+          cartItems.length > 0 && 
+          {
+          tabBarBadge:  cartItems.length,
           tabBarBadgeStyle: {
             backgroundColor: colors.amber,
             color: colors.primary,
