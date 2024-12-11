@@ -50,7 +50,7 @@ const Products = ({ route }) => {
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
         ListEmptyComponent={() => (
-          <StyledText small style={styles.emptryText}>
+          <StyledText small style={styles.emptyText}>
             No match found
           </StyledText>
         )}

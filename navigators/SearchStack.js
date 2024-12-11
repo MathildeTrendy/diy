@@ -25,7 +25,7 @@ const SearchStack = () => {
           borderBottomWidth: 0,
           elevation: 0,
           shadowColor: "transparent",
-          shadowOpacity: 0,
+          shadowOpacity: 0.5,
         },
       }}
       initialRouteName="SearchScreen"
@@ -45,7 +45,7 @@ const SearchStack = () => {
             borderBottomWidth: 0,
             elevation: 0,
             shadowColor: "transparent",
-            shadowOpacity: 0,
+            shadowOpacity: 0.5,
           },
         }}
       />

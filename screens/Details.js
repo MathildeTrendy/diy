@@ -101,7 +101,7 @@ const Details = ({ route }) => {
           <AntDesign
             name="hearto"
             size={27}
-            color={colors.tertiary + "cc"}
+            color={colors.darkred + "cc"}
           ></AntDesign>
         </TouchableOpacity>
         <Image source={fetchedDiy?.image} style={styles.image} />
@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     right: "50%",
     padding: 10,
     borderRadius: 50,
-    borderColor: colors.secondary,
+    borderColor: colors.darkred,
     zIndex: 1,
   },
   image: {
@@ -174,8 +174,8 @@ const styles = StyleSheet.create({
     height: "90%",
     width: "90%",
     resizeMode: "contain",
-    right: -95,
-    top: 90,
+    right: -50,
+    top: 50,
   },
   bottomSection: {
     paddingHorizontal: 25,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.secondary,
   },
   removeButtonText: {
-    color: colors.tertiary + "cc",
+    color: colors.darkred + "cc",
   },
   CartCounter: {
     width: "47%",
