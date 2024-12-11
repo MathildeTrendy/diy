@@ -17,7 +17,7 @@ import { StackRouter } from "@react-navigation/native";
 const Details = ({ route }) => {
   const diyId = route.params?.id;
   const [fetchedDiy, setFetchedDiy] = useState();
-  const [addedToCart, setAddedToCart] = useState(true); //true = viser +/-, false = 'add cart'
+  const [addedToCart, setAddedToCart] = useState(false); //true = viser +/-, false = 'add cart'
   const { cartItems, setCartItems } = useContext(CartContext);
   const [cartCount, setCartCount] = useState(1);
 

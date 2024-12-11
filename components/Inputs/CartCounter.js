@@ -5,6 +5,7 @@ import { colors } from "../../config/theme";
 import { useState } from "react";
 
 const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
+  
   const increaseCount = () => {
     count = parseInt(count);
     limit = parseInt(limit);
@@ -15,7 +16,8 @@ const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
     count = parseInt(count);
     let newCount = count <= 1 ? 1 : count - 1;
     setCount(newCount);
-  };
+  }
+
 
   const handleOnEndEditing = () => {
     let newCount = count >= limit ? limit : count < 1 ? 1 : count;
@@ -25,12 +27,11 @@ const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
   return (
     //check: if small property is not recieved then return this view:
     //{'${count'} converts to String
-
     <>
       {!small && (
-        <View style={[styles.container, styles.smallContainer, style]}>
+        <View style={[styles.container, style]}>
           <TouchableOpacity
-            style={[styles.button, styles.smallButton]}
+            style={[styles.button]}
             onPress={decreaseCount}
           >
             <AntDesign name="minuscircle" size={30} color={colors.tertiary} />
@@ -38,7 +39,7 @@ const CartCounter = ({ style, small, count = 1, setCount, limit = 1 }) => {
 
           <StyledTextInput
             style={styles.input}
-            value={"${count}"}
+            value={'${count}'}
             onEndEditing={handleOnEndEditing}
             onChangeText={setCount}
             keyboardType="number-pad"
