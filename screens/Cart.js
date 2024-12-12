@@ -1,7 +1,6 @@
 import { useContext, useState, useEffect } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 import { MainContainer, StyledText, StyledButton } from "../components";
-import { getDiyData } from "../config/data";
 import { CartCard } from "../components";
 import { colors } from "../config/theme";
 import { Feather } from "@expo/vector-icons";

@@ -7,8 +7,6 @@ import OnboardingStack from "./navigators/OnboardingStack";
 import { OnboardingContext, CartContext } from "./utils/context";
 import { getData } from "./utils/storage";
 
-import AsyncStorage from "@react-native-async-storage/async-storage";
-
 SplashScreen.preventAutoHideAsync();
 
 export default function App() {

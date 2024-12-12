@@ -4,6 +4,9 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../config/theme";
 
 const CartCounter = ({ style, small, count = 1, setCount = () => {}, limit = 1 }) => {
+const increaseDisabled =  count === limit;
+const decreaseDisabled = count === 1;
+
   const increaseCount = () => {
     let newCount = count >= limit ? limit : count + 1;
     setCount(newCount);
@@ -25,24 +28,33 @@ const CartCounter = ({ style, small, count = 1, setCount = () => {}, limit = 1 }
       {!small && (
         <View style={[styles.container, style]}>
           <TouchableOpacity
-            style={[styles.button]}
-            onPress={decreaseCount}
+            style={[styles.button, decreaseDisabled && styles.disabled]}
+            onPress={decreaseCount} disabled={decreaseDisabled}
           >
             <AntDesign name="minuscircle" size={20} color={colors.tertiary} />
           </TouchableOpacity>
         
           <Text style={styles.countText}>{count}</Text>
 
-          <TouchableOpacity style={styles.button} onPress={increaseCount}>
+          <TouchableOpacity 
+          style={[styles.button, increaseDisabled && styles.disabled]} 
+          onPress={increaseCount} 
+          disabled={increaseDisabled}>
             <AntDesign name="pluscircle" size={30} color={colors.tertiary} />
           </TouchableOpacity>
         </View>
       )}
+
       {small && (
         <View style={[styles.container, styles.smallContainer, style]}>
           <TouchableOpacity
-            style={[styles.button, styles.smallButton]}
+            style={[
+              styles.button, 
+              styles.smallButton, 
+              decreaseDisabled && styles.disabled,
+            ]}
             onPress={decreaseCount}
+            disabled={decreaseDisabled}
           >
             <AntDesign name="minuscircle" size={20} color={colors.tertiary} />
           </TouchableOpacity>
@@ -52,8 +64,12 @@ const CartCounter = ({ style, small, count = 1, setCount = () => {}, limit = 1 }
 
           
           <TouchableOpacity
-            style={[styles.button, styles.smallButton]}
+            style={[styles.button, styles.smallButton, 
+            increaseDisabled && styles.disabled, 
+
+            ]}
             onPress={increaseCount}
+            disabled={increaseDisabled}
           >
             <AntDesign name="pluscircle" size={20} color={colors.tertiary} />
           </TouchableOpacity>
@@ -106,6 +122,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
   },
+  disabled: {
+    opacity: 0.4
+  }
 });
 
 export default CartCounter;
