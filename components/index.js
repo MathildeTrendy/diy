@@ -10,6 +10,7 @@ import ProductInfo from "./Texts/ProductInfo";
 import CartCounter from "./Inputs/CartCounter";
 import CartCard from "./Cards/CartCard";
 import AlertModal from "./Modals/AlertModal";
+import ProfileInfo from "./Texts/ProfileInfo"
 
 export {
   StyledText,
@@ -24,4 +25,5 @@ export {
   CartCounter,
   CartCard,
   AlertModal,
+  ProfileInfo,
 };

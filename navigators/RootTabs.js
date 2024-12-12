@@ -1,13 +1,15 @@
 import { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home } from "../screens";
 import { colors } from "../config/theme";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import React, { useEffect } from "react";
 import HomeStack from "./HomeStack";
 import SearchStack from "./SearchStack";
 import CartStack from "./CartStack";
+import ProfileStack from "./ProfileStack";
 import { CartContext } from "../utils/context";
+
+
 
 const Tab = createBottomTabNavigator();
 
@@ -66,7 +68,7 @@ const RootTabs = () => {
           unmountOnBlur: true,
         }}
       />
-      <Tab.Screen name="Profile" component={Home} />
+      <Tab.Screen name="Profile" component={ProfileStack} />
     </Tab.Navigator>
   );
 };
