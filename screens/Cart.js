@@ -32,20 +32,30 @@ const Cart = () => {
     if(isConfirmed == true) {
     setIsModalVisible(true);    //clearCart();
 
-    return setTimeout(() => {
+    setTimeout(() => {
       setOrderConfirmed(true),
       setIsConfirming(false)
 
-    }, 2000)
-  }
+    }, 2000);
+  }else {
 
   setIsModalVisible(true);
-
+  }
 };
 
   const cancelCheckout = () => {
+    if(orderConfirmed) {
+      return completeOrder();
+    }
     setIsModalVisible(false);
+  };
+
+  const completeOrder = async () => {
+    await clearCart();
+    setIsModalVisible(false);
+    setOrderConfirmed(false);
   }
+
 
   const clearCart = async () => {
     try {
@@ -98,31 +108,52 @@ const Cart = () => {
       <AlertModal isVisible={isModalVisible} onClose={cancelCheckout}>
        {!orderConfirmed && (
         <View style={styles.modalContentContainer}>
-        <StyledText style={{marginBottom: 15}}>You are about to checkout an order of <StyledText bold>{`$${cartTotal}`}</StyledText>. Continue?
+        <StyledText style={{textAlign: "center", marginBottom: 15}}>
+          You are about to checkout an order of {" "}
+        <StyledText bold>{`$${cartTotal}`}</StyledText>. Continue?
         </StyledText>
-
-        <StyledButton style={styles.marginBottom} isLoading={isConfirming} onPress={() => checkOut(true)}>
+      
+        <StyledButton 
+          style={[styles.modalButton, { backgroundColor: colors.tertiary}]}
+          isLoading={isConfirming} 
+          onPress={() => checkOut(true)}
+          >
           Continue
         </StyledButton>
-        </View>
-        )}
+
+        <StyledButton
+        style={[styles.modalButton, { backgroundColor: colors.grey }]}
+        onPress={cancelCheckout}
+      >
+        Cancel
+      </StyledButton>
+    </View>
+  )}
 
         {orderConfirmed && (  
         <View style={styles.modalContentContainer}>
-          <Feather name="check-circle" size={45} color={colors.green} style={{marginBottom: 10}} />
+          <Feather 
+          name="check-circle" 
+          size={45} 
+          color={colors.green} 
+          style={{marginBottom: 10}} />
+        
         <StyledText style={{marginBottom: 15}}>
           Order Confirmed!
         </StyledText>
-
-        <StyledButton style={styles.marginBottom} isLoading={isConfirming} onPress={() => checkOut(true)}>
-          Continue
+        <StyledButton 
+        style={[styles.modalButton, {backgroundColor: colors.green }]} 
+        onPress={completeOrder}
+        >
+          Great!
         </StyledButton>
         </View>
-        )}
-      </AlertModal>
+        )}    
+    </AlertModal>
     </MainContainer>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
@@ -157,12 +188,23 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   modalContentContainer: {
-    padding: 25,
-    alignItwms: 'center',
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
+    paddingVertical: 30,
+    alignItems: "center",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 20,
+    width: "100%",
+    alignItems: "center",
   },
   modalButton: {
     height: 50,
-    width: "50%",
+    width: "80%",
+    marginVertical: 10,
+    borderRadius: 8,
   }
 });
 

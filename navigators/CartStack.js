@@ -1,12 +1,13 @@
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Details, Products, Cart } from "../screens";
 import { colors } from "../config/theme";
 import { onIOS } from "../config/constants";
 import { Feather } from "@expo/vector-icons";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, View } from "react-native";
 import { CartContext } from "../utils/context";
 import { storeData } from "../utils/storage";
+import {AlertModal, StyledText, StyledButton} from "../components";
 
 
 
@@ -14,12 +15,14 @@ const Stack = createStackNavigator();
 
 const CartStack = () => {
   const {cartItems, setCartItems} = useContext(CartContext);
+const [isModalVisible, setIsModalVisible] = useState(false);
 
 
   const clearCart = async () => {
     try {
       storeData("@DiyApp:CartItems", []);
       setCartItems([]);
+      setIsModalVisible(false);
     } catch (error) {
       console.warn(error);
       
@@ -27,6 +30,7 @@ const CartStack = () => {
   };
 
   return (
+    <>
     <Stack.Navigator
       screenOptions={{
         headerTitleAlign: "center",
@@ -56,8 +60,11 @@ const CartStack = () => {
           headerRight: () => (
             <>
             {cartItems.length > 0 && 
-            <TouchableOpacity onPress={clearCart} style={{padding: 10}}>
-              <Feather name="trash" size={20} color={colors.tertiary + "cc"} />
+            <TouchableOpacity onPress={() => setIsModalVisible(true)} style={{padding: 10}}>
+              <Feather 
+              name="trash" 
+              size={20} 
+              color={colors.tertiary + "cc"} />
             </TouchableOpacity>}
             </>
           ),
@@ -81,14 +88,34 @@ const CartStack = () => {
           },
         }}
       />
-      <Stack.Screen
-        name="Products"
-        component={Products}
-        options={{ title: "Our Collection" }}
-      />
-      <Stack.Screen name="Popular" component={Products} />
     </Stack.Navigator>
+      <AlertModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)}
+        
+      >
+       <View style={{
+        flexDirection: "row",
+        justifyContent: "space-between",
+        padding:25,
+        alignItems: "center"
+       }}>
+       <StyledText style={{marginBottom: 15}}>
+        You are about to clear your cart. Do you wish to proceed? {" "} 
+       </StyledText>
+
+       <StyledButton 
+       style={{height: 50, width: '50%', backgroundColor: colors.tertiary,
+
+       }} 
+       onPress={clearCart}
+        >
+         Continue
+       </StyledButton>
+       </View>
+     </AlertModal>
+     </>
+     
   );
 };
+
 
 export default CartStack;
