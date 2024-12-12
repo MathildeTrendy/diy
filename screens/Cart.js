@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect } from "react";
-import { FlatList, StyleSheet, View } from "react-native";
-import { MainContainer, StyledText, StyledButton } from "../components";
+import { Alert, FlatList, StyleSheet, View } from "react-native";
+import { MainContainer, StyledText, StyledButton, AlertModal } from "../components";
 import { CartCard } from "../components";
 import { colors } from "../config/theme";
 import { Feather } from "@expo/vector-icons";
@@ -11,6 +11,9 @@ import { storeData } from "../utils/storage";
 const Cart = () => {
   const {cartItems, setCartItems} = useContext(CartContext);
   const [cartTotal, setCartTotal] = useState(0);
+  const [isModalVisible, setIsModalVisible ] = useState(false);
+  const [orderConfirmed, setOrderConfirmed] = useState(false);
+  const [isConfirming, setIsConfirming] = useState(false);
 
   const calculateCartTotal = () => {
     if(cartItems.length > 0) {
@@ -25,9 +28,23 @@ const Cart = () => {
     calculateCartTotal();
   }, [cartItems]);
 
-  const checkOut = () => {
-    alert (`Check out: $${cartTotal}`);
-    clearCart();
+  const checkOut = (isConfirmed) => {
+    if(isConfirmed == true) {
+    setIsModalVisible(true);    //clearCart();
+
+    return setTimeout(() => {
+      setOrderConfirmed(true),
+      setIsConfirming(false)
+
+    }, 2000)
+  }
+
+  setIsModalVisible(true);
+
+};
+
+  const cancelCheckout = () => {
+    setIsModalVisible(false);
   }
 
   const clearCart = async () => {
@@ -78,6 +95,31 @@ const Cart = () => {
           </View>
         </>
       )}
+      <AlertModal isVisible={isModalVisible} onClose={cancelCheckout}>
+       {!orderConfirmed && (
+        <View style={styles.modalContentContainer}>
+        <StyledText style={{marginBottom: 15}}>You are about to checkout an order of <StyledText bold>{`$${cartTotal}`}</StyledText>. Continue?
+        </StyledText>
+
+        <StyledButton style={styles.marginBottom} isLoading={isConfirming} onPress={() => checkOut(true)}>
+          Continue
+        </StyledButton>
+        </View>
+        )}
+
+        {orderConfirmed && (  
+        <View style={styles.modalContentContainer}>
+          <Feather name="check-circle" size={45} color={colors.green} style={{marginBottom: 10}} />
+        <StyledText style={{marginBottom: 15}}>
+          Order Confirmed!
+        </StyledText>
+
+        <StyledButton style={styles.marginBottom} isLoading={isConfirming} onPress={() => checkOut(true)}>
+          Continue
+        </StyledButton>
+        </View>
+        )}
+      </AlertModal>
     </MainContainer>
   );
 };
@@ -114,6 +156,14 @@ const styles = StyleSheet.create({
     color: colors.tertiary,
     marginTop: 5,
   },
+  modalContentContainer: {
+    padding: 25,
+    alignItwms: 'center',
+  },
+  modalButton: {
+    height: 50,
+    width: "50%",
+  }
 });
 
 export default Cart;
