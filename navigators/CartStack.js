@@ -66,7 +66,8 @@ const [isModalVisible, setIsModalVisible] = useState(false);
               size={20} 
               color={colors.tertiary + "cc"} />
             </TouchableOpacity>}
-            </>
+            
+          </>
           ),
           headerRightContainerStyle: {
             //push icon away from the screen
@@ -89,19 +90,21 @@ const [isModalVisible, setIsModalVisible] = useState(false);
         }}
       />
     </Stack.Navigator>
-      <AlertModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)}
-        
-      >
-       <View style={{
+      
+    <AlertModal isVisible={isModalVisible} onClose={() => setIsModalVisible(false)}>
+       <View 
+       style={{
         flexDirection: "row",
         justifyContent: "space-between",
-        padding:25,
+        padding: 25,
         alignItems: "center"
-       }}>
+       }}
+       >
        <StyledText style={{marginBottom: 15}}>
-        You are about to clear your cart. Do you wish to proceed? {" "} 
+        You are about to clear your cart. Do you wish to proceed?
        </StyledText>
 
+       <View style={{ flexDirection: "row", width: "60%", justifyContent: "space-between" }}>
        <StyledButton 
        style={{height: 50, width: '50%', backgroundColor: colors.tertiary,
 
@@ -110,7 +113,20 @@ const [isModalVisible, setIsModalVisible] = useState(false);
         >
          Continue
        </StyledButton>
-       </View>
+
+       <StyledButton
+              style={{
+                height: 50,
+                width: "48%",  // Each button gets 48% width
+                backgroundColor: colors.grey,
+              }}
+              onPress={() => setIsModalVisible(false)} // Close modal on cancel
+            >
+              Cancel
+            </StyledButton>
+          </View>
+        </View>
+
      </AlertModal>
      </>
      

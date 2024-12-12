@@ -113,6 +113,7 @@ const Cart = () => {
         <StyledText bold>{`$${cartTotal}`}</StyledText>. Continue?
         </StyledText>
       
+        <View style={styles.modalButtonContainer}>
         <StyledButton 
           style={[styles.modalButton, { backgroundColor: colors.tertiary}]}
           isLoading={isConfirming} 
@@ -120,7 +121,6 @@ const Cart = () => {
           >
           Continue
         </StyledButton>
-
         <StyledButton
         style={[styles.modalButton, { backgroundColor: colors.grey }]}
         onPress={cancelCheckout}
@@ -128,20 +128,21 @@ const Cart = () => {
         Cancel
       </StyledButton>
     </View>
+  </View>
   )}
 
-        {orderConfirmed && (  
-        <View style={styles.modalContentContainer}>
-          <Feather 
-          name="check-circle" 
-          size={45} 
-          color={colors.green} 
-          style={{marginBottom: 10}} />
+  {orderConfirmed && (  
+    <View style={styles.modalContentContainer}>
+      <Feather 
+        name="check-circle" 
+        size={45} 
+        color={colors.green} 
+        style={{marginBottom: 10}} />
         
-        <StyledText style={{marginBottom: 15}}>
-          Order Confirmed!
-        </StyledText>
-        <StyledButton 
+      <StyledText style={{marginBottom: 15}}>
+        Order Confirmed!
+      </StyledText>
+      <StyledButton 
         style={[styles.modalButton, {backgroundColor: colors.green }]} 
         onPress={completeOrder}
         >
@@ -194,18 +195,21 @@ const styles = StyleSheet.create({
     paddingVertical: 30,
     alignItems: "center",
   },
-  buttonContainer: {
-    position: "absolute",
-    bottom: 20,
-    width: "100%",
-    alignItems: "center",
+  modalButtonContainer: {
+    flexDirection: "row", 
+    justifyContent: "space-between",
+    width: "80%", 
+    marginTop: 20,
+    
   },
   modalButton: {
     height: 50,
     width: "80%",
-    marginVertical: 10,
+    marginHorizontal: 5,
     borderRadius: 8,
-  }
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
 export default Cart;
