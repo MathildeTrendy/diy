@@ -60,7 +60,7 @@ export const diyData = [
     quantityAvailable: 35,
     popular: true,
     deal: true,
-    image: require("./../assets/diy/5.png"),
+    image: require("./../assets/diy/julpyssel-renar.jpg"),
   },
   {
     id: 6,
@@ -76,7 +76,7 @@ export const diyData = [
     quantityAvailable: 35,
     popular: false,
     deal: true,
-    image: require("./../assets/diy/5.png"),
+    image: require("./../assets/diy/juleh.jpg"),
   },
   {
     id: 2,
