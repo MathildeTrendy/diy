@@ -25,7 +25,7 @@ export default function App() {
       const onboardingStatus = await getData("@DiyApp:Onboarding");
       const cartItemsData = await getData("@DiyApp:CartItems");
 
-      onboardingStatus && setIsDiyAppOnboarded(onboardingStatus);
+      onboardingStatus && setIsDiyAppOnboarded(onboardingStatus == "true");
       cartItemsData && setCartItems(cartItemsData);
     } catch (error) {
       console.warn(error);

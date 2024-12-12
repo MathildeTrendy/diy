@@ -9,6 +9,9 @@ import { HeaderHeightContext } from "@react-navigation/elements";
 import { useNavigation } from "@react-navigation/native";
 import { storeData } from "./../utils/storage";
 import { OnboardingContext } from "../utils/context";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+
 
 const Welcome = ({ route }) => {
   const navigation = useNavigation();
@@ -16,6 +19,7 @@ const Welcome = ({ route }) => {
   const onLastScreen = activeScreen === onboardingData.length; //hvis dette er true, skal vi gemme 'skip' knappen
   const { setIsDiyAppOnboarded } = useContext(OnboardingContext);
   const [completingOnboarding, setCompletingOnboarding] = useState(false);
+  const currentData = onboardingData[activeScreen - 1] || {};
 
   const completeOnBoarding = async () => {
     try {

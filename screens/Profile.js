@@ -17,13 +17,16 @@ const Profile = () => {
         </StyledText>
     
     
-    <ProfileInfo icon="user" label="Username">
+    <ProfileInfo 
+    icon="user" label="Username">
         {activeUser?.username}
         </ProfileInfo>
-    <ProfileInfo icon="user" label="Email">
+    <ProfileInfo 
+    icon="user" label="Email">
         {activeUser?.email}
         </ProfileInfo>
-    <ProfileInfo icon="enviromento" label="Address">
+    <ProfileInfo 
+    icon="enviromento" label="Address">
         {activeUser?.address}
         </ProfileInfo>
 
