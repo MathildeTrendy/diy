@@ -105,8 +105,8 @@ export const onboardingData = [
   },
   {
     id: 2,
-    title: "Good diy is all you need",
-    summary: "Dette er ikke en vin-app",
+    title: "Velkommen til Retrove",
+    summary: "En app udviklet til inspiration for alle med interesse indenfor upcyckling og bæredygtighed.",
     text: "",
     backgroundColor: "6b7280",
   },

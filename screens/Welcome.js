@@ -12,7 +12,6 @@ import { OnboardingContext } from "../utils/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
-
 const Welcome = ({ route }) => {
   const navigation = useNavigation();
   const [activeScreen] = useState(route.params?.activeScreen || 1); //Hvis ikke active screen er der, falder den tilbage på 1
