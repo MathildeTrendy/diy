@@ -6,6 +6,8 @@ import RootTabs from "./navigators/RootTabs";
 import OnboardingStack from "./navigators/OnboardingStack";
 import { OnboardingContext, CartContext, UserContext } from "./utils/context";
 import { getData } from "./utils/storage";
+import firebase from "firebase/app";
+import "firebase/auth";
 
 SplashScreen.preventAutoHideAsync();
 

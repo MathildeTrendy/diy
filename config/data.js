@@ -107,7 +107,8 @@ export const onboardingData = [
     id: 2,
     title: "Good diy is all you need",
     summary: "Dette er ikke en vin-app",
-    image: require("./../assets/diy/retrove.png"),
+    text: "",
+    backgroundColor: "6b7280",
   },
   {
     id: 3,
