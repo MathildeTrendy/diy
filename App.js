@@ -7,14 +7,6 @@ import OnboardingStack from "./navigators/OnboardingStack";
 import { OnboardingContext, CartContext, UserContext, SavedProductsContext } from "./utils/context";
 import { getData } from "./utils/storage";
 
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import firebaseConfig from "./config/firebase"; // Din firebase config
-import { initializeApp } from "firebase/app";
-import auth from '@react-native-firebase/auth'; // This is for React Native Firebase SDK
-
-
-// Firebase setup
-const app = initializeApp(firebaseConfig);
 
 SplashScreen.preventAutoHideAsync();
 
@@ -42,23 +34,8 @@ export default function App() {
   };
 
   useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (user) => {
-        if (user) {
-          // If the user is logged in
-          setActiveUser({
-            username: user.displayName || "User",
-            email: user.email,
-            address: "Address not provided", // Example
-          });
-        } else {
-          // If the user is not logged in
-          setActiveUser(null);
-        }
-      });
-    
       prepareApp();
     
-      return () => unsubscribe();
     }, []);
 
   return (
