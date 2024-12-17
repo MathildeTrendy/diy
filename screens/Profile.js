@@ -1,14 +1,14 @@
 import { useContext } from "react";
 import { MainContainer, StyledText, ProfileInfo, ProductCard } from "../components";
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList, View, TouchableOpacity } from "react-native";
 import { colors } from "../config/theme";
-import { UserContext } from "../utils/context";
+import { UserContext, SavedProductsContext } from "../utils/context";
 import { AntDesign } from "@expo/vector-icons";
-import { getDiyData } from "../config/data";
+import { ScreenWidth } from "../config/constants";
 
 const Profile = () => {
     const{activeUser} = useContext(UserContext);
-    const savedProducts = [...getDiyData({})];
+    const {savedProducts} = useContext(SavedProductsContext);
 
     return ( 
     <MainContainer style={styles.container}>
@@ -35,7 +35,24 @@ const Profile = () => {
         <AntDesign name="heart" size={17} color={colors.darkred + "cc"}/>       
     </StyledText>
 
-    <FlatList
+    {(!savedProducts || savedProducts.length === 0) && (
+        <View style={styles.emptyWishlist}>
+          <AntDesign
+            name="hearto"
+            size={ScreenWidth * 0.4}
+            color={colors.tertiary + "55"}
+            style={{ marginBottom: 30 }}
+          />
+
+          <StyledText big>Your Wishlist is empty!</StyledText>
+          <StyledText style={styles.emptyWishlistText}>
+            No items found in your Wishlist
+          </StyledText>
+        </View>
+      )}
+
+    {savedProducts && savedProducts.length > 0 && (
+        <FlatList
         data={savedProducts}
         renderItem={({ item }) => <ProductCard {...item} all />}
         keyExtractor={({ id }) => id.toString()}
@@ -47,6 +64,7 @@ const Profile = () => {
         numColumns={2}
         columnWrapperStyle={{ justifyContent: "space-between" }}
        />
+    )}
     </MainContainer>
 );
 };
@@ -60,8 +78,16 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 15,
         color: colors.darkred + "cc"
-
-    }
+    },
+    emptyWishlist: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+      },
+      emptyWishlistText: {
+        color: colors.tertiary,
+        marginTop: 5,
+      },
 })
 
 export default Profile;

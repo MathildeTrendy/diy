@@ -10,7 +10,7 @@ import {
 import { getDiyData } from "../config/data";
 import { colors } from "../config/theme";
 import { AntDesign } from "@expo/vector-icons";
-import { CartContext } from "../utils/context";
+import { CartContext, SavedProductsContext } from "../utils/context";
 import { storeData } from "../utils/storage";
 import { StackRouter } from "@react-navigation/native";
 
@@ -20,6 +20,8 @@ const Details = ({ route }) => {
   const [addedToCart, setAddedToCart] = useState(false); //true = viser +/-, false = 'add cart'
   const { cartItems, setCartItems } = useContext(CartContext);
   const [cartCount, setCartCount] = useState(1);
+  const {savedProducts, setSavedProducts} = useContext(SavedProductsContext);
+  const [saved, setSaved] = useState(false);
 
   const fetchDiyDetails = () => {
     try {
@@ -30,9 +32,38 @@ const Details = ({ route }) => {
     }
   };
 
+  const handleSaveProduct = async () => {
+    try {
+      let updatedSavedProducts;
+
+      if(!saved) {
+
+      updatedSavedProducts = [...(savedProducts || []), fetchedDiy];
+    }else {
+      
+      updatedSavedProducts = (savedProducts || []).filter((savedProduct) =>
+      savedProduct.id !== diyId
+    );
+  }
+
+      await storeData("@DiyApp:SavedProducts", updatedSavedProducts); //"@DiyApp:SavedProducts" er Key til storeData
+      setSavedProducts(updatedSavedProducts);
+      setSaved(!saved);
+    } catch (error) {
+      console.warn(error);
+    }
+  };
+
+  const checkSavedStatus = () => {
+    if ((savedProducts || []).some((savedProducts) => savedProducts.id === diyId)) {
+      setSaved(true);
+    }
+  }
+
   useEffect(() => {
     fetchDiyDetails();
     checkCartStatus();
+    checkSavedStatus();
   }, []);
 
   const handleAddToCart = async (newCount) => {
@@ -114,11 +145,11 @@ const Details = ({ route }) => {
           {fetchedDiy?.origin}
         </ProductInfo>
         <StyledText big>{fetchedDiy?.currency + fetchedDiy?.price}</StyledText>
-        <TouchableOpacity style={styles.heart}>
+        <TouchableOpacity style={styles.heart} onPress={handleSaveProduct}>
           <AntDesign
-            name="hearto"
+            name={saved ? "heart" : "hearto"}
             size={27}
-            color={colors.darkred + "cc"}
+            color={saved ? colors.darkred + "cc" : colors.darkred + "cc"}
           ></AntDesign>
         </TouchableOpacity>
         <Image source={fetchedDiy?.image} style={styles.image} />
