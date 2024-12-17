@@ -1,7 +1,13 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState } from 'react';
 import { View, TextInput, Button, Text, StyleSheet} from 'react-native';
 import app from '../config/firebase';
 import {getAuth, signInWithEmailAndPassword} from "firebase/auth";
+import firebaseConfig from "../config/firebase"; // Din Firebase config
+import { initializeApp } from 'firebase/app';
+
+
+//const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 
 const LoginScreen = () => {
 
@@ -9,17 +15,16 @@ const LoginScreen = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const auth = getAuth(app);
 
 
   // Login-funktion
   const handleLogin = async () => {
     try {
-      await firebase.auth().signInWithEmailAndPassword(email, password);
-      console.log('Bruger logget ind');
-      // Naviger til en anden skærm, hvis login er succesfuldt
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log('User logget in');
+      // Navigate to another screen upon successful login
     } catch (e) {
-      setError(e.message); // Håndter eventuelle fejl
+      setError(e.message); // Handle any errors
     }
   };
 
