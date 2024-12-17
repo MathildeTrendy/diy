@@ -4,19 +4,15 @@ configurations {
 
 buildscript {
     apply from: "config.gradle"
-    def kotlinVersion = ext.AsyncStorageConfig.kotlinVersion
-    def kspVersion = ext.AsyncStorageConfig.kspVersion
-
     repositories {
         mavenCentral()
         google()
     }
     dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "com.google.devtools.ksp:symbol-processing-gradle-plugin:$kspVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${ext.AsyncStorageConfig.kotlinVersion}"
+        classpath "com.google.devtools.ksp:symbol-processing-gradle-plugin:${ext.AsyncStorageConfig.kspVersion}"
     }
 }
-
 
 apply plugin: 'com.android.library'
 apply from: 'config.gradle'
@@ -46,15 +42,12 @@ android {
     }
 
     compileSdkVersion project.ext.AsyncStorageConfig.compileSdkVersion
-    // Used to override the NDK path/version by allowing users to customize
-    // the NDK path/version from their root project (e.g. for M1 support)
     if (rootProject.hasProperty("ndkPath")) {
         ndkPath rootProject.ext.ndkPath
     }
     if (rootProject.hasProperty("ndkVersion")) {
         ndkVersion rootProject.ext.ndkVersion
     }
-
 
     defaultConfig {
         minSdkVersion project.ext.AsyncStorageConfig.minSdkVersion
@@ -64,6 +57,7 @@ android {
         buildConfigField "boolean", "AsyncStorage_useNextStorage", "${useNextStorage}"
         buildConfigField "boolean", "IS_NEW_ARCHITECTURE_ENABLED", "${isNewArchitectureEnabled}"
     }
+
     lintOptions {
         abortOnError false
     }
@@ -84,7 +78,6 @@ android {
             } else {
                 srcDirs += 'src/javaPackage/java'
             }
-
             if (!isNewArchitectureEnabled) {
                 srcDirs += 'src/oldarch/java'
             }
@@ -94,7 +87,6 @@ android {
 
 repositories {
     maven {
-        // All of React Native (JS, Obj-C sources, Android binaries) is installed from npm
         url "${project.ext.resolveModulePath("react-native")}/android"
     }
     google()
