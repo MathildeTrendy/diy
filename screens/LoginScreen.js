@@ -6,8 +6,9 @@ import firebaseConfig from "../config/firebase"; // Din Firebase config
 import { initializeApp } from 'firebase/app';
 
 
+
 //const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+//const auth = getAuth(app);
 
 const LoginScreen = () => {
 
