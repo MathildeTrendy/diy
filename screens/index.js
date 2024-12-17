@@ -4,4 +4,5 @@ import Details from "./Details";
 import Products from "./Products";
 import Cart from "./Cart";
 import Profile from "./Profile";
-export { Home, Welcome, Details, Products, Cart, Profile };
+import LoginScreen from "./LoginScreen";
+export { Home, Welcome, Details, Products, Cart, Profile, LoginScreen };
