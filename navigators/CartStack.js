@@ -10,8 +10,6 @@ import { storeData } from "../utils/storage";
 import {AlertModal, StyledText, StyledButton} from "../components";
 import { GooglePay } from "react-native-google-pay";
 
-//jgjgj
-
 
 
 
