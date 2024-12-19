@@ -14,6 +14,8 @@ buildscript {
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:${ext.AsyncStorageConfig.kotlinVersion}"
         classpath "com.google.devtools.ksp:symbol-processing-gradle-plugin:${ext.AsyncStorageConfig.kspVersion}"
+        classpath 'com.google.gms:google-services:4.3.15'  // Add this line
+
     }
 }
 
@@ -117,5 +119,6 @@ dependencies {
         testImplementation project.ext.AsyncStorageLibs.testRobolectric
         testImplementation project.ext.AsyncStorageLibs.testTruth
     }
+apply plugin: 'com.google.gms.google-services'
 
 }
