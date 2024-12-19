@@ -3,7 +3,16 @@
   xmlns:tools="http://schemas.android.com/tools"
   package="io.invertase.firebase">
 
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
+
+
   <application>
+    <meta-data
+    android:name="com.google.android.gms.wallet.api.enabled"
+    android:value="true" />
+    
     <meta-data android:name="app_data_collection_default_enabled" android:value="${firebaseJsonDataCollectionDefaultEnabled}"/>
     <service
       android:name="com.google.firebase.components.ComponentDiscoveryService"
