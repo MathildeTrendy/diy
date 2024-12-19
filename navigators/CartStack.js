@@ -229,6 +229,7 @@ import { GooglePay } from "react-native-google-pay";
 
 
 
+
 const Stack = createStackNavigator();
 
 const allowedPaymentMethods = [
