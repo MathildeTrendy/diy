@@ -1,11 +1,10 @@
 import StyledText from "../Texts/StyledText";
-import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
+import { TouchableOpacity, View, StyleSheet } from "react-native"; // fjernet Image import
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
 import { useNavigation } from "@react-navigation/native";
 
-//se produktdetaljer
-const ProductCard = ({ id, name, currency, price, image, all }) => {
+const ProductCard = ({ id, title, price, all }) => {
   const navigation = useNavigation();
 
   const handleOnPress = () => {
@@ -17,13 +16,12 @@ const ProductCard = ({ id, name, currency, price, image, all }) => {
       style={all ? styles.containerPlus : styles.container}
       onPress={handleOnPress}
     >
-      <Image source={image} style={styles.image} />
       <View style={styles.details}>
         <StyledText style={styles.text} small numberOfLines={2}>
-          {name}
+          {title}
         </StyledText>
         <StyledText style={styles.price} bold>
-          {currency + price}
+          {price} DKK
         </StyledText>
       </View>
     </TouchableOpacity>
@@ -64,14 +62,6 @@ const styles = StyleSheet.create({
   },
   price: {
     color: colors.accent + "cc",
-  },
-
-  image: {
-    width: "100%",
-    height: "87%",
-    top: -55,
-    position: "absolute",
-    resizeMode: "contain",
   },
 });
 
