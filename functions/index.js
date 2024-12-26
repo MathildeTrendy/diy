@@ -24,7 +24,6 @@ exports.createPaymentIntent = onRequest(async (req, res) => {
       };
       
 
-    // Send clientSecret tilbage til frontend
     res.status(200).send(paymentResponse);
     } catch (error) {
       logger.error('Error creating payment intent:', error);

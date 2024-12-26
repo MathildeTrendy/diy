@@ -11,7 +11,6 @@ import { storeData } from "./../utils/storage";
 import { OnboardingContext } from "../utils/context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 const Welcome = ({ route }) => {
   const navigation = useNavigation();
   const [activeScreen] = useState(route.params?.activeScreen || 1); //Hvis ikke active screen er der, falder den tilbage på 1
@@ -27,7 +26,8 @@ const Welcome = ({ route }) => {
 
       setTimeout(() => {
         setIsDiyAppOnboarded(true);
-        setCompletingOnboarding(false);
+       // setCompletingOnboarding(false);
+        navigation.navigate("PrivacyPolicy");
       }, 500);
     } catch (error) {
       console.warn(error);
@@ -98,8 +98,11 @@ const Welcome = ({ route }) => {
           icon="arrowright"
           isLoading={completingOnboarding}
           onPress={() => {
-            if (onLastScreen) return completeOnBoarding();
+            if (onLastScreen) {
+              navigation.navigate("PrivacyPolicy");
+            } else {
             navigation.push("Welcome", { activeScreen: activeScreen + 1 }); //we want active screen to be increased by 1
+            }
           }}
         >
           {onLastScreen ? "Explore" : "Next"}
