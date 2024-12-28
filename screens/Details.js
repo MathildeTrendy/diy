@@ -181,7 +181,7 @@ const Details = ({ route }) => {
                 count={cartCount}
                 setCount={handleAddToCart}
                 limit={fetchedDiy?.quantityAvailable}
-                onPress={handleRemoveFromCart}
+                onPress={handleRemoveFromCart} //fjerner item fra cart
               />
             </>
           )}
