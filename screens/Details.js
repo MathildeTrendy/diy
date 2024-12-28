@@ -172,6 +172,7 @@ const Details = ({ route }) => {
                 icon="delete"
                 style={styles.removeButton}
                 textStyle={styles.removeButtonText}
+                onPress={handleRemoveFromCart}
               >
                 Remove
               </StyledButton>
