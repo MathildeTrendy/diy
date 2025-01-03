@@ -9,23 +9,24 @@ import { getUserItems, createItem } from "../utils/itemService";
 const Profile = () => {
   const { activeUser } = useContext(UserContext);
 
-  // State til at gemme brugerens egne items fra Firestore
   const [myItems, setMyItems] = useState([]);
-
-  // State til oprettelse af nye items (fjern image)
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [homepageUrl, setHomepageUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
   // Hent brugerens items fra Firestore
   const fetchMyItems = async () => {
     if (activeUser?.uid) {
+      setLoading(true);
       try {
         const items = await getUserItems(activeUser.uid);
         setMyItems(items);
       } catch (error) {
         console.error("Error fetching user items: ", error);
+      } finally {
+        setLoading(false);
       }
     }
   };
@@ -35,6 +36,11 @@ const Profile = () => {
   }, [activeUser]);
 
   const handleCreate = async () => {
+    if (!title || !price) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
     try {
       const newItem = {
         title,
@@ -45,9 +51,7 @@ const Profile = () => {
       };
 
       await createItem(newItem);
-      // Efter oprettelse: Hent items igen
-      await fetchMyItems();  
-      // Clear input
+      await fetchMyItems(); // Opdater items
       setTitle("");
       setDescription("");
       setPrice("");
@@ -64,16 +68,12 @@ const Profile = () => {
       </StyledText>
 
       <ProfileInfo icon="user" label="Username">
-        {activeUser?.username}
+        {activeUser?.username || "N/A"}
       </ProfileInfo>
       <ProfileInfo icon="user" label="Email">
-        {activeUser?.email}
-      </ProfileInfo>
-      <ProfileInfo icon="enviromento" label="Address">
-        {activeUser?.address}
+        {activeUser?.email || "N/A"}
       </ProfileInfo>
 
-      {/* Sektion til at oprette nye items */}
       <StyledText style={styles.header} bold>
         Opret et nyt item
       </StyledText>
@@ -106,27 +106,30 @@ const Profile = () => {
         <Button title="Create Item" onPress={handleCreate} />
       </View>
 
-      {/* Viser brugerens egne items fra Firestore */}
       <StyledText style={styles.header} bold>
         My Creations
       </StyledText>
-      <FlatList
-        data={myItems}
-        renderItem={({ item }) => <ProductCard {...item} all />}
-        keyExtractor={(item) => item.id}
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={{
-          paddingBottom: 25,
-          marginBottom: 10,
-        }}
-        numColumns={2}
-        columnWrapperStyle={{ justifyContent: "space-between" }}
-        ListEmptyComponent={() => (
-          <StyledText small style={styles.emptyText}>
-            You have no items yet.
-          </StyledText>
-        )}
-      />
+      {loading ? (
+        <StyledText>Loading...</StyledText>
+      ) : (
+        <FlatList
+          data={myItems}
+          renderItem={({ item }) => <ProductCard {...item} all />}
+          keyExtractor={(item) => item.id}
+          showsVerticalScrollIndicator={false}
+          contentContainerStyle={{
+            paddingBottom: 25,
+            marginBottom: 10,
+          }}
+          numColumns={2}
+          columnWrapperStyle={{ justifyContent: "space-between" }}
+          ListEmptyComponent={() => (
+            <StyledText small style={styles.emptyText}>
+              You have no items yet.
+            </StyledText>
+          )}
+        />
+      )}
 
       <StyledText style={styles.header} bold>
         WishList{" "}
@@ -138,19 +141,19 @@ const Profile = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 25
+    paddingHorizontal: 25,
   },
   header: {
     marginTop: 5,
     marginBottom: 15,
-    color: colors.darkred + "cc"
+    color: colors.darkred + "cc",
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     padding: 5,
     marginBottom: 10,
-    borderRadius: 5
+    borderRadius: 5,
   },
   emptyText: {
     color: colors.tertiary,
