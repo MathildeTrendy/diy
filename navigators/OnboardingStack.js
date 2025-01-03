@@ -8,6 +8,9 @@ import { Feather } from "@expo/vector-icons";
 import { onIOS } from "../config/constants";
 import { OnboardingContext } from "../utils/context";
 import { storeData } from "../utils/storage";
+import PrivacyPolicy from "../screens/PrivacyPolicy";
+import RootTabs from "./RootTabs";
+
 
 const Stack = createStackNavigator();
 
@@ -30,10 +33,11 @@ const OnboardingStack = () => {
 
   return (
     <Stack.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         headerTitleAlign: "center",
         headerTintColor: colors.tint,
-        headerRight: () => (
+        headerRight: () =>
+          route.name !== "PrivacyPolicy" && (
           <StyledButton
             onPress={completeOnBoarding}
             isLoading={completingOnboarding}
@@ -63,9 +67,11 @@ const OnboardingStack = () => {
           left: onIOS ? 22 : 12,
         },
         headerBackTitleVisible: false,
-      }}
+      })}
     >
       <Stack.Screen name="Welcome" component={Welcome} />
+      <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
+      <Stack.Screen name="RootTabs" component={RootTabs} options={{ headerShown: false }} /> 
     </Stack.Navigator>
   );
 };
