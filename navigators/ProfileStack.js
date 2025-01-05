@@ -52,7 +52,7 @@ const ProfileStack = () => {
       <Stack.Screen
         name="Products"
         component={Products}
-        options={{ title: "Our Collection" }}
+        options={{ title: "My Collection" }}
       />
       <Stack.Screen name="Popular" component={Products} />
     </Stack.Navigator>

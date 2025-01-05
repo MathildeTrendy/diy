@@ -1,191 +1,94 @@
-import { useState, useEffect, useContext } from "react"; //hook ??
-import { View, StyleSheet, Text, TouchableOpacity, Image } from "react-native";
-import {
-  ScrollableMainContainer,
-  StyledText,
-  ProductInfo,
-  StyledButton,
-  CartCounter,
-} from "../components";
-import { getDiyData } from "../config/data";
+import React, { useContext } from "react";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { ScrollableMainContainer, StyledText, ProductInfo } from "../components";
 import { colors } from "../config/theme";
 import { AntDesign } from "@expo/vector-icons";
-import { CartContext, SavedProductsContext } from "../utils/context";
+import { SavedProductsContext } from "../utils/context";
 import { storeData } from "../utils/storage";
-import { StackRouter } from "@react-navigation/native";
 
 const Details = ({ route }) => {
-  const diyId = route.params?.id;
-  const [fetchedDiy, setFetchedDiy] = useState();
-  const [addedToCart, setAddedToCart] = useState(false); //true = viser +/-, false = 'add cart'
-  const { cartItems, setCartItems } = useContext(CartContext);
-  const [cartCount, setCartCount] = useState(1);
-  const {savedProducts, setSavedProducts} = useContext(SavedProductsContext);
-  const [saved, setSaved] = useState(false);
+  // Modtag produktet, som blev sendt fra ProductCard eller DisplayCard
+  const { item } = route.params;
 
-  const fetchDiyDetails = () => {
-    try {
-      const diyData = getDiyData({ diyId })[0];
-      setFetchedDiy(diyData);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
+  // Hvis item mod forventning skulle være undefined, undgå fejl:
+  if (!item) {
+    return (
+      <ScrollableMainContainer>
+        <StyledText>No item data available!</StyledText>
+      </ScrollableMainContainer>
+    );
+  }
 
+  const { savedProducts, setSavedProducts } = useContext(SavedProductsContext);
+  const isSaved = savedProducts?.some((savedProduct) => savedProduct.id === item.id);
+
+  // Funktion til at gemme/fjerne produkt fra favoritter
   const handleSaveProduct = async () => {
     try {
       let updatedSavedProducts;
 
-      if(!saved) {
-
-      updatedSavedProducts = [...(savedProducts || []), fetchedDiy];
-    }else {
-      
-      updatedSavedProducts = (savedProducts || []).filter((savedProduct) =>
-      savedProduct.id !== diyId
-    );
-  }
-
-      await storeData("@DiyApp:SavedProducts", updatedSavedProducts); //"@DiyApp:SavedProducts" er Key til storeData
-      setSavedProducts(updatedSavedProducts);
-      setSaved(!saved);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  const checkSavedStatus = () => {
-    if ((savedProducts || []).some((savedProducts) => savedProducts.id === diyId)) {
-      setSaved(true);
-    }
-  }
-
-  useEffect(() => {
-    fetchDiyDetails();
-    checkCartStatus();
-    checkSavedStatus();
-  }, []);
-
-  const handleAddToCart = async (newCount) => {
-    try {
-      let updatedCartItems = [];
-
-      if (!addedToCart) {
-
-        const newItem = {...fetchedDiy, cartCount: 1};
-        updatedCartItems = [newItem, ...cartItems];
-        newCount = 1;
-      } else if (newCount > 0) {
-
-        updatedCartItems = cartItems.map((cartItem) =>
-          cartItem.id === diyId 
-          ? {...cartItem, cartCount: newCount }
-          : cartItem
-        );
+      if (!isSaved) {
+        updatedSavedProducts = [...(savedProducts || []), item];
       } else {
-        updatedCartItems = cartItems.filter((cartItem) => cartItem.id !== diyId);
+        updatedSavedProducts = (savedProducts || []).filter(
+          (savedProduct) => savedProduct.id !== item.id
+        );
       }
 
-      await saveCartItems(updatedCartItems, newCount);
-      setAddedToCart(newCount > 0);
+      await storeData("@DiyApp:SavedProducts", updatedSavedProducts);
+      setSavedProducts(updatedSavedProducts);
     } catch (error) {
       console.warn(error);
     }
   };
-
-  const saveCartItems = async (updatedCartItems, newCount) => {
-    try {
-      storeData("@DiyApp:CartItems", updatedCartItems);
-      setCartItems(updatedCartItems);
-      setCartCount(newCount);
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  const checkCartStatus = () => {
-    for (const cartItem of cartItems) {
-      if (cartItem.id === diyId) {
-        setAddedToCart(true);
-        setCartCount(cartItem.cartCount);
-      }
-    }
-  };
-
-  const handleRemoveFromCart = async () => {
-    try {
-      if(addedToCart) {
-        let updatedCartItems = cartItems.filter(
-          (cartItem) => cartItem.id !== diyId);
-      saveCartItems(updatedCartItems);
-      setAddedToCart(false);
-      }
-    } catch (error) {
-      console.warn(error);
-      
-    }
-  }
 
   return (
     <ScrollableMainContainer contentContainerStyle={styles.container}>
       <View style={styles.topSection}>
-        <StyledText bold style={styles.name}>
-          {fetchedDiy?.name}
+        {/* Title */}
+        <StyledText bold style={styles.title}>
+          {item.title}
         </StyledText>
-        <ProductInfo label="Alcohol" style={styles.info}>
-          {fetchedDiy?.alcohol + "%"}
-        </ProductInfo>
-        <ProductInfo label="Volume" style={styles.info}>
-          {fetchedDiy?.volume}
-        </ProductInfo>
-        <ProductInfo label="Year" style={styles.info}>
-          {fetchedDiy?.year}
-        </ProductInfo>
-        <ProductInfo label="Origin" style={styles.info}>
-          {fetchedDiy?.origin}
-        </ProductInfo>
-        <StyledText big>{fetchedDiy?.currency + fetchedDiy?.price}</StyledText>
+
+        {/* Image (vises under titlen) */}
+        {item.image && (
+          <Image
+            // Tjekker om item.image er et "number" (lokal require)
+            // eller en string (URL), så billedet altid vises korrekt
+            source={
+              typeof item.image === "number"
+                ? item.image
+                : { uri: item.image }
+            }
+            style={styles.image}
+          />
+        )}
+
+        {/* Price */}
+        <StyledText style={styles.price} bold>
+          {item.price} DKK
+        </StyledText>
+
+        {/* Heart (Gem/Fjern fra favoritter) */}
         <TouchableOpacity style={styles.heart} onPress={handleSaveProduct}>
           <AntDesign
-            name={saved ? "heart" : "hearto"}
+            name={isSaved ? "heart" : "hearto"}
             size={27}
-            color={saved ? colors.darkred + "cc" : colors.darkred + "cc"}
-          ></AntDesign>
+            color={colors.darkred + "cc"}
+          />
         </TouchableOpacity>
-        <Image source={fetchedDiy?.image} style={styles.image} />
       </View>
 
       <View style={styles.bottomSection}>
-        <ProductInfo label={"Description"} style={styles.info}>
-          {fetchedDiy?.description}
+        {/* Description */}
+        <ProductInfo label="Description" style={styles.info}>
+          {item.description || "No description provided"}
         </ProductInfo>
 
-        <View style={styles.cartRow}>
-          {!addedToCart && (
-            <StyledButton icon="shoppingcart" onPress={handleAddToCart}>
-              Add to cart
-            </StyledButton>
-          )}
-          {addedToCart && (
-            <>
-              <StyledButton
-                icon="delete"
-                style={styles.removeButton}
-                textStyle={styles.removeButtonText}
-                onPress={handleRemoveFromCart}
-              >
-                Remove
-              </StyledButton>
-              <CartCounter
-                style={styles.CartCounter}
-                count={cartCount}
-                setCount={handleAddToCart}
-                limit={fetchedDiy?.quantityAvailable}
-                onPress={handleRemoveFromCart} //fjerner item fra cart
-              />
-            </>
-          )}
-        </View>
+        {/* Homepage URL */}
+        <ProductInfo label="Homepage URL" style={styles.info}>
+          {item.homepageUrl || "No URL provided"}
+        </ProductInfo>
       </View>
     </ScrollableMainContainer>
   );
@@ -202,49 +105,37 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 15,
     borderBottomLeftRadius: 15,
   },
-  name: {
-    marginBottom: 30,
-    fontsize: 30,
+  bottomSection: {
+    paddingHorizontal: 25,
+    paddingTop: 25,
+  },
+  title: {
+    marginBottom: 20,
+    fontSize: 30,
+  },
+  price: {
+    marginBottom: 20,
+    fontSize: 24,
+    color: colors.darkred,
   },
   info: {
-    margin: 15,
+    marginVertical: 10,
   },
   heart: {
-    backgroundColor: colors.primary,
     position: "absolute",
     bottom: -20,
     right: "50%",
     padding: 10,
+    backgroundColor: colors.primary,
     borderRadius: 50,
     borderColor: colors.darkred,
     zIndex: 1,
   },
   image: {
-    position: "absolute",
-    height: "90%",
-    width: "90%",
+    width: "100%",
+    height: 300,
     resizeMode: "contain",
-    right: -50,
-    top: 50,
-  },
-  bottomSection: {
-    paddingHorizontal: 25,
-    paddingTop: 25,
-  },
-  cartRow: {
-    flexDirection: "row",
-    marginTop: 10,
-    justifyContent: "space-between",
-  },
-  removeButton: {
-    width: "47%",
-    backgroundColor: colors.secondary,
-  },
-  removeButtonText: {
-    color: colors.darkred + "cc",
-  },
-  CartCounter: {
-    width: "47%",
+    marginBottom: 20,
   },
 });
 

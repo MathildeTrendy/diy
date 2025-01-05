@@ -1,14 +1,33 @@
+import React from "react";
+import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import StyledText from "../Texts/StyledText";
-import { TouchableOpacity, View, StyleSheet } from "react-native"; // fjernet Image import
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
 import { useNavigation } from "@react-navigation/native";
 
-const ProductCard = ({ id, title, price, all }) => {
+const ProductCard = ({
+  id,
+  title,
+  price,
+  description,
+  homepageUrl,
+  image,
+  all, // Styrer evt. forskellig styling
+}) => {
   const navigation = useNavigation();
 
   const handleOnPress = () => {
-    navigation.navigate("Details", { id });
+    // Send alle relevante felter med i 'item'
+    navigation.navigate("Details", {
+      item: {
+        id,
+        title,
+        price,
+        description,
+        homepageUrl,
+        image,
+      },
+    });
   };
 
   return (
@@ -16,6 +35,14 @@ const ProductCard = ({ id, title, price, all }) => {
       style={all ? styles.containerPlus : styles.container}
       onPress={handleOnPress}
     >
+      {/* Hvis du vil vise billedet i kortet, kan du fjerne kommentarerne:
+      {image && (
+        <Image
+          source={{ uri: image }}
+          style={styles.image}
+        />
+      )} 
+      */}
       <View style={styles.details}>
         <StyledText style={styles.text} small numberOfLines={2}>
           {title}

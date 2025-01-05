@@ -1,101 +1,73 @@
-// Product data
+// Eksempel på brug et andet sted i din kode:
+// import { getItemData } from "../config/data";
+// const item = getItemData({ itemId: 1 });
+// console.log("Her er item nr. 1:", item);
 
-//function to enable to return the Data
-export const getDiyData = ({ diyId, popular, deal, searchTerm }) => {
+//
+// data.js
+//
+
+// Funktion til at filtrere items baseret på itemId eller searchTerm
+export const getItemData = ({ itemId, searchTerm }) => {
   let filterFunction;
 
-  searchTerm = searchTerm?.toLowerCase();
-
-  //hvis vi har et id, filterFunctioner
-
-  if (diyId) {
-    filterFunction = (diy) => diy.id === diyId;
-  } else if (popular && searchTerm) {
-    filterFunction = (diy) =>
-      (diy.name?.toLowerCase().includes(searchTerm) ||
-        diy.description?.toLowerCase().includes(searchTerm)) &&
-      diy.popular === true;
-  } else if (popular) {
-    filterFunction = (diy) => diy.popular === true;
-  } else if (deal) {
-    filterFunction = (diy) => diy.deal === true;
+  if (itemId) {
+    filterFunction = (item) => item.id === itemId;
   } else if (searchTerm) {
-    filterFunction = (diy) =>
-      diy.name?.toLowerCase().includes(searchTerm) ||
-      diy.description?.toLowerCase().includes(searchTerm);
+    const st = searchTerm.toLowerCase();
+    filterFunction = (item) =>
+      item.title?.toLowerCase().includes(st) ||
+      item.description?.toLowerCase().includes(st);
   } else {
-    filterFunction = (diy) => diy;
+    // Returner alle, hvis hverken itemId eller searchTerm er sat
+    filterFunction = () => true;
   }
-  return diyData.filter(filterFunction);
+
+  return itemsData.filter(filterFunction);
 };
 
-export const diyData = [
+// Items-data - svarende til dine felter i Profile.js
+export const itemsData = [
   {
-    id: 4,
-    name: "Ridge East Bench Zinfandel",
-    origin: "California",
+    id: 1,
+    title: "Bag of recycled materials",
+    description: "A bag made of recycled leather.",
     price: 120,
-    currency: "DKK",
-    alcohol: "14.8",
-    volume: "750ml",
-    year: "2020",
-    description:
-      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
-    quantityAvailable: 35,
-    popular: false,
-    deal: true,
-    image: require("./../assets/diy/diy.png"),
-  },
-  {
-    id: 5,
-    name: "Sweet taste of",
-    origin: "California",
-    price: 78,
-    currency: "DKK",
-    alcohol: "13.9",
-    volume: "750ml",
-    year: "2021",
-    description:
-      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
-    quantityAvailable: 35,
-    popular: true,
-    deal: true,
-    image: require("./../assets/diy/julpyssel-renar.jpg"),
-  },
-  {
-    id: 6,
-    name: "Round and spicy",
-    origin: "California",
-    price: 57,
-    currency: "DKK",
-    alcohol: "14.5",
-    volume: "750ml",
-    year: "2022",
-    description:
-      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
-    quantityAvailable: 35,
-    popular: false,
-    deal: true,
-    image: require("./../assets/diy/juleh.jpg"),
+    homepageUrl: "https://www.example.com/chair",
+    ownerId: "owner_ABC123",
+    image: require("./../assets/diy/upcycled-bag.jpg"),
   },
   {
     id: 2,
-    name: "Riesling",
-    origin: "Germany",
-    price: 340,
-    currency: "DKK",
-    alcohol: "14.5",
-    volume: "750ml",
-    year: "2022",
+    title: "Refurbished Lamp",
+    description: "A lamp restored with new paint and wiring for a fresh look.",
+    price: 250,
+    homepageUrl: "https://www.example.com/lamp",
+    ownerId: "owner_ABC123",
+    image: require("./../assets/diy/julpyssel-renar.jpg"),
+  },
+  {
+    id: 3,
+    title: "Vintage Painted Table",
     description:
-      "This diy from Califonia is a mixture of the sweet grape and the bla bla bla",
-    quantityAvailable: 35,
-    popular: false,
-    deal: true,
+      "An old table given new life with chalk paint and custom hardware.",
+    price: 180,
+    homepageUrl: "https://www.example.com/table",
+    ownerId: "owner_ABC123",
+    image: require("./../assets/diy/juleh.jpg"),
+  },
+  {
+    id: 4,
+    title: "Handmade Decorative Jar",
+    description: "A decorative jar made from upcycled glass bottles.",
+    price: 90,
+    homepageUrl: "https://www.example.com/jar",
+    ownerId: "owner_DEF456",
     image: require("./../assets/diy/6.png"),
   },
 ];
 
+// Onboarding-data forbliver uændret
 export const onboardingData = [
   {
     id: 1,
@@ -106,7 +78,8 @@ export const onboardingData = [
   {
     id: 2,
     title: "Velkommen til Retrove",
-    summary: "En app udviklet til inspiration for alle med interesse indenfor upcyckling og bæredygtighed.",
+    summary:
+      "En app udviklet til inspiration for alle med interesse indenfor upcyckling og bæredygtighed.",
     text: "",
     backgroundColor: "6b7280",
   },

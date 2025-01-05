@@ -1,3 +1,4 @@
+// Profile.js
 import React, { useContext, useState, useEffect } from "react";
 import { MainContainer, StyledText, ProfileInfo, ProductCard } from "../components";
 import { StyleSheet, FlatList, View, TextInput, Button } from "react-native";
@@ -5,39 +6,42 @@ import { colors } from "../config/theme";
 import { UserContext } from "../utils/context";
 import { AntDesign } from "@expo/vector-icons";
 import { getUserItems, createItem } from "../utils/itemService";
+import { useNavigation } from "@react-navigation/native";
 
 const Profile = () => {
   const { activeUser } = useContext(UserContext);
+  const navigation = useNavigation();
 
-  const [myItems, setMyItems] = useState([]);
+  // Liste med brugerens egne produkter
+  const [products, setProducts] = useState([]);
+  // Felter til at oprette nyt produkt
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [homepageUrl, setHomepageUrl] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // Hent brugerens items fra Firestore
-  const fetchMyItems = async () => {
-    if (activeUser?.uid) {
-      setLoading(true);
-      try {
-        const items = await getUserItems(activeUser.uid);
-        setMyItems(items);
-      } catch (error) {
-        console.error("Error fetching user items: ", error);
-      } finally {
-        setLoading(false);
-      }
+  // Hent brugerens produkter fra Firestore
+  const fetchProducts = async () => {
+    if (!activeUser?.uid) return;
+    setLoading(true);
+    try {
+      const items = await getUserItems(activeUser.uid);
+      setProducts(items);
+    } catch (error) {
+      console.error("Error fetching user items:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchMyItems();
+    fetchProducts();
   }, [activeUser]);
 
   const handleCreate = async () => {
     if (!title || !price) {
-      alert("Please fill in all required fields.");
+      alert("Please fill in all required fields (title & price).");
       return;
     }
 
@@ -47,11 +51,12 @@ const Profile = () => {
         description,
         price: Number(price) || 0,
         homepageUrl,
-        ownerId: activeUser.uid,
+        ownerId: activeUser.uid, // vigtigt for at kunne filtrere
       };
 
       await createItem(newItem);
-      await fetchMyItems(); // Opdater items
+      await fetchProducts(); // Opdater liste
+      // Nulstil inputfelter
       setTitle("");
       setDescription("");
       setPrice("");
@@ -75,7 +80,7 @@ const Profile = () => {
       </ProfileInfo>
 
       <StyledText style={styles.header} bold>
-        Opret et nyt item
+        Create a new product
       </StyledText>
       <View style={{ marginBottom: 20 }}>
         <TextInput
@@ -107,33 +112,39 @@ const Profile = () => {
       </View>
 
       <StyledText style={styles.header} bold>
-        My Creations
+        Products
       </StyledText>
       {loading ? (
         <StyledText>Loading...</StyledText>
       ) : (
         <FlatList
-          data={myItems}
-          renderItem={({ item }) => <ProductCard {...item} all />}
+          data={products}
+          renderItem={({ item }) => (
+            <ProductCard
+              id={item.id}
+              title={item.title}
+              price={item.price}
+              description={item.description}
+              homepageUrl={item.homepageUrl}
+              image={item.image}
+              all
+            />
+          )}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingBottom: 25,
-            marginBottom: 10,
-          }}
+          contentContainerStyle={{ paddingBottom: 25, marginBottom: 10 }}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: "space-between" }}
           ListEmptyComponent={() => (
             <StyledText small style={styles.emptyText}>
-              You have no items yet.
+              You have no products yet.
             </StyledText>
           )}
         />
       )}
 
       <StyledText style={styles.header} bold>
-        WishList{" "}
-        <AntDesign name="heart" size={17} color={colors.darkred + "cc"} />
+        WishList <AntDesign name="heart" size={17} color={colors.darkred + "cc"} />
       </StyledText>
     </MainContainer>
   );

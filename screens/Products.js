@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, FlatList } from "react-native";
 import {
   MainContainer,
@@ -6,31 +6,57 @@ import {
   ProductCard,
   StyledText,
 } from "../components";
-import { getDiyData } from "../config/data";
 import { colors } from "../config/theme";
+import { getAllItems } from "../utils/itemService";
 
 const Products = ({ route }) => {
+  const [allItems, setAllItems] = useState([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const fetchProducts = async () => {
+  // Hent alle items fra Firestore, én gang når komponenten mountes
+  useEffect(() => {
+    fetchAllItems();
+  }, []);
+
+  const fetchAllItems = async () => {
     try {
-      let availableDiyData = getDiyData({
-        popular: route.name == "Popular",
-        searchTerm,
-      });
-      setFilteredProducts(availableDiyData);
+      const items = await getAllItems();
+      setAllItems(items);
+      setFilteredProducts(items);
     } catch (error) {
-      console.warn(error);
+      console.warn("Error fetching items:", error);
     }
   };
 
+  // Kør filtrering hver gang searchTerm ændres
   useEffect(() => {
-    fetchProducts();
-  }, [searchTerm]);
+    handleFilter();
+  }, [searchTerm, allItems]);
+
+  // Hvis du vil tjekke for "Popular"-route, kan du gøre:
+  // const isPopularRoute = route?.name === "Popular";
+  // og filtrere items, der fx har item.popular === true
+
+  const handleFilter = () => {
+    if (!searchTerm) {
+      // Hvis ingen søgeterm, vis alle
+      setFilteredProducts(allItems);
+      return;
+    }
+    const lowerSearch = searchTerm.toLowerCase();
+
+    const filtered = allItems.filter((item) => {
+      const titleMatch = item.title?.toLowerCase().includes(lowerSearch);
+      const descMatch = item.description?.toLowerCase().includes(lowerSearch);
+      return titleMatch || descMatch;
+    });
+    setFilteredProducts(filtered);
+  };
 
   return (
     <MainContainer>
+      {/* Søgefelt */}
       <StyledTextInput
         icon="search1"
         placeholder="Search"
@@ -38,6 +64,8 @@ const Products = ({ route }) => {
         value={searchTerm}
         onChangeText={setSearchTerm}
       />
+
+      {/* Liste med filtrerede items */}
       <FlatList
         data={filteredProducts}
         renderItem={({ item }) => <ProductCard {...item} all />}
@@ -60,10 +88,6 @@ const Products = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 25,
-    paddingTop: 5,
-  },
   search: {
     fontWeight: "500",
     marginBottom: 10,
@@ -73,4 +97,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
 });
+
 export default Products;
