@@ -176,7 +176,7 @@ const Profile = () => {
       )}
 
       <StyledText style={[styles.header, { marginTop: 20 }]} bold>
-        WishList <AntDesign name="heart" size={17} color={colors.darkred + "cc"} />
+        WishList <AntDesign name="heart" size={17} color={colors.metallic + "cc"} />
       </StyledText>
 
       {/* Modal til at oprette item */}
@@ -192,7 +192,7 @@ const Profile = () => {
               style={styles.closeIcon}
               onPress={() => setModalVisible(false)}
             >
-              <AntDesign name="closecircle" size={24} color={colors.darkred} />
+              <AntDesign name="closecircle" size={24} color={colors.metallic + "cc"} />
             </TouchableOpacity>
 
             <StyledText bold style={styles.modalTitle}>
@@ -255,22 +255,23 @@ const styles = StyleSheet.create({
   header: {
     marginTop: 5,
     marginBottom: 15,
-    color: colors.darkred + "cc",
+    color: colors.metallic + "cc",
   },
   subHeader: {
     fontSize: 18,
-    color: colors.darkred + "cc",
+    color: colors.metallic + "cc",
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 6,
-    marginBottom: 10,
-    borderRadius: 5,
+    borderColor: colors.secondary,
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 8,
     width: "100%",
+    backgroundColor: "white",
   },
   emptyText: {
-    color: colors.tertiary,
+    color: colors.metallic + "cc",
     textAlign: "center",
   },
   plusContainer: {
@@ -281,27 +282,32 @@ const styles = StyleSheet.create({
   },
   plusButton: {
     flexDirection: "row",
-    backgroundColor: colors.darkred + "cc",
+    backgroundColor: colors.metallic + "cc",
     borderRadius: 20,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
     alignItems: "center",
   },
   plusText: {
-    color: "#fff",
-    marginLeft: 3,
+    color: "black",
+    marginLeft: 5,
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.4)",
+    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semitransparent sort baggrund
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
     width: "85%",
-    backgroundColor: "#fff",
-    borderRadius: 10,
+    backgroundColor: "white",
+    borderRadius: 15,
     padding: 20,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
     position: "relative",
   },
   closeIcon: {
@@ -310,29 +316,30 @@ const styles = StyleSheet.create({
     right: 15,
   },
   modalTitle: {
-    fontSize: 18,
-    marginBottom: 15,
-    color: colors.darkred + "cc",
+    fontSize: 20,
+    marginBottom: 20,
+    color: colors.metallic + "cc",
+    fontWeight: "bold",
     alignSelf: "center",
   },
   imageButton: {
     flexDirection: "row",
-    backgroundColor: colors.primary,
+    backgroundColor: colors.metallic + "cc",
     borderRadius: 8,
     paddingHorizontal: 12,
-    paddingVertical: 6,
+    paddingVertical: 8,
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 15,
   },
   imageButtonText: {
-    color: "#fff",
-    marginLeft: 6,
+    color: "white",
+    marginLeft: 8,
   },
   previewImage: {
     width: 100,
     height: 100,
-    marginBottom: 10,
-    borderRadius: 8,
+    marginBottom: 15,
+    borderRadius: 10,
     alignSelf: "center",
   },
 });

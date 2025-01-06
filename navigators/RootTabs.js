@@ -2,36 +2,34 @@ import { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { colors } from "../config/theme";
 import { AntDesign, Feather } from "@expo/vector-icons";
-import React, { useEffect } from "react";
 import HomeStack from "./HomeStack";
 import SearchStack from "./SearchStack";
 import CartStack from "./CartStack";
 import ProfileStack from "./ProfileStack";
 import { CartContext } from "../utils/context";
 
-
-
 const Tab = createBottomTabNavigator();
 
 const RootTabs = () => {
-  const {cartItems, setCartItems} = useContext(CartContext);
+  const { cartItems } = useContext(CartContext);
 
-  useEffect(() => {}, []);
+  // Beregn det samlede antal varer i kurven
+  const totalCartItems = cartItems.reduce((total, item) => total + item.cartCount, 0);
 
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarStyle: {
-          backgroundColor: colors?.primary,
-          borderTopColor: colors?.secondary,
+          backgroundColor: colors.primary,
+          borderTopColor: colors.secondary,
           borderTopWidth: 2,
           height: 60,
         },
         tabBarItemStyle: {
           paddingVertical: 5,
         },
-        tabBarInactiveTintColor: colors?.tertiary + "cc",
-        tabBarActiveTintColor: colors?.metallic + "cc",
+        tabBarInactiveTintColor: colors.tertiary + "cc",
+        tabBarActiveTintColor: colors.metallic + "cc",
         tabBarIcon: ({ size, color }) => {
           let iconName;
 
@@ -57,10 +55,8 @@ const RootTabs = () => {
       <Tab.Screen
         name="Cart"
         component={CartStack}
-        options={
-          cartItems.length > 0 && 
-          {
-          tabBarBadge:  cartItems.length,
+        options={{
+          tabBarBadge: totalCartItems > 0 ? totalCartItems : null, // Vis badge kun, hvis der er varer
           tabBarBadgeStyle: {
             backgroundColor: colors.amber,
             color: colors.primary,
