@@ -9,7 +9,7 @@ import {
 } from "../components";
 import { useNavigation } from "@react-navigation/native";
 import { getUserItems } from "../utils/itemService"; // Henter kun items for én bruger
-import { getItemData } from "../config/data"; // Din lokale data om deals/popular
+import { getUniqueFindItemData, getPopularItemData } from "../config/data"; // Din lokale data om deals/popular
 import { UserContext } from "../utils/context";
 
 export default function Home() {
@@ -40,7 +40,7 @@ export default function Home() {
       <SectionHeader style={styles.header}>Unique Finds</SectionHeader>
       <FlatList
         // Stadig din local data-fil: getItemData({ popular: true })
-        data={getItemData({ popular: true })}
+        data={getUniqueFindItemData({ popular: true })}
         renderItem={({ item }) => <DisplayCard {...item} />}
         keyExtractor={({ id }) => id.toString()}
         horizontal
@@ -59,7 +59,7 @@ export default function Home() {
         Popular
       </SectionHeader>
       <FlatList
-        data={getItemData({ deal: true })}
+        data={getPopularItemData({ deal: true })}
         renderItem={({ item }) => <ProductCard {...item} />}
         keyExtractor={({ id }) => id.toString()}
         horizontal

@@ -25,6 +25,7 @@
     "@stripe/stripe-react-native": "^0.38.6",
     "dotenv": "^16.4.7",
     "expo": "~52.0.20",
+    "expo-image-picker": "^16.0.3",
     "expo-splash-screen": "^0.29.18",
     "expo-status-bar": "~2.0.0",
     "firebase": "^11.1.0",

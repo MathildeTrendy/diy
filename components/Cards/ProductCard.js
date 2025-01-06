@@ -1,3 +1,4 @@
+// ProductCard.js
 import React from "react";
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import StyledText from "../Texts/StyledText";
@@ -35,14 +36,14 @@ const ProductCard = ({
       style={all ? styles.containerPlus : styles.container}
       onPress={handleOnPress}
     >
-      {/* Hvis du vil vise billedet i kortet, kan du fjerne kommentarerne:
+      {/* Viser billedet i toppen af kortet, hvis der er et billede */}
       {image && (
         <Image
-          source={{ uri: image }}
+          source={typeof image === 'number' ? image : { uri: image }}
           style={styles.image}
+          resizeMode="cover"
         />
-      )} 
-      */}
+      )}
       <View style={styles.details}>
         <StyledText style={styles.text} small numberOfLines={2}>
           {title}
@@ -58,37 +59,44 @@ const ProductCard = ({
 const styles = StyleSheet.create({
   container: {
     width: ScreenWidth * 0.36,
-    height: ScreenWidth * 0.46,
-    miniWidth: 135,
-    minHeight: 173,
+    minWidth: 135,
     backgroundColor: colors.secondary,
     borderRadius: 15,
     marginTop: 60,
     marginRight: 25,
-    justifyContent: "flex-end",
+    flexDirection: 'column',
+    overflow: 'hidden',
   },
   containerPlus: {
     width: ScreenWidth * 0.4,
-    height: ScreenWidth * 0.5,
-    miniWidth: 150,
-    minHeight: 188,
+    minWidth: 150,
     backgroundColor: colors.secondary,
     borderRadius: 15,
-    marginTop: 60,
-    justifyContent: "flex-end",
+    marginTop: 30,
+    marginRight: 25,
+    flexDirection: 'column',
+    overflow: 'hidden',
+  },
+  image: {
+    width: '100%',
+    height: ScreenWidth * 0.36, // Justeret højde
+    borderTopLeftRadius: 15,
+    borderTopRightRadius: 15,
   },
   details: {
-    height: "50%",
     padding: 10,
-    justifyContent: "flex-end",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: 94, // Passende højde til detaljer
   },
   text: {
-    textAlign: "center",
+    textAlign: 'center',
     marginBottom: 5,
+    color: colors.textPrimary, // Sikrer synlighed
   },
   price: {
-    color: colors.accent + "cc",
+    color: colors.accent + 'cc',
+    fontWeight: 'bold',
   },
 });
 
