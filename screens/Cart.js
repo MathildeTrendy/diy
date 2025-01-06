@@ -1,26 +1,21 @@
 import { useContext, useState, useEffect } from "react";
-import { Alert, FlatList, StyleSheet, View } from "react-native";
-import { MainContainer, StyledText, StyledButton, AlertModal } from "../components";
-import { CartCard } from "../components";
-import { colors } from "../config/theme";
-import { Feather } from "@expo/vector-icons";
-import { ScreenWidth } from "../config/constants";
+import { FlatList, StyleSheet, View, Image, Alert } from "react-native";
+import { MainContainer, StyledText, StyledButton } from "../components";
 import { CartContext } from "../utils/context";
-import { storeData } from "../utils/storage";
+import { colors } from "../config/theme";
 
 const Cart = () => {
-  const {cartItems, setCartItems} = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
   const [cartTotal, setCartTotal] = useState(0);
-  const [isModalVisible, setIsModalVisible ] = useState(false);
-  const [orderConfirmed, setOrderConfirmed] = useState(false);
-  const [isConfirming, setIsConfirming] = useState(false);
 
   const calculateCartTotal = () => {
-    if(cartItems.length > 0) {
-      const cartTotal = cartItems.reduce((accumulator, cartItem ) => {
-        return accumulator + cartItem.price * cartItem.cartCount;
-      }, 0);
-      setCartTotal(cartTotal);
+    if (cartItems.length > 0) {
+      const total = cartItems.reduce(
+        (accumulator, cartItem) =>
+          accumulator + cartItem.price * cartItem.cartCount,
+        0
+      );
+      setCartTotal(total);
     }
   };
 
@@ -28,187 +23,105 @@ const Cart = () => {
     calculateCartTotal();
   }, [cartItems]);
 
-  const checkOut = (isConfirmed) => {
-    if(isConfirmed == true) {
-    setIsModalVisible(true);    //clearCart();
-
-    setTimeout(() => {
-      setOrderConfirmed(true),
-      setIsConfirming(false)
-
-    }, 2000);
-  }else {
-
-  setIsModalVisible(true);
-  }
-};
-
-  const cancelCheckout = () => {
-    if(orderConfirmed) {
-      return completeOrder();
+  const handleCheckout = () => {
+    if (cartItems.length === 0) {
+      Alert.alert("Cart is empty", "Please add items to your cart before paying.");
+      return;
     }
-    setIsModalVisible(false);
+
+    Alert.alert(
+      "Checkout",
+      `You are about to pay ${cartItems[0].currency || "DKK"}${cartTotal.toFixed(
+        2
+      )}. Do you want to proceed?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Pay",
+          onPress: () => {
+            completePayment();
+          },
+        },
+      ]
+    );
   };
 
-  const completeOrder = async () => {
-    await clearCart();
-    setIsModalVisible(false);
-    setOrderConfirmed(false);
-  }
-
-
-  const clearCart = async () => {
-    try {
-      storeData("@DiyApp:CartItems", []);
-      setCartItems([]);
-    } catch (error) {
-      console.warn(error);
-      
-    }
+  const completePayment = async () => {
+    // Simulerer en betalingsproces
+    Alert.alert("Payment Successful", "Thank you for your purchase!");
+    setCartItems([]); // Tømmer kurven
   };
+
+  const renderCartItem = ({ item }) => (
+    <View style={styles.cartItem}>
+      {/* Viser billede */}
+      <Image
+        source={typeof item.image === "number" ? item.image : { uri: item.image }}
+        style={styles.itemImage}
+      />
+      {/* Viser navn og pris */}
+      <View style={styles.itemDetails}>
+        <StyledText big>{item.title || "Unnamed Item"}</StyledText>
+        <StyledText>{`${item.currency || "DKK"}${item.price.toFixed(2)}`}</StyledText>
+        <StyledText small>{`Quantity: ${item.cartCount}`}</StyledText>
+      </View>
+    </View>
+  );
 
   return (
     <MainContainer style={styles.container}>
-      {cartItems.length <= 0 && (
-        <View style={styles.emptyCart}>
-          <Feather
-            name="shopping-cart"
-            size={ScreenWidth * 0.4}
-            color={colors.tertiary}
-            style={{ marginBottom: 50 }}
-          />
-
-          <StyledText big>Your cart is empty!</StyledText>
-          <StyledText style={styles.emptyCartText}>
-            No items found in your cart
-          </StyledText>
-        </View>
-      )}
-
-      {cartItems.length > 0 && (
+      {cartItems.length === 0 ? (
+        <StyledText big>Your cart is empty!</StyledText>
+      ) : (
         <>
           <FlatList
             data={cartItems}
-            renderItem={({ item }) => 
-            <CartCard id={item.id} 
-            {...item} />}
-            showVerticalScrollIndicator={false}
+            keyExtractor={(item) => item.id.toString()}
+            renderItem={renderCartItem}
           />
-
-          <View style={styles.divider} />
-
-          <View style={styles.checkoutRow}>
-            <StyledText big style={styles.totalAmount}>
-              {`$${cartTotal}`}
-            </StyledText>
-            <StyledButton style={styles.checkoutButton}onPress={checkOut} >Checkout</StyledButton>
+          <View style={styles.totalContainer}>
+            <StyledText big>{`Total: ${cartItems[0]?.currency || "DKK"}${cartTotal.toFixed(2)}`}</StyledText>
           </View>
+          {/* Pay-knap */}
+          <StyledButton style={styles.payButton} onPress={handleCheckout}>
+            Pay Now
+          </StyledButton>
         </>
       )}
-      <AlertModal isVisible={isModalVisible} onClose={cancelCheckout}>
-       {!orderConfirmed && (
-        <View style={styles.modalContentContainer}>
-        <StyledText style={{textAlign: "center", marginBottom: 15}}>
-          You are about to checkout an order of {" "}
-        <StyledText bold>{`$${cartTotal}`}</StyledText>. Continue?
-        </StyledText>
-      
-        <View style={styles.modalButtonContainer}>
-        <StyledButton 
-          style={[styles.modalButton, { backgroundColor: colors.tertiary}]}
-          isLoading={isConfirming} 
-          onPress={() => checkOut(true)}
-          >
-          Continue
-        </StyledButton>
-        <StyledButton
-        style={[styles.modalButton, { backgroundColor: colors.grey }]}
-        onPress={cancelCheckout}
-      >
-        Cancel
-      </StyledButton>
-    </View>
-  </View>
-  )}
-
-  {orderConfirmed && (  
-    <View style={styles.modalContentContainer}>
-      <Feather 
-        name="check-circle" 
-        size={45} 
-        color={colors.green} 
-        style={{marginBottom: 10}} />
-        
-      <StyledText style={{marginBottom: 15}}>
-        Order Confirmed!
-      </StyledText>
-      <StyledButton 
-        style={[styles.modalButton, {backgroundColor: colors.green }]} 
-        onPress={completeOrder}
-        >
-          Great!
-        </StyledButton>
-        </View>
-        )}    
-    </AlertModal>
     </MainContainer>
   );
 };
 
-
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 5,
-    paddingHorizontal: 25,
+    padding: 20,
   },
-  divider: {
-    height: 1,
-    backgroundColor: colors.secondary,
-    marginVertical: 1,
-  },
-  checkoutRow: {
+  cartItem: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
-    marginVertical: 10,
+    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderColor: colors.secondary,
+    paddingBottom: 10,
   },
-  totalAmount: {
-    width: "40%",
-    color: colors.darkred + "cc",
+  itemImage: {
+    width: 60,
+    height: 60,
+    resizeMode: "contain",
+    marginRight: 10,
   },
-  checkoutButton: {
-    width: "50%",
-  },
-  emptyCart: {
+  itemDetails: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
-  emptyCartText: {
-    color: colors.tertiary,
-    marginTop: 5,
-  },
-  modalContentContainer: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 20,
-    paddingVertical: 30,
-    alignItems: "center",
-  },
-  modalButtonContainer: {
-    flexDirection: "row", 
-    justifyContent: "space-between",
-    width: "80%", 
+  totalContainer: {
     marginTop: 20,
-    
+    alignItems: "flex-end",
   },
-  modalButton: {
-    height: 50,
-    width: "80%",
-    marginHorizontal: 5,
-    borderRadius: 8,
-    justifyContent: "center",
-    alignItems: "center",
+  payButton: {
+    marginTop: 20,
+    backgroundColor: colors.green,
+    padding: 15,
+    borderRadius: 5,
   },
 });
 

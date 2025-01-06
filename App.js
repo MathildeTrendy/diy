@@ -19,6 +19,32 @@ export default function App() {
   const [SavedProducts, setSavedProducts] = useState([]);
   const [isAuthChecked, setIsAuthChecked] = useState(false);
 
+  const addItemToCart = (item) => {
+    setCartItems((prevItems) => {
+      const existingItem = prevItems.find((cartItem) => cartItem.id === item.id);
+      if (existingItem) {
+        return prevItems.map((cartItem) =>
+          cartItem.id === item.id
+            ? { ...cartItem, cartCount: cartItem.cartCount + 1 }
+            : cartItem
+        );
+      } else {
+        // Sørg for at inkludere alle nødvendige felter
+        return [
+          ...prevItems,
+          {
+            id: item.id,
+            title: item.title,
+            price: item.price,
+            currency: item.currency || "DKK",
+            image: item.image,
+            cartCount: 1,
+          },
+        ];
+      }
+    });
+  };
+
   const loadUserData = async (user) => {
     if (user) {
       const userOnboardingKey = `@DiyApp:Onboarding:${user.uid}`;
@@ -57,7 +83,7 @@ export default function App() {
 
   return (
     <OnboardingContext.Provider value={{ isDiyAppOnboarded, setIsDiyAppOnboarded }}>
-      <CartContext.Provider value={{ cartItems, setCartItems }}>
+      <CartContext.Provider value={{ cartItems, setCartItems, addItemToCart }}>
         <SavedProductsContext.Provider value={{ SavedProducts, setSavedProducts }}>
           <UserContext.Provider value={{ activeUser, setActiveUser }}>
             <NavigationContainer>
@@ -76,16 +102,3 @@ export default function App() {
     </OnboardingContext.Provider>
   );
 }
-
-/*// Tilføj denne funktion til at hente publishable key fra serveren
-const fetchKey = async () => {
-  try {
-    const response = await fetch("https://your-server.com/get-publishable-key");
-    const { key } = await response.json();
-    return key;
-  } catch (error) {
-    console.error("Error fetching publishable key:", error);
-    return "";
-  }
-};*/
-
