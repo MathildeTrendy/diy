@@ -15,7 +15,8 @@ jobs:
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
-      with:
+      with: with:
+  apiKey: "${{ secrets.FIREBASE_WEB_API_KEY }}"
         node-version: '16'
 
     - name: Install Dependencies
@@ -26,5 +27,7 @@ jobs:
       with:
         repoToken: "§{{ secrets.GITHUB_TOKEN }}"
         fireBaseServiceAccount: "§{{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+        projectId: "${{ secrets.FIREBASE_PROJECT_ID }}"
         channelID:  preview
+        
         
