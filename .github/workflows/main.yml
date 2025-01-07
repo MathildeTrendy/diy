@@ -15,9 +15,10 @@ jobs:
 
     - name: Set up Node.js
       uses: actions/setup-node@v3
-      with: with:
-  apiKey: "${{ secrets.FIREBASE_WEB_API_KEY }}"
+      with:   
         node-version: '16'
+
+        appId: "${{ secrets.FIREBASE_APP_ID }}"
 
     - name: Install Dependencies
       run: npm install
