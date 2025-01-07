@@ -18,17 +18,18 @@ jobs:
       with:   
         node-version: '16'
 
-        appId: "${{ secrets.FIREBASE_APP_ID }}"
 
     - name: Install Dependencies
       run: npm install
+
+    - name: Build Project
+      run: npm run build
 
     - name: Deploy to Firebase Hosting
       uses: FirebaseExtended/action-hosting-deploy@v0
       with:
         repoToken: "${{ secrets.GITHUB_TOKEN }}"
         fireBaseServiceAccount: "§{{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
-        projectId: "${{ secrets.FIREBASE_PROJECT_ID }}"
         channelID:  preview
         
         
