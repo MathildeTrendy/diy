@@ -26,4 +26,5 @@ jobs:
       with:
         repoToken: "§{{ secrets.GITHUB_TOKEN }}"
         fireBaseServiceAccount: "§{{ secrets.FIREBASE_SERVICE_ACCOUNT }}"
+        channelID:  preview
         
