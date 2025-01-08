@@ -224,12 +224,7 @@ const Profile = () => {
               onChangeText={setHomepageUrl}
               style={styles.input}
             />
-            <TextInput
-              placeholder="Owner id"
-              value={ownerId}
-              onChangeText={setOwnerId}
-              style={styles.input}
-            />
+          
 
             <TouchableOpacity style={styles.imageButton} onPress={handlePickImage}>
               <AntDesign name="picture" size={20} color="white" />
