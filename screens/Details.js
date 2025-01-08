@@ -1,14 +1,10 @@
-import { useContext, useState } from "react";
-import { View, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
-import { CartContext } from "../utils/context";
-import { StyledButton, StyledText } from "../components";
+import React from "react";
+import { FlatList, Image, ScrollView, StyleSheet, View } from "react-native";
+import { StyledText } from "../components";
 import { colors } from "../config/theme";
-import { Feather } from "@expo/vector-icons";
 
 const Details = ({ route }) => {
-  const { cartItems, setCartItems } = useContext(CartContext);
   const item = route.params?.item;
-  const [quantity, setQuantity] = useState(1); // Holder styr på mængden
 
   if (!item) {
     return (
@@ -18,38 +14,25 @@ const Details = ({ route }) => {
     );
   }
 
-  const handleAddToCart = () => {
-    const existingItem = cartItems.find((cartItem) => cartItem.id === item.id);
-    if (existingItem) {
-      // Hvis varen allerede findes i kurven, opdater mængden
-      const updatedCartItems = cartItems.map((cartItem) =>
-        cartItem.id === item.id
-          ? { ...cartItem, cartCount: cartItem.cartCount + quantity }
-          : cartItem
-      );
-      setCartItems(updatedCartItems);
-    } else {
-      // Tilføj varen som ny post
-      setCartItems([...cartItems, { ...item, cartCount: quantity }]);
-    }
-    setQuantity(1); // Nulstil mængden på Details-siden
-  };
-
-  const increaseQuantity = () => setQuantity((prev) => prev + 1);
-  const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const renderImage = ({ item }) => (
+    <Image source={{ uri: item }} style={styles.carouselImage} />
+  );
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {item.image ? (
-        <Image
-          source={typeof item.image === "number" ? item.image : { uri: item.image }}
-          style={styles.image}
+      {item.images && item.images.length > 0 ? (
+        <FlatList
+          data={item.images}
+          renderItem={renderImage}
+          horizontal
+          keyExtractor={(image, index) => index.toString()}
+          showsHorizontalScrollIndicator={false}
+          style={styles.carouselContainer}
         />
       ) : (
-        <View style={styles.placeholder}>
-          <StyledText>No Image Available</StyledText>
-        </View>
+        <Image source={{ uri: item.image }} style={styles.image} />
       )}
+
       <View style={styles.content}>
         <StyledText big style={styles.title}>
           {item.title || "Unnamed Item"}
@@ -60,19 +43,9 @@ const Details = ({ route }) => {
         <StyledText bold style={styles.price}>
           {`Price: ${item.currency || "DKK"}${item.price.toFixed(2)}`}
         </StyledText>
-        {/* Mængdekontrol */}
-        <View style={styles.quantityControl}>
-          <TouchableOpacity onPress={decreaseQuantity} style={styles.quantityButton}>
-            <Feather name="minus" size={20} color={colors.primary} />
-          </TouchableOpacity>
-          <StyledText style={styles.quantityText}>{quantity}</StyledText>
-          <TouchableOpacity onPress={increaseQuantity} style={styles.quantityButton}>
-            <Feather name="plus" size={20} color={colors.primary} />
-          </TouchableOpacity>
-        </View>
-        <StyledButton onPress={handleAddToCart} style={styles.addButton}>
-          Add to Cart
-        </StyledButton>
+        <StyledText style={styles.owner}>
+          {`Owner: ${item.ownerUsername || "Unknown"}`}
+        </StyledText>
       </View>
     </ScrollView>
   );
@@ -84,18 +57,20 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     padding: 20,
   },
-  image: {
-    width: "100%",
-    height: 350,
-    resizeMode: "contain",
+  carouselContainer: {
     marginBottom: 20,
   },
-  placeholder: {
+  carouselImage: {
+    width: 300,
+    height: 300,
+    resizeMode: "contain",
+    marginRight: 10,
+    borderRadius: 8,
+  },
+  image: {
     width: "100%",
-    height: 350,
-    backgroundColor: colors.secondary,
-    justifyContent: "center",
-    alignItems: "center",
+    height: 300,
+    resizeMode: "contain",
     marginBottom: 20,
   },
   content: {
@@ -119,27 +94,10 @@ const styles = StyleSheet.create({
     color: colors.accent,
     marginBottom: 30,
   },
-  quantityControl: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 20,
-    justifyContent: "flex-start",
-  },
-  quantityButton: {
-    padding: 10,
-    borderRadius: 5,
-    backgroundColor: colors.metallic + "cc",
-    marginHorizontal: 10,
-  },
-  quantityText: {
-    color: "black",
-  },
-  addButton: {
-    width: "100%",
-    paddingVertical: 15,
-    backgroundColor: colors.metallic + "cc",
-    borderRadius: 8,
-    alignItems: "center",
+  owner: {
+    fontSize: 16,
+    marginTop: 10,
+    color: colors.secondaryText,
   },
 });
 

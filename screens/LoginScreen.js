@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text } from "react-native";
+import { View, TextInput, Button, Text, TouchableOpacity } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useNavigation } from "@react-navigation/native"; // Tilføjet navigation
 import { auth } from "../firebase";
 
 export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+  const navigation = useNavigation(); // Brug navigation
 
   const handleLogin = async () => {
     try {
@@ -37,6 +39,14 @@ export default function LoginScreen() {
         style={{ borderWidth: 1, borderColor: "#ccc", padding: 10, marginVertical: 5 }}
       />
       <Button title="Login" onPress={handleLogin} />
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Signup")} // Naviger til signup
+        style={{ marginTop: 20 }}
+      >
+        <Text style={{ textAlign: "center", color: "blue" }}>
+          Don't have an account? Sign Up
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
