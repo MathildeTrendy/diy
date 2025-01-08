@@ -22,7 +22,7 @@ const uploadImage = async (image) => {
 };
 
 const Profile = () => {
-  const { activeUser } = useContext(UserContext);
+  const { activeUser } = useContext(UserContext); // Hent brugeren fra konteksten
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -83,7 +83,7 @@ const Profile = () => {
         price: Number(price) || 0,
         homepageUrl,
         ownerId: activeUser.uid,
-        username: activeUser.username || "Unknown",
+        username: activeUser.displayName || "Unknown", // Brug `displayName`
         image: imageUrl,
       };
 
@@ -108,7 +108,7 @@ const Profile = () => {
       </StyledText>
 
       <ProfileInfo icon="user" label="Username">
-        {activeUser?.username || "N/A"}
+        {activeUser?.displayName || "N/A"} {/* Viser brugernavnet */}
       </ProfileInfo>
       <ProfileInfo icon="user" label="Email">
         {activeUser?.email || "N/A"}
