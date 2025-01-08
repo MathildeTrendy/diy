@@ -1,4 +1,3 @@
-// screens/Profile.js
 import React, { useContext, useState, useEffect } from "react";
 import {
   StyleSheet,
@@ -11,7 +10,6 @@ import {
   Image,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 
 import { MainContainer, StyledText, ProfileInfo, ProductCard } from "../components";
@@ -19,34 +17,22 @@ import { colors } from "../config/theme";
 import { UserContext } from "../utils/context";
 import { getUserItems, createItem } from "../utils/itemService";
 
-// Dummy uploadfunktion. Hvis du vil gemme i Firebase Storage, implementér her:
 const uploadImage = async (image) => {
-  // return fx image.uri eller en downloadURL
   return image.uri;
 };
 
 const Profile = () => {
   const { activeUser } = useContext(UserContext);
-  const navigation = useNavigation();
-
-  // Liste med brugerens egne produkter
   const [products, setProducts] = useState([]);
-
-  // Felter til at oprette nyt produkt
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState("");
   const [homepageUrl, setHomepageUrl] = useState("");
-  const [ownerId, setOwnerId] = ("");
-
-  // Billed-state
   const [image, setImage] = useState(null);
 
   const [loading, setLoading] = useState(false);
-  // Modal-state
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Hent brugerens produkter fra Firestore subcollection
   const fetchProducts = async () => {
     if (!activeUser?.uid) return;
     setLoading(true);
@@ -64,7 +50,6 @@ const Profile = () => {
     fetchProducts();
   }, [activeUser]);
 
-  // Vælg billede fra galleri
   const handlePickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -97,14 +82,14 @@ const Profile = () => {
         description,
         price: Number(price) || 0,
         homepageUrl,
-        ownerId: activeUser.uid, // Afgørende for subcollection
+        ownerId: activeUser.uid,
+        username: activeUser.username || "Unknown",
         image: imageUrl,
       };
 
       await createItem(newItem);
       await fetchProducts();
 
-      // Ryd felter og luk modal
       setTitle("");
       setDescription("");
       setPrice("");
@@ -118,7 +103,6 @@ const Profile = () => {
 
   return (
     <MainContainer style={styles.container}>
-      {/* Header */}
       <StyledText style={styles.header} bold>
         Account
       </StyledText>
@@ -130,7 +114,6 @@ const Profile = () => {
         {activeUser?.email || "N/A"}
       </ProfileInfo>
 
-      {/* + (plus)-knap */}
       <View style={styles.plusContainer}>
         <StyledText bold style={styles.subHeader}>
           Products
@@ -145,22 +128,22 @@ const Profile = () => {
         </TouchableOpacity>
       </View>
 
-      {/* Liste med brugerens items */}
       {loading ? (
         <StyledText>Loading...</StyledText>
       ) : (
         <FlatList
           data={products}
           renderItem={({ item }) => (
-            <ProductCard
-              id={item.id}
-              title={item.title}
-              price={item.price}
-              description={item.description}
-              homepageUrl={item.homepageUrl}
-              image={item.image}
-              all
-            />
+            <View style={styles.productContainer}>
+              <ProductCard
+                id={item.id}
+                title={item.title}
+                price={item.price}
+                description={item.description}
+                homepageUrl={item.homepageUrl}
+                image={item.image}
+              />
+            </View>
           )}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
@@ -175,11 +158,6 @@ const Profile = () => {
         />
       )}
 
-      <StyledText style={[styles.header, { marginTop: 20 }]} bold>
-        WishList <AntDesign name="heart" size={17} color={colors.metallic + "cc"} />
-      </StyledText>
-
-      {/* Modal til at oprette item */}
       <Modal
         animationType="slide"
         transparent={true}
@@ -224,7 +202,6 @@ const Profile = () => {
               onChangeText={setHomepageUrl}
               style={styles.input}
             />
-          
 
             <TouchableOpacity style={styles.imageButton} onPress={handlePickImage}>
               <AntDesign name="picture" size={20} color="white" />
@@ -255,6 +232,10 @@ const styles = StyleSheet.create({
   subHeader: {
     fontSize: 18,
     color: colors.metallic + "cc",
+  },
+  productContainer: {
+    flex: 1,
+    marginBottom: 15,
   },
   input: {
     borderWidth: 1,
@@ -289,7 +270,7 @@ const styles = StyleSheet.create({
   },
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Semitransparent sort baggrund
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -298,12 +279,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 15,
     padding: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
-    position: "relative",
   },
   closeIcon: {
     position: "absolute",

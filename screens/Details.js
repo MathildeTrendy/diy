@@ -1,10 +1,21 @@
-import React from "react";
-import { FlatList, Image, ScrollView, StyleSheet, View } from "react-native";
+import React, { useContext, useState } from "react";
+import {
+  FlatList,
+  Image,
+  ScrollView,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+} from "react-native";
 import { StyledText } from "../components";
 import { colors } from "../config/theme";
+import { CartContext } from "../utils/context";
 
 const Details = ({ route }) => {
+  const { addItemToCart } = useContext(CartContext);
   const item = route.params?.item;
+
+  const [quantity, setQuantity] = useState(1);
 
   if (!item) {
     return (
@@ -15,11 +26,27 @@ const Details = ({ route }) => {
   }
 
   const renderImage = ({ item }) => (
-    <Image source={{ uri: item }} style={styles.carouselImage} />
+    <Image
+      source={typeof item === "number" ? item : { uri: item }}
+      style={styles.carouselImage}
+    />
   );
+
+  const handleAddToCart = () => {
+    const itemToAdd = {
+      ...item,
+      cartCount: quantity,
+    };
+    addItemToCart(itemToAdd);
+  };
+
+  const increaseQuantity = () => setQuantity((prev) => prev + 1);
+  const decreaseQuantity = () =>
+    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Billedvisning */}
       {item.images && item.images.length > 0 ? (
         <FlatList
           data={item.images}
@@ -29,10 +56,17 @@ const Details = ({ route }) => {
           showsHorizontalScrollIndicator={false}
           style={styles.carouselContainer}
         />
+      ) : item.image ? (
+        <Image
+          source={typeof item.image === "number" ? item.image : { uri: item.image }}
+          style={styles.image}
+          resizeMode="contain"
+        />
       ) : (
-        <Image source={{ uri: item.image }} style={styles.image} />
+        <StyledText style={styles.noImage}>No Image Available</StyledText>
       )}
 
+      {/* Item detaljer */}
       <View style={styles.content}>
         <StyledText big style={styles.title}>
           {item.title || "Unnamed Item"}
@@ -40,12 +74,28 @@ const Details = ({ route }) => {
         <StyledText style={styles.description}>
           {item.description || "No description available."}
         </StyledText>
-        <StyledText bold style={styles.price}>
-          {`Price: ${item.currency || "DKK"}${item.price.toFixed(2)}`}
-        </StyledText>
         <StyledText style={styles.owner}>
           {`Owner: ${item.ownerUsername || "Unknown"}`}
         </StyledText>
+        <StyledText bold style={styles.price}>
+          {`Price: ${item.currency || "DKK"}${item.price.toFixed(2)}`}
+        </StyledText>
+
+        {/* Quantity kontrol */}
+        <View style={styles.quantityControl}>
+          <TouchableOpacity onPress={decreaseQuantity} style={styles.quantityButton}>
+            <StyledText style={styles.quantityButtonText}>-</StyledText>
+          </TouchableOpacity>
+          <StyledText style={styles.quantityText}>{quantity}</StyledText>
+          <TouchableOpacity onPress={increaseQuantity} style={styles.quantityButton}>
+            <StyledText style={styles.quantityButtonText}>+</StyledText>
+          </TouchableOpacity>
+        </View>
+
+        {/* Add to Cart knap */}
+        <TouchableOpacity style={styles.cartButton} onPress={handleAddToCart}>
+          <StyledText style={styles.cartButtonText}>Add to Cart</StyledText>
+        </TouchableOpacity>
       </View>
     </ScrollView>
   );
@@ -69,35 +119,78 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 300,
+    height: 350, // Mere plads til billedet
     resizeMode: "contain",
+    marginBottom: 20,
+  },
+  noImage: {
+    textAlign: "center",
+    color: colors.secondaryText,
+    fontSize: 18,
     marginBottom: 20,
   },
   content: {
     width: "100%",
   },
   title: {
-    fontSize: 28,
-    marginBottom: 10,
+    fontSize: 20,
+    marginBottom: 8,
     color: colors.primaryText,
     fontWeight: "bold",
   },
   description: {
-    fontSize: 18,
-    marginBottom: 20,
-    textAlign: "justify",
-    lineHeight: 28,
+    fontSize: 14,
+    marginBottom: 15,
+    lineHeight: 22,
+    color: colors.secondaryText,
+  },
+  owner: {
+    fontSize: 12,
+    marginTop: 10, // Giver afstand til beskrivelsen
+    marginBottom: 5, // Mere afstand fra prisen
     color: colors.secondaryText,
   },
   price: {
-    fontSize: 20,
+    fontSize: 22,
     color: colors.accent,
-    marginBottom: 30,
+    marginBottom: 20, // Giver mere luft under prisen
   },
-  owner: {
+  quantityControl: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 20,
+    justifyContent: "center",
+  },
+  quantityButton: {
+    backgroundColor: colors.metallic + "cc",
+    width: 40, // Kvadratisk form
+    height: 40, // Kvadratisk form
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 5,
+    marginHorizontal: 10,
+  },
+  quantityButtonText: {
+    color: "white",
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  quantityText: {
     fontSize: 16,
-    marginTop: 10,
-    color: colors.secondaryText,
+    fontWeight: "bold",
+    color: colors.primaryText,
+  },
+  cartButton: {
+    backgroundColor: colors.metallic + "cc",
+    paddingVertical: 12,
+    borderRadius: 8,
+    alignItems: "center",
+    marginHorizontal: 60,
+  },
+  cartButtonText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
 

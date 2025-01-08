@@ -22,14 +22,16 @@ export default function App() {
   const addItemToCart = (item) => {
     setCartItems((prevItems) => {
       const existingItem = prevItems.find((cartItem) => cartItem.id === item.id);
+
       if (existingItem) {
+        // Hvis varen allerede er i kurven, opdater dens `cartCount` baseret på det nye item
         return prevItems.map((cartItem) =>
           cartItem.id === item.id
-            ? { ...cartItem, cartCount: cartItem.cartCount + 1 }
+            ? { ...cartItem, cartCount: cartItem.cartCount + item.cartCount }
             : cartItem
         );
       } else {
-        // Sørg for at inkludere alle nødvendige felter
+        // Hvis varen ikke findes, tilføj den til kurven
         return [
           ...prevItems,
           {
@@ -38,7 +40,7 @@ export default function App() {
             price: item.price,
             currency: item.currency || "DKK",
             image: item.image,
-            cartCount: 1,
+            cartCount: item.cartCount, // Brug det angivne antal
           },
         ];
       }

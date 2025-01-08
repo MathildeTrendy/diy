@@ -1,4 +1,3 @@
-// DisplayCard.js
 import React from "react";
 import { TouchableOpacity, View, StyleSheet, Image } from "react-native";
 import { useNavigation } from "@react-navigation/native";
@@ -17,7 +16,6 @@ const DisplayCard = ({
   const navigation = useNavigation();
 
   const handlePress = () => {
-    // Send hele item som parameter til Details
     navigation.navigate("Details", {
       item: {
         id,
@@ -52,37 +50,34 @@ const DisplayCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: ScreenWidth * 0.67,
-    height: ScreenWidth * 0.43,
-    minWidth: 250,
-    minHeight: 160,
+    width: ScreenWidth * 0.6, // Mindre bredde
+    height: ScreenWidth * 0.4, // Justeret højde
+    minWidth: 220, // Minimum bredde reduceret
+    minHeight: 140,
     backgroundColor: colors.metallic + "cc",
-    borderRadius: 25,
-    marginTop: 45,
-    marginRight: 25,
+    borderRadius: 20,
+    marginTop: 30,
+    marginRight: 20,
     flexDirection: "row",
   },
   details: {
-    width: "70%",
-    padding: 15,
+    width: "65%", // Reduceret bredde for tekstdetaljer
+    padding: 10,
     justifyContent: "space-around",
   },
   productTitle: {
     color: colors.secondary,
-    fontSize: 15,
+    fontSize: 14, // Mindre fontstørrelse
     marginBottom: 5,
-    right: 6,
   },
   productPrice: {
     color: colors.secondary,
-    fontSize: 16,
+    fontSize: 15,
   },
   productImage: {
-    width: "40%",
+    width: "35%", // Reduceret billedbredde
     height: "100%",
-    top: 0,
-    right: 26,
-    borderRadius: 20,
+    borderRadius: 15,
   },
 });
 

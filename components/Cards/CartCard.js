@@ -9,13 +9,12 @@ import { useNavigation } from "@react-navigation/native";
 import { CartContext } from "../../utils/context";
 import { storeData } from "../../utils/storage";
 
-
 const CartCard = ({ id, image, name, volume, currency, price, cartCount, quantityAvailable }) => {
   const navigation = useNavigation();
-  const {cartItems, setCartItems} = useContext(CartContext);
+  const { cartItems, setCartItems } = useContext(CartContext);
 
   const handleOnPress = () => {
-    navigation.navigate("Details", {id});
+    navigation.navigate("Details", { id });
   };
 
   const handleAddToCart = (newCount) => {
@@ -25,8 +24,8 @@ const CartCard = ({ id, image, name, volume, currency, price, cartCount, quantit
           cartItem.id === id
             ? { ...cartItem, cartCount: newCount }
             : cartItem
-      );
-  
+        );
+
         saveCartItems(updatedCartItems);
       }
     } catch (error) {
@@ -47,18 +46,16 @@ const CartCard = ({ id, image, name, volume, currency, price, cartCount, quantit
     try {
       console.log("Cart before removal:", cartItems);
       console.log("Item to remove:", id);
-      
+
       let updatedCartItems = cartItems.filter(
-          (cartItem) => cartItem.id !== id);
-       
-      
+        (cartItem) => cartItem.id !== id
+      );
 
       console.log("Cart after removal:", updatedCartItems);
 
       await saveCartItems(updatedCartItems);
     } catch (error) {
       console.warn(error);
-      
     }
   };
 
@@ -70,10 +67,8 @@ const CartCard = ({ id, image, name, volume, currency, price, cartCount, quantit
           <StyledText bold numberOfLines={2} style={styles.name}>
             {name}
           </StyledText>
-          <TouchableOpacity style={styles.closeButton} 
-          onPress={handleRemoveFromCart}
-          >
-          <AntDesign name="close" size={22} color={colors.tertiary + "cc"} />
+          <TouchableOpacity style={styles.closeButton} onPress={handleRemoveFromCart}>
+            <AntDesign name="close" size={22} color={colors.tertiary + "cc"} />
           </TouchableOpacity>
         </View>
 
@@ -85,11 +80,12 @@ const CartCard = ({ id, image, name, volume, currency, price, cartCount, quantit
           <StyledText bold style={styles.price}>
             {currency + price}
           </StyledText>
-          <CartCounter 
-          small 
-          count={cartCount}
-          setCount={(newCount) => handleAddToCart(newCount)} 
-          limit={quantityAvailable} />
+          <CartCounter
+            small
+            count={cartCount}
+            setCount={(newCount) => handleAddToCart(newCount)}
+            limit={quantityAvailable}
+          />
         </View>
       </View>
     </TouchableOpacity>
