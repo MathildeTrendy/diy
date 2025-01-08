@@ -8,7 +8,6 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
-    "build": "react-scripts build"
   },
   "dependencies": {
     "@babel/plugin-transform-class-properties": "^7.25.9",
