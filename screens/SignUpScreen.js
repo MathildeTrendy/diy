@@ -7,12 +7,47 @@ export default function SignupScreen() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [errorMsg, setErrorMsg] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(""); 
+
+  const evaluatePasswordStrength = (pwd) => {
+    let strength = 0;
+    if (pwd.length >= 8) strength += 1;
+    if (/[A-Z]/.test(pwd)) strength += 1;
+    if (/[a-z]/.test(pwd)) strength += 1;
+    if (/[0-9]/.test(pwd)) strength += 1;
+    if (/[^A-Za-z0-9]/.test(pwd)) strength += 1;
+
+    switch (strength) {
+      case 0:
+      case 1:
+      case 2:
+        return "Svagt";
+      case 3:
+      case 4:
+        return "Mellem";
+      case 5:
+        return "Stærkt";
+      default:
+        return "";
+    }
+  };
+
+  const handlePasswordChange = (pwd) => { 
+    setPassword(pwd);
+    setPasswordStrength(evaluatePasswordStrength(pwd));
+  };
 
   const handleSignup = async () => {
-    if (!email || !username || !password) {
+    if (!email || !username || !password || !confirmPassword) { 
       setErrorMsg("Please fill out all fields.");
+      return;
+    }
+
+    if (password !== confirmPassword) { 
+      setErrorMsg("Passwords do not match.");
       return;
     }
 
@@ -24,12 +59,11 @@ export default function SignupScreen() {
       );
       const user = userCredential.user;
 
-      // Tilføj brugernavn til profilen
+     
       await updateProfile(user, { displayName: username });
 
       setSuccessMsg("Account created successfully!");
       setErrorMsg("");
-      // Eventuelt kan du navigere brugeren til login-skærmen
     } catch (error) {
       setErrorMsg(error.message);
       setSuccessMsg("");
@@ -61,7 +95,19 @@ export default function SignupScreen() {
         placeholder="Password"
         secureTextEntry
         value={password}
-        onChangeText={setPassword}
+        onChangeText={handlePasswordChange} 
+        style={styles.input}
+      />
+      {password ? (
+        <Text style={styles.passwordStrength}>
+          Password Strength: {passwordStrength}
+        </Text>
+      ) : null}
+      <TextInput
+        placeholder="Confirm Password"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
         style={styles.input}
       />
       <Button title="Sign Up" onPress={handleSignup} />
@@ -96,5 +142,10 @@ const styles = StyleSheet.create({
     color: "green",
     marginBottom: 10,
     textAlign: "center",
+  },
+  passwordStrength: { 
+    textAlign: "center",
+    marginBottom: 10,
+    color: "#555",
   },
 });
