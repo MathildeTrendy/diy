@@ -51,7 +51,6 @@ export default function Home() {
       {/* Popular */}
       <SectionHeader
         style={styles.header}
-        rightText="View all"
         rightTextOnPress={() => {
           navigation.navigate("Popular");
         }}
@@ -70,7 +69,6 @@ export default function Home() {
       {/* My Collection (viser kun items fra logged-in user) */}
       <SectionHeader
         style={styles.header}
-        rightText="View all"
         rightTextOnPress={() => {
           navigation.navigate("Products");
         }}
