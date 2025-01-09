@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome'; // Importér ikoner
 import { StyledText } from "../components";
 import { colors } from "../config/theme";
 import { CartContext } from "../utils/context";
@@ -56,6 +57,16 @@ const Details = ({ route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
+      {/* Øverste række med ikoner */}
+      <View style={styles.iconRow}>
+        <TouchableOpacity onPress={() => {}} style={styles.iconButton} accessibilityLabel="Rediger">
+          <Icon name="edit" size={24} color={colors.accent} />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => {}} style={styles.iconButton} accessibilityLabel="Slet">
+          <Icon name="trash" size={24} color={colors.accent} />
+        </TouchableOpacity>
+      </View>
+
       {item.images && item.images.length > 0 ? (
         <FlatList
           data={item.images}
@@ -79,6 +90,7 @@ const Details = ({ route }) => {
         <StyledText big style={styles.title}>
           {item.title || "Unnamed Item"}
         </StyledText>
+
         <StyledText style={styles.description}>
           {item.description || "No description available."}
         </StyledText>
@@ -125,14 +137,14 @@ const styles = StyleSheet.create({
   },
   carouselImage: {
     width: 300,
-    height: 300,
+    height: 220, // Let større end tidligere (200)
     resizeMode: "contain",
     marginRight: 10,
     borderRadius: 8,
   },
   image: {
     width: "100%",
-    height: 350,
+    height: 280, // Let større end tidligere (250)
     resizeMode: "contain",
     marginBottom: 20,
   },
@@ -207,11 +219,21 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginHorizontal: 60,
+    marginBottom: 20, // Sørger for, at der er plads til knappen
   },
   cartButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
+  },
+  // Tilføjede styles for ikonerne
+  iconRow: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    marginBottom: 10,
+  },
+  iconButton: {
+    marginLeft: 15,
   },
 });
 
