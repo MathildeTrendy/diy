@@ -27,13 +27,6 @@ const AlertModal = ({ children, onClose, isVisible, title, buttons, onContinue }
             ))}
           </View>
         )}
-        {/* "Continue" Button for Payment Simulation */}
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: colors.primary }]}
-          onPress={onContinue}
-        >
-          <StyledText style={[styles.buttonText, { color: colors.secondary }]}>Continue</StyledText>
-        </TouchableOpacity>
       </View>
     </Modal>
   );
