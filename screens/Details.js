@@ -7,6 +7,8 @@ import {
   View,
   TouchableOpacity,
   Linking,
+  Modal,
+  Alert,
 } from "react-native";
 import Icon from 'react-native-vector-icons/FontAwesome'; // Importér ikoner
 import { StyledText } from "../components";
@@ -18,6 +20,8 @@ const Details = ({ route }) => {
   const item = route.params?.item; // Henter det aktuelle item fra navigationens route
 
   const [quantity, setQuantity] = useState(1);
+  const [isReportModalVisible, setReportModalVisible] = useState(false);
+  const [selectedReportType, setSelectedReportType] = useState(null);
 
   if (!item) {
     return (
@@ -55,6 +59,26 @@ const Details = ({ route }) => {
   // Brug `item.username` direkte, da det blev sat under oprettelse af item'et
   const createdBy = item.username || "Unknown";
 
+  const reportTypes = [
+    "Spam",
+    "Inappropriate Content",
+    "Copyright Violation",
+    "Fraudulent Activity",
+    "Harassment",
+    "Other",
+  ];
+
+  const handleReport = (type) => {
+    setSelectedReportType(type);
+    setReportModalVisible(false);
+    // Her kan du håndtere rapporteringen, f.eks. sende til backend
+    Alert.alert(
+      "Report Submitted",
+      `Thank you for reporting "${type}". We will review it shortly.`,
+      [{ text: "OK" }]
+    );
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Øverste række med ikoner */}
@@ -64,6 +88,14 @@ const Details = ({ route }) => {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => {}} style={styles.iconButton} accessibilityLabel="Slet">
           <Icon name="trash" size={24} color={colors.accent} />
+        </TouchableOpacity>
+        {/* Flag Icon (Rød) */}
+        <TouchableOpacity
+          onPress={() => setReportModalVisible(true)}
+          style={styles.iconButton}
+          accessibilityLabel="Rapporter"
+        >
+          <Icon name="flag" size={24} color={colors.red} />
         </TouchableOpacity>
       </View>
 
@@ -122,6 +154,39 @@ const Details = ({ route }) => {
           <StyledText style={styles.cartButtonText}>Add to Cart</StyledText>
         </TouchableOpacity>
       </View>
+
+      {/* Report Modal */}
+      <Modal
+        visible={isReportModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setReportModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            {/* Luk-knap (X) */}
+            <TouchableOpacity
+              onPress={() => {
+                setReportModalVisible(false);
+              }}
+              style={styles.closeButton}
+              accessibilityLabel="Luk"
+            >
+              <Icon name="times" size={24} color={colors.secondaryText} />
+            </TouchableOpacity>
+            <StyledText big style={styles.modalTitle}>Report Item</StyledText>
+            {reportTypes.map((type) => (
+              <TouchableOpacity
+                key={type}
+                onPress={() => handleReport(type)}
+                style={styles.reportOption}
+              >
+                <StyledText style={styles.reportText}>{type}</StyledText>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </View>
+      </Modal>
     </ScrollView>
   );
 };
@@ -234,6 +299,49 @@ const styles = StyleSheet.create({
   },
   iconButton: {
     marginLeft: 15,
+  },
+  // Modal styles
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)", // Øget opacity for bedre kontrast
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalContainer: {
+    width: "80%",
+    backgroundColor: "#FFFFFF", // Solid hvid baggrund for høj kontrast
+    borderRadius: 10,
+    padding: 20,
+    alignItems: "stretch",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5, // For Android shadow
+  },
+  modalTitle: {
+    textAlign: "center",
+    marginBottom: 20,
+    color: colors.primaryText,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  reportOption: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.secondaryText,
+  },
+  reportText: {
+    fontSize: 16,
+    color: colors.primaryText, // Sørger for høj kontrast
+  },
+  // Luk-knap (X) styles
+  closeButton: {
+    position: "absolute",
+    top: 10,
+    right: 10,
+    padding: 10,
+    zIndex: 1, // Sørger for, at knappen er øverst
   },
 });
 
