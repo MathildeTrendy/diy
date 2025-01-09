@@ -7,9 +7,11 @@ import { Feather } from "@expo/vector-icons";
 
 const Cart = () => {
   const { cartItems, setCartItems } = useContext(CartContext);
-  const [subtotal, setSubtotal] = useState(0); // Subtotal uden gebyrer
-  const [cartTotal, setCartTotal] = useState(0); // Total med gebyrer
-  const [isCheckoutVisible, setIsCheckoutVisible] = useState(false); // Styrer modal
+  const [subtotal, setSubtotal] = useState(0);
+  const [cartTotal, setCartTotal] = useState(0);
+  const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
+  const [isSuccessVisible, setIsSuccessVisible] = useState(false);
+
   const [checkoutDetails, setCheckoutDetails] = useState({
     fullName: "",
     address: "",
@@ -18,14 +20,15 @@ const Cart = () => {
     country: "",
     phone: "",
     email: "",
+    cardNumber: "",
+    expiryDate: "",
+    cvv: "",
   });
-  const [isSuccessVisible, setIsSuccessVisible] = useState(false); // Succesmodal
 
   const shippingCost = 49; // Fragtpris i DKK
   const serviceFee = 10; // Servicegebyr i DKK
-  const vatRate = 0.25; // Momsrate på 25%
 
-  const calculateTotals = () => {
+  const calculateSubtotal = () => {
     if (cartItems && cartItems.length > 0) {
       const calculatedSubtotal = cartItems.reduce(
         (accumulator, cartItem) =>
@@ -33,14 +36,14 @@ const Cart = () => {
         0
       );
       setSubtotal(calculatedSubtotal);
-
-      const vat = calculatedSubtotal * vatRate;
-      const calculatedTotal = calculatedSubtotal + vat + shippingCost + serviceFee;
-      setCartTotal(calculatedTotal);
     } else {
       setSubtotal(0);
-      setCartTotal(0);
     }
+  };
+
+  const calculateCartTotal = () => {
+    const total = subtotal + shippingCost + serviceFee;
+    setCartTotal(total);
   };
 
   const adjustQuantity = (id, amount) => {
@@ -60,17 +63,31 @@ const Cart = () => {
   };
 
   const handlePay = () => {
-    // Valider checkout felter
-    const { fullName, address, city, postalCode, country, phone, email } = checkoutDetails;
-    if (!fullName || !address || !city || !postalCode || !country || !phone || !email) {
+    const { fullName, address, city, postalCode, country, phone, email, cardNumber, expiryDate, cvv } = checkoutDetails;
+
+    if (!fullName || !address || !city || !postalCode || !country || !phone || !email || !cardNumber || !expiryDate || !cvv) {
       alert("Please fill in all fields!");
       return;
     }
 
-    // Gennemfør betaling
+    if (cardNumber.length !== 16 || !/^\d+$/.test(cardNumber)) {
+      alert("Invalid card number. It must be 16 digits.");
+      return;
+    }
+
+    if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+      alert("Invalid expiry date. Use format MM/YY.");
+      return;
+    }
+
+    if (cvv.length !== 3 || !/^\d+$/.test(cvv)) {
+      alert("Invalid CVV. It must be 3 digits.");
+      return;
+    }
+
     setIsCheckoutVisible(false);
     setIsSuccessVisible(true);
-    setCartItems([]); // Tøm kurven
+    setCartItems([]);
     setCheckoutDetails({
       fullName: "",
       address: "",
@@ -79,11 +96,14 @@ const Cart = () => {
       country: "",
       phone: "",
       email: "",
-    }); // Nulstil felter
+      cardNumber: "",
+      expiryDate: "",
+      cvv: "",
+    });
   };
 
   useEffect(() => {
-    calculateTotals();
+    calculateSubtotal();
   }, [cartItems]);
 
   const renderCartItem = ({ item }) => (
@@ -139,7 +159,10 @@ const Cart = () => {
           </View>
           <StyledButton
             style={styles.payButton}
-            onPress={() => setIsCheckoutVisible(true)}
+            onPress={() => {
+              calculateCartTotal();
+              setIsCheckoutVisible(true);
+            }}
           >
             Pay Now
           </StyledButton>
@@ -150,6 +173,7 @@ const Cart = () => {
       <AlertModal isVisible={isCheckoutVisible} onClose={() => setIsCheckoutVisible(false)}>
         <ScrollView contentContainerStyle={styles.modalContent}>
           <StyledText big>Checkout</StyledText>
+          {/* Input Fields */}
           <TextInput
             style={styles.input}
             placeholder="Full Name"
@@ -195,20 +219,35 @@ const Cart = () => {
             value={checkoutDetails.email}
             onChangeText={(text) => setCheckoutDetails({ ...checkoutDetails, email: text })}
           />
-          <StyledText style={styles.modalText}>
-            Shipping: {`${cartItems?.[0]?.currency || "DKK"}${shippingCost}`}
-          </StyledText>
-          <StyledText style={styles.modalText}>
-            Service Fee: {`${cartItems?.[0]?.currency || "DKK"}${serviceFee}`}
-          </StyledText>
-          <StyledText style={styles.modalText}>
-            VAT (25%): {`${cartItems?.[0]?.currency || "DKK"}${(subtotal * vatRate).toFixed(2)}`}
-          </StyledText>
-          <StyledText big style={styles.modalText}>
-            Total: {`${cartItems?.[0]?.currency || "DKK"}${cartTotal.toFixed(2)}`}
-          </StyledText>
+          {/* Payment Fields */}
+          <TextInput
+            style={styles.input}
+            placeholder="Card Number"
+            keyboardType="numeric"
+            maxLength={16}
+            value={checkoutDetails.cardNumber}
+            onChangeText={(text) => setCheckoutDetails({ ...checkoutDetails, cardNumber: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="Expiry Date (MM/YY)"
+            value={checkoutDetails.expiryDate}
+            onChangeText={(text) => setCheckoutDetails({ ...checkoutDetails, expiryDate: text })}
+          />
+          <TextInput
+            style={styles.input}
+            placeholder="CVV"
+            keyboardType="numeric"
+            maxLength={3}
+            value={checkoutDetails.cvv}
+            onChangeText={(text) => setCheckoutDetails({ ...checkoutDetails, cvv: text })}
+          />
+          {/* Totals */}
+          <StyledText>{`Shipping: ${cartItems?.[0]?.currency || "DKK"}${shippingCost}`}</StyledText>
+          <StyledText>{`Service Fee: ${cartItems?.[0]?.currency || "DKK"}${serviceFee}`}</StyledText>
+          <StyledText bold>{`Total: ${cartItems?.[0]?.currency || "DKK"}${cartTotal.toFixed(2)}`}</StyledText>
           <StyledButton style={styles.modalPayButton} onPress={handlePay}>
-            Pay
+            Confirm Payment
           </StyledButton>
         </ScrollView>
       </AlertModal>
@@ -217,9 +256,7 @@ const Cart = () => {
       <AlertModal isVisible={isSuccessVisible} onClose={() => setIsSuccessVisible(false)}>
         <View style={styles.modalContent}>
           <Feather name="check-circle" size={50} color={colors.success} />
-          <StyledText big style={styles.modalText}>
-            Payment Successful!
-          </StyledText>
+          <StyledText big>Payment Successful!</StyledText>
           <StyledButton style={styles.modalPayButton} onPress={() => setIsSuccessVisible(false)}>
             OK
           </StyledButton>
@@ -230,9 +267,7 @@ const Cart = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    padding: 20,
-  },
+  container: { padding: 20 },
   cartItem: {
     flexDirection: "row",
     alignItems: "center",
@@ -241,12 +276,7 @@ const styles = StyleSheet.create({
     borderColor: colors.secondary,
     paddingBottom: 10,
   },
-  itemImage: {
-    width: 60,
-    height: 60,
-    resizeMode: "contain",
-    marginRight: 10,
-  },
+  itemImage: { width: 60, height: 60, marginRight: 10 },
   placeholder: {
     width: 60,
     height: 60,
@@ -255,9 +285,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 5,
   },
-  itemDetails: {
-    flex: 1,
-  },
+  itemDetails: { flex: 1 },
   quantityControl: {
     flexDirection: "row",
     alignItems: "center",
@@ -269,41 +297,26 @@ const styles = StyleSheet.create({
     backgroundColor: colors.metallic + "cc",
     marginHorizontal: 5,
   },
-  quantityText: {
-    color: "black",
-  },
-  deleteButton: {
-    padding: 5,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  totalContainer: {
-    marginTop: 20,
-    alignItems: "flex-end",
-  },
+  quantityText: { color: "black" },
+  deleteButton: { padding: 5, alignItems: "center", justifyContent: "center" },
+  totalContainer: { marginTop: 20, alignItems: "flex-end" },
   payButton: {
     marginTop: 20,
     backgroundColor: colors.metallic + "cc",
     paddingVertical: 10,
     borderRadius: 5,
   },
-  modalContent: {
-    padding: 20,
-  },
-  modalText: {
-    marginVertical: 10,
-  },
+  modalContent: { padding: 20 },
   input: {
     borderWidth: 1,
     borderColor: colors.secondary,
     borderRadius: 5,
     padding: 10,
-    width: "100%",
-    marginBottom: 20,
+    marginBottom: 10,
   },
   modalPayButton: {
+    marginTop: 20,
     backgroundColor: colors.metallic + "cc",
-    width: "100%",
     paddingVertical: 10,
     borderRadius: 5,
     alignItems: "center",
