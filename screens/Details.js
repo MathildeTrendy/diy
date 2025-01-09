@@ -6,6 +6,7 @@ import {
   StyleSheet,
   View,
   TouchableOpacity,
+  Linking,
 } from "react-native";
 import { StyledText } from "../components";
 import { colors } from "../config/theme";
@@ -13,7 +14,7 @@ import { CartContext } from "../utils/context";
 
 const Details = ({ route }) => {
   const { addItemToCart } = useContext(CartContext);
-  const item = route.params?.item;
+  const item = route.params?.item; // Henter det aktuelle item fra navigationens route
 
   const [quantity, setQuantity] = useState(1);
 
@@ -44,9 +45,17 @@ const Details = ({ route }) => {
   const decreaseQuantity = () =>
     setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
+  const handleOpenURL = () => {
+    if (item.homepageUrl) {
+      Linking.openURL(item.homepageUrl);
+    }
+  };
+
+  // Brug `item.username` direkte, da det blev sat under oprettelse af item'et
+  const createdBy = item.username || "Unknown";
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Billedvisning */}
       {item.images && item.images.length > 0 ? (
         <FlatList
           data={item.images}
@@ -66,7 +75,6 @@ const Details = ({ route }) => {
         <StyledText style={styles.noImage}>No Image Available</StyledText>
       )}
 
-      {/* Item detaljer */}
       <View style={styles.content}>
         <StyledText big style={styles.title}>
           {item.title || "Unnamed Item"}
@@ -74,14 +82,20 @@ const Details = ({ route }) => {
         <StyledText style={styles.description}>
           {item.description || "No description available."}
         </StyledText>
-        <StyledText style={styles.owner}>
-          {`Owner: ${item.ownerUsername || "Unknown"}`}
+        <StyledText style={styles.username}>
+          {`Created by: ${createdBy}`} {/* Viser brugernavnet for opretteren */}
         </StyledText>
+
+        {item.homepageUrl && (
+          <TouchableOpacity onPress={handleOpenURL}>
+            <StyledText style={styles.url}>Visit Homepage</StyledText>
+          </TouchableOpacity>
+        )}
+
         <StyledText bold style={styles.price}>
           {`Price: ${item.currency || "DKK"}${item.price.toFixed(2)}`}
         </StyledText>
 
-        {/* Quantity kontrol */}
         <View style={styles.quantityControl}>
           <TouchableOpacity onPress={decreaseQuantity} style={styles.quantityButton}>
             <StyledText style={styles.quantityButtonText}>-</StyledText>
@@ -92,7 +106,6 @@ const Details = ({ route }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Add to Cart knap */}
         <TouchableOpacity style={styles.cartButton} onPress={handleAddToCart}>
           <StyledText style={styles.cartButtonText}>Add to Cart</StyledText>
         </TouchableOpacity>
@@ -119,7 +132,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 350, // Mere plads til billedet
+    height: 350,
     resizeMode: "contain",
     marginBottom: 20,
   },
@@ -144,16 +157,23 @@ const styles = StyleSheet.create({
     lineHeight: 22,
     color: colors.secondaryText,
   },
-  owner: {
-    fontSize: 12,
-    marginTop: 10, // Giver afstand til beskrivelsen
-    marginBottom: 5, // Mere afstand fra prisen
+  username: {
+    fontSize: 14,
+    marginTop: 5,
+    marginBottom: 10,
     color: colors.secondaryText,
+    fontWeight: "bold",
+  },
+  url: {
+    fontSize: 14,
+    color: colors.accent,
+    textDecorationLine: "underline",
+    marginBottom: 10,
   },
   price: {
     fontSize: 22,
     color: colors.accent,
-    marginBottom: 20, // Giver mere luft under prisen
+    marginBottom: 15,
   },
   quantityControl: {
     flexDirection: "row",
@@ -163,12 +183,13 @@ const styles = StyleSheet.create({
   },
   quantityButton: {
     backgroundColor: colors.metallic + "cc",
-    width: 40, // Kvadratisk form
-    height: 40, // Kvadratisk form
-    justifyContent: "center",
-    alignItems: "center",
+    padding: 10,
     borderRadius: 5,
     marginHorizontal: 10,
+    width: 50,
+    height: 50,
+    alignItems: "center",
+    justifyContent: "center",
   },
   quantityButtonText: {
     color: "white",

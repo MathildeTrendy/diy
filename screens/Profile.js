@@ -22,7 +22,7 @@ const uploadImage = async (image) => {
 };
 
 const Profile = () => {
-  const { activeUser } = useContext(UserContext); // Hent brugeren fra konteksten
+  const { activeUser } = useContext(UserContext);
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -83,7 +83,7 @@ const Profile = () => {
         price: Number(price) || 0,
         homepageUrl,
         ownerId: activeUser.uid,
-        username: activeUser.displayName || "Unknown", // Brug `displayName`
+        username: activeUser.displayName || "Unknown", // Dynamisk brugernavn
         image: imageUrl,
       };
 
@@ -108,7 +108,7 @@ const Profile = () => {
       </StyledText>
 
       <ProfileInfo icon="user" label="Username">
-        {activeUser?.displayName || "N/A"} {/* Viser brugernavnet */}
+        {activeUser?.displayName || "N/A"}
       </ProfileInfo>
       <ProfileInfo icon="user" label="Email">
         {activeUser?.email || "N/A"}
@@ -142,6 +142,7 @@ const Profile = () => {
                 description={item.description}
                 homepageUrl={item.homepageUrl}
                 image={item.image}
+                username={item.username} // Sender brugernavn til produktkort
               />
             </View>
           )}

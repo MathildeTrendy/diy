@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { TouchableOpacity, View, Image, StyleSheet } from "react-native";
 import StyledText from "../Texts/StyledText";
-import CartCounter from "../Inputs/CartCounter";
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
 import { AntDesign } from "@expo/vector-icons";

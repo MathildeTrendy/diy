@@ -7,7 +7,6 @@ import SectionHeader from "./Texts/SectionHeader";
 import DisplayCard from "./Cards/DisplayCard";
 import ProductCard from "./Cards/ProductCard";
 import ProductInfo from "./Texts/ProductInfo";
-import CartCounter from "./Inputs/CartCounter";
 import CartCard from "./Cards/CartCard";
 import AlertModal from "./Modals/AlertModal";
 import ProfileInfo from "./Texts/ProfileInfo"
@@ -22,7 +21,6 @@ export {
   DisplayCard,
   ProductCard,
   ProductInfo,
-  CartCounter,
   CartCard,
   AlertModal,
   ProfileInfo,
