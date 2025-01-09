@@ -133,16 +133,17 @@ export const onboardingData = [
   },
   {
     id: 2,
-    title: "Velkommen til Retrove",
+    title: "Welcome to Retrove",
     summary:
-      "En app udviklet til inspiration for alle med interesse indenfor upcyckling og bæredygtighed.",
+      "Easily buy and sell unique DIY and upcycled items with ReTrove’s user-friendly marketplace. Discover handcrafted treasures or list your own creations effortlessly.",
     text: "",
-    backgroundColor: "6b7280",
+    image: require("/Users/Penneo/Documents/diy/assets/diy/upcycled-bag.jpg"),
+    
   },
   {
     id: 3,
-    title: "Welcome to The Diy App!",
-    summary: "Dette er ikke en vin-app",
-    image: require("./../assets/diy/retrove.png"),
+    title: "Join our community 🩵",
+    summary: "Unleash your creativity and join our community dedicated to upcycling and sustainable living. At ReTrove, we believe in the power of the circular economy to transform everyday items into unique, eco-friendly treasures.",
+    image: require("/Users/Penneo/Documents/diy/assets/onboarding/community.jpeg"),
   },
 ];

@@ -13,8 +13,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Welcome = ({ route }) => {
   const navigation = useNavigation();
-  const [activeScreen] = useState(route.params?.activeScreen || 1); //Hvis ikke active screen er der, falder den tilbage på 1
-  const onLastScreen = activeScreen === onboardingData.length; //hvis dette er true, skal vi gemme 'skip' knappen
+  const [activeScreen] = useState(route.params?.activeScreen || 1); 
+  const onLastScreen = activeScreen === onboardingData.length;
   const { setIsDiyAppOnboarded } = useContext(OnboardingContext);
   const [completingOnboarding, setCompletingOnboarding] = useState(false);
   const currentData = onboardingData[activeScreen - 1] || {};
@@ -137,18 +137,23 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   title: {
-    fontSize: 25,
+    fontSize: 22,
     fontWeight: "bold",
     textAlign: "center",
     marginBottom: 15,
   },
   summary: {
     textAlign: "center",
-    color: colors.tertiary,
+    fontSize: 19,
+    color: "black",
+    lineHeight: 28, 
+    marginTop: 5, 
+    marginBottom: 20, 
   },
+    
   bottomContent: {
     alignItems: "center",
-    marginBottom: 25,
+    marginBottom: 45,
   },
   pageIndicators: {
     flexDirection: "row",
