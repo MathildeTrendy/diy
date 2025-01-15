@@ -133,7 +133,7 @@ export const onboardingData = [
   },
   {
     id: 2,
-    title: "Welcome to Retrove",
+    title: "Welcome to ReTrove",
     summary:
       "Easily buy and sell unique DIY and upcycled items with ReTrove’s user-friendly marketplace. Discover handcrafted treasures or list your own creations effortlessly.",
     text: "",

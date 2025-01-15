@@ -8,12 +8,11 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
-  const navigation = useNavigation(); // Brug navigation
+  const navigation = useNavigation();
 
   const handleLogin = async () => {
     try {
       await signInWithEmailAndPassword(auth, email.trim(), password);
-      // Login lykkedes. onAuthStateChanged i App.js vil opdatere navigationen.
     } catch (error) {
       setErrorMsg(error.message);
     }

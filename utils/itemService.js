@@ -10,7 +10,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-// Opretter et item i "items"-collection
+
 export const createItem = async (itemData) => {
   try {
     const itemsRef = collection(db, "items");
@@ -23,7 +23,7 @@ export const createItem = async (itemData) => {
   }
 };
 
-// Henter alle items fra "items"-collection
+
 export const getAllItems = async () => {
   try {
     const itemsRef = collection(db, "items");
