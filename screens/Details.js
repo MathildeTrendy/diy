@@ -9,11 +9,16 @@ import {
   Linking,
   Modal,
   Alert,
+  TextInput,
+  Button,
 } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 import Icon from 'react-native-vector-icons/FontAwesome'; // Importér ikoner
 import { StyledText } from "../components";
 import { colors } from "../config/theme";
 import { CartContext } from "../utils/context";
+import * as ImagePicker from "expo-image-picker";
+import { updateItem, deleteItem } from "../utils/itemService";
 
 const Details = ({ route }) => {
   const { addItemToCart } = useContext(CartContext);
@@ -22,6 +27,16 @@ const Details = ({ route }) => {
   const [quantity, setQuantity] = useState(1);
   const [isReportModalVisible, setReportModalVisible] = useState(false);
   const [selectedReportType, setSelectedReportType] = useState(null);
+
+  // Edit state
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
+  const [titleEditValue, setTitleEditValue] = useState(item.title);
+  const [descriptionEditValue, setDescriptionEditValue] = useState(item.description);
+  const [priceEditValue, setPriceEditValue] = useState(item.price);
+  const [homepageUrlEditValue, setHomepageUrlEditValue] = useState(item.homepageUrl);
+  const [imageEditValue, setImageEditValue] = useState({
+    uri: item.image
+  });
 
   if (!item) {
     return (
@@ -57,8 +72,60 @@ const Details = ({ route }) => {
   };
 
   // Brug `item.username` direkte, da det blev sat under oprettelse af item'et
-  const createdBy = item.username || "Unknown";
+  const createdBy = item.username;
 
+  // Edit logic
+  const handleChangeImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!result.canceled) {
+      const pickedImage = result.assets[0];
+      setImageEditValue({
+        uri: pickedImage.uri,
+        name: `item-${Date.now()}.jpg`,
+      });
+    }
+  };
+
+  const handleUpdate = async () => {
+    if (!titleEditValue || !priceEditValue) {
+      alert("Please fill in all required fields (title & price).");
+      return;
+    }
+
+    try {
+      let imageUrl = null;
+      if (imageEditValue) {
+        imageUrl = imageEditValue.uri;
+      }
+
+      const itemUpdateData = {
+        title: titleEditValue,
+        description: descriptionEditValue,
+        price: Number(priceEditValue) || 0,
+        homepageUrl: homepageUrlEditValue,
+        image: imageUrl,
+      };
+
+      await updateItem(item.id, itemUpdateData);
+      // await fetchProducts();
+
+      setEditModalVisible(false)
+    } catch (error) {
+      console.warn("Error updating item:", error);
+    }
+  };
+
+  // Delete logic
+  const handleDeleteItem = async () => {
+    await deleteItem(item.id)
+  }
+
+  // Report logic
   const reportTypes = [
     "Spam",
     "Inappropriate Content",
@@ -83,10 +150,10 @@ const Details = ({ route }) => {
     <ScrollView contentContainerStyle={styles.container}>
       {/* Øverste række med ikoner */}
       <View style={styles.iconRow}>
-        <TouchableOpacity onPress={() => {}} style={styles.iconButton} accessibilityLabel="Rediger">
+        <TouchableOpacity onPress={() => setEditModalVisible(true)} style={styles.iconButton} accessibilityLabel="Rediger">
           <Icon name="edit" size={24} color={colors.accent} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => {}} style={styles.iconButton} accessibilityLabel="Slet">
+        <TouchableOpacity onPress={() => handleDeleteItem()} style={styles.iconButton} accessibilityLabel="Slet">
           <Icon name="trash" size={24} color={colors.accent} />
         </TouchableOpacity>
         {/* Flag Icon (Rød) */}
@@ -137,7 +204,7 @@ const Details = ({ route }) => {
         )}
 
         <StyledText bold style={styles.price}>
-          {`Price: ${item.currency || "DKK"}${item.price.toFixed(2)}`}
+          {`Price: ${item.currency || "DKK"} ${item.price.toFixed(2)}`}
         </StyledText>
 
         <View style={styles.quantityControl}>
@@ -154,6 +221,68 @@ const Details = ({ route }) => {
           <StyledText style={styles.cartButtonText}>Add to Cart</StyledText>
         </TouchableOpacity>
       </View>
+
+      {/* Edit Modal */}
+      <Modal
+        visible={isEditModalVisible}
+        transparent={true}
+        animationType="fade"
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContainer}>
+            {/* Luk-knap (X) */}
+            <TouchableOpacity
+              onPress={() => {
+                setEditModalVisible(false);
+              }}
+              style={styles.closeButton}
+              accessibilityLabel="Luk"
+            >
+              <Icon name="times" size={24} color={colors.secondaryText} />
+            </TouchableOpacity>
+
+            <StyledText big style={styles.modalTitle}>Edit {item.title || "Unnamed Item"}</StyledText>        
+
+            <TextInput
+              placeholder="Title"
+              value={titleEditValue}
+              onChangeText={setTitleEditValue}
+              style={styles.input}
+            />
+            <TextInput
+              placeholder="Description"
+              value={descriptionEditValue}
+              onChangeText={setDescriptionEditValue}
+              style={styles.input}
+            />
+            <TextInput 
+              placeholder="Price"
+              value={priceEditValue.toString()}
+              onChangeText={setPriceEditValue}
+              style={styles.input}
+              keyboardType="numeric"
+            />
+            <TextInput
+              placeholder="Homepage URL"
+              value={homepageUrlEditValue}
+              onChangeText={setHomepageUrlEditValue}
+              style={styles.input}
+            />
+
+            <TouchableOpacity style={styles.imageButton} onPress={handleChangeImage}>
+              <AntDesign name="picture" size={20} color="white" />
+              <StyledText style={styles.imageButtonText}>Change Image</StyledText>
+            </TouchableOpacity>
+
+            {imageEditValue && (
+              <Image source={{ uri: imageEditValue.uri }} style={styles.previewImage} />
+            )}
+
+            <Button title="Update Item" onPress={handleUpdate} />
+          </View>
+        </View>
+      </Modal>
 
       {/* Report Modal */}
       <Modal
@@ -342,6 +471,35 @@ const styles = StyleSheet.create({
     right: 10,
     padding: 10,
     zIndex: 1, // Sørger for, at knappen er øverst
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: colors.secondary,
+    padding: 10,
+    marginBottom: 15,
+    borderRadius: 8,
+    width: "100%",
+    backgroundColor: "white",
+  },
+  imageButton: {
+    flexDirection: "row",
+    backgroundColor: colors.metallic + "cc",
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    alignItems: "center",
+    marginBottom: 15,
+  },
+  imageButtonText: {
+    color: "white",
+    marginLeft: 8,
+  },
+  previewImage: {
+    width: 100,
+    height: 100,
+    marginBottom: 15,
+    borderRadius: 10,
+    alignSelf: "center",
   },
 });
 

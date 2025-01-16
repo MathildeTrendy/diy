@@ -11,6 +11,7 @@ const ProductCard = ({
   price,
   description,
   homepageUrl,
+  username,
   image,
   all,
 }) => {
@@ -22,6 +23,7 @@ const ProductCard = ({
         id,
         title,
         price,
+        username,
         description,
         homepageUrl,
         image,
