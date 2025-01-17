@@ -5,6 +5,7 @@ import StyledText from "../Texts/StyledText";
 import { ScreenWidth } from "../../config/constants";
 import { colors } from "../../config/theme";
 
+//Unique Finds and My Collection
 const DisplayCard = ({
   id,
   title,
