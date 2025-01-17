@@ -14,7 +14,6 @@ const Products = ({ route }) => {
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
 
-  // Hent alle items fra Firestore, én gang når komponenten mountes
   useEffect(() => {
     fetchAllItems();
   }, []);
@@ -29,18 +28,13 @@ const Products = ({ route }) => {
     }
   };
 
-  // Kør filtrering hver gang searchTerm ændres
   useEffect(() => {
     handleFilter();
   }, [searchTerm, allItems]);
 
-  // Hvis du vil tjekke for "Popular"-route, kan du gøre:
-  // const isPopularRoute = route?.name === "Popular";
-  // og filtrere items, der fx har item.popular === true
 
   const handleFilter = () => {
     if (!searchTerm) {
-      // Hvis ingen søgeterm, vis alle
       setFilteredProducts(allItems);
       return;
     }
@@ -56,7 +50,6 @@ const Products = ({ route }) => {
 
   return (
     <MainContainer>
-      {/* Søgefelt */}
       <StyledTextInput
         icon="search1"
         placeholder="Search"
@@ -65,7 +58,6 @@ const Products = ({ route }) => {
         onChangeText={setSearchTerm}
       />
 
-      {/* Liste med filtrerede items */}
       <FlatList
         data={filteredProducts}
         renderItem={({ item }) => <ProductCard {...item} all />}

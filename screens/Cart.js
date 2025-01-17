@@ -169,11 +169,9 @@ const Cart = () => {
         </>
       )}
 
-      {/* Checkout Modal */}
       <AlertModal isVisible={isCheckoutVisible} onClose={() => setIsCheckoutVisible(false)}>
         <ScrollView contentContainerStyle={styles.modalContent}>
           <StyledText big>Checkout</StyledText>
-          {/* Input Fields */}
           <TextInput
             style={styles.input}
             placeholder="Full Name"
@@ -219,7 +217,6 @@ const Cart = () => {
             value={checkoutDetails.email}
             onChangeText={(text) => setCheckoutDetails({ ...checkoutDetails, email: text })}
           />
-          {/* Payment Fields */}
           <TextInput
             style={styles.input}
             placeholder="Card Number"
@@ -242,7 +239,6 @@ const Cart = () => {
             value={checkoutDetails.cvv}
             onChangeText={(text) => setCheckoutDetails({ ...checkoutDetails, cvv: text })}
           />
-          {/* Totals */}
           <StyledText>{`Shipping: ${cartItems?.[0]?.currency || "DKK"}${shippingCost}`}</StyledText>
           <StyledText>{`Service Fee: ${cartItems?.[0]?.currency || "DKK"}${serviceFee}`}</StyledText>
           <StyledText bold>{`Total: ${cartItems?.[0]?.currency || "DKK"}${cartTotal.toFixed(2)}`}</StyledText>
@@ -252,7 +248,6 @@ const Cart = () => {
         </ScrollView>
       </AlertModal>
 
-      {/* Success Modal */}
       <AlertModal isVisible={isSuccessVisible} onClose={() => setIsSuccessVisible(false)}>
         <View style={styles.modalContent}>
           <Feather name="check-circle" size={50} color={colors.success} />

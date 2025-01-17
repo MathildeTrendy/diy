@@ -13,28 +13,26 @@ import {
   Button,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import Icon from "react-native-vector-icons/FontAwesome"; // Importér ikoner
+import Icon from "react-native-vector-icons/FontAwesome";
 import { StyledText } from "../components";
 import { colors } from "../config/theme";
 import { CartContext } from "../utils/context";
 import * as ImagePicker from "expo-image-picker";
 import { updateItem, deleteItem } from "../utils/itemService";
 
-// VIGTIGT: Importér useNavigation, så du kan navigere tilbage
 import { useNavigation } from "@react-navigation/native";
 
 const Details = ({ route }) => {
   const { addItemToCart } = useContext(CartContext);
-  const item = route.params?.item; // Henter det aktuelle item fra navigationens route
+  const item = route.params?.item;
 
-  // Opret navigation-objektet
   const navigation = useNavigation();
 
   const [quantity, setQuantity] = useState(1);
   const [isReportModalVisible, setReportModalVisible] = useState(false);
   const [selectedReportType, setSelectedReportType] = useState(null);
 
-  // Edit state
+
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [titleEditValue, setTitleEditValue] = useState(item.title);
   const [descriptionEditValue, setDescriptionEditValue] = useState(item.description);
@@ -76,7 +74,6 @@ const Details = ({ route }) => {
     }
   };
 
-  // Edit logic (billedeskift, update etc.)
   const handleChangeImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -120,11 +117,9 @@ const Details = ({ route }) => {
     }
   };
 
-  // Delete logic
   const handleDeleteItem = async () => {
     try {
       await deleteItem(item.id);
-      // Vender altid tilbage til forrige skærm (Profile ELLER Home)
       navigation.goBack();
     } catch (error) {
       console.warn("Error deleting item:", error);
@@ -133,7 +128,6 @@ const Details = ({ route }) => {
 
   const createdBy = item.username;
 
-  // Report logic
   const reportTypes = [
     "Spam",
     "Inappropriate Content",
@@ -155,7 +149,6 @@ const Details = ({ route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Øverste række med ikoner */}
       <View style={styles.iconRow}>
         <TouchableOpacity
           onPress={() => setEditModalVisible(true)}
@@ -173,7 +166,6 @@ const Details = ({ route }) => {
           <Icon name="trash" size={24} color={colors.accent} />
         </TouchableOpacity>
 
-        {/* Flag Icon (Rød) */}
         <TouchableOpacity
           onPress={() => setReportModalVisible(true)}
           style={styles.iconButton}
@@ -237,7 +229,6 @@ const Details = ({ route }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Edit Modal */}
       <Modal
         visible={isEditModalVisible}
         transparent={true}
@@ -246,7 +237,6 @@ const Details = ({ route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            {/* Luk-knap (X) */}
             <TouchableOpacity
               onPress={() => {
                 setEditModalVisible(false);
@@ -304,7 +294,6 @@ const Details = ({ route }) => {
         </View>
       </Modal>
 
-      {/* Report Modal */}
       <Modal
         visible={isReportModalVisible}
         transparent={true}
@@ -313,7 +302,6 @@ const Details = ({ route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            {/* Luk-knap (X) */}
             <TouchableOpacity
               onPress={() => {
                 setReportModalVisible(false);
@@ -440,7 +428,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
-  // Tilføjede styles for ikonerne
+
   iconRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -449,7 +437,7 @@ const styles = StyleSheet.create({
   iconButton: {
     marginLeft: 15,
   },
-  // Modal styles
+
   modalOverlay: {
     flex: 1,
     backgroundColor: "rgba(0,0,0,0.7)",
@@ -484,7 +472,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.primaryText,
   },
-  // Luk-knap (X) styles
+
   closeButton: {
     position: "absolute",
     top: 10,

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, Button, Alert } from "react-native";
 import { StyledButton } from "../components";
-import { useNavigation } from "@react-navigation/native";
-import { colors } from "../config/theme";
 
 
 const PrivacyPolicy = ({ navigation }) => {

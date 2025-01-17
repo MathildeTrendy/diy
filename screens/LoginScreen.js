@@ -1,18 +1,27 @@
 import React, { useState } from "react";
-import { View, TextInput, Button, Text, TouchableOpacity, StyleSheet, Image } from "react-native";
+import { 
+  View,
+  TextInput,
+  Button,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useNavigation } from "@react-navigation/native"; // Tilføjet navigation
+import { useNavigation } from "@react-navigation/native";
 import { auth } from "../firebase";
 
-export default function LoginScreen() {
+export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
+
   const navigation = useNavigation();
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email.trim(), password);
+      await signInWithEmailAndPassword(auth, email.trim(), password.trim());
     } catch (error) {
       setErrorMsg(error.message);
     }
@@ -20,13 +29,13 @@ export default function LoginScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Logo */}
-      <Image source={require("../assets/diy/retrove.png")} style={styles.logo} />
+      <Image 
+        source={require("../assets/diy/retrove.png")} 
+        style={styles.logo} 
+      />
 
-      {/* Fejlmeddelelse */}
       {errorMsg ? <Text style={styles.errorMsg}>{errorMsg}</Text> : null}
 
-      {/* Email Input */}
       <TextInput
         placeholder="Email"
         value={email}
@@ -36,7 +45,6 @@ export default function LoginScreen() {
         style={styles.input}
       />
 
-      {/* Password Input */}
       <TextInput
         placeholder="Password"
         secureTextEntry
@@ -45,11 +53,12 @@ export default function LoginScreen() {
         style={styles.input}
       />
 
-      {/* Login Knappen */}
       <Button title="Login" onPress={handleLogin} />
 
-      {/* Link til Signup */}
-      <TouchableOpacity onPress={() => navigation.navigate("Signup")} style={styles.signupLink}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Signup")} 
+        style={styles.signupLink}
+      >
         <Text style={styles.signupText}>Don't have an account? Sign Up</Text>
       </TouchableOpacity>
     </View>
@@ -61,17 +70,12 @@ const styles = StyleSheet.create({
     padding: 20,
     flex: 1,
     justifyContent: "center",
-    alignItems: "center", // Centrer indholdet horisontalt
-    backgroundColor: "#f9f9f9", // Lys baggrundsfarve
+    alignItems: "center",
+    backgroundColor: "#f9f9f9",
   },
   logo: {
-    width: 200, // Øget bredden
-    height: 200, // Øget højden
-    marginBottom: 20, // Giver plads mellem logoet og titlen
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
+    width: 200,
+    height: 200,
     marginBottom: 20,
   },
   errorMsg: {
@@ -86,7 +90,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 8,
     marginVertical: 8,
-    backgroundColor: "white", // Hvid baggrund for inputfelter
+    backgroundColor: "white",
   },
   signupLink: {
     marginTop: 20,
@@ -94,6 +98,6 @@ const styles = StyleSheet.create({
   signupText: {
     color: "blue",
     textAlign: "center",
-    textDecorationLine: "underline", // Understreget tekst for link-effekt
+    textDecorationLine: "underline",
   },
 });

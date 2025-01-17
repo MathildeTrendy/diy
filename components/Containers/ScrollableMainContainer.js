@@ -16,7 +16,6 @@ const ScrollableMainContainer = ({
 }) => {
   const headerHeight = useContext(HeaderHeightContext);
 
-  // FlatList kræver data, så du kan tilpasse med dummy eller faktisk data.
   const data = React.Children.toArray(children);
 
   return (

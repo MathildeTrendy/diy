@@ -11,9 +11,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 
-/**
- * Opretter et nyt item i Firestore.
- */
+
 export const createItem = async (itemData) => {
   try {
     const itemsRef = collection(db, "items");
@@ -26,9 +24,6 @@ export const createItem = async (itemData) => {
   }
 };
 
-/**
- * Henter alle items (bruges kun hvis du vil vise ALT, uanset ejer).
- */
 export const getAllItems = async () => {
   try {
     const itemsRef = collection(db, "items");
@@ -44,9 +39,6 @@ export const getAllItems = async () => {
   }
 };
 
-/**
- * Henter kun items, der tilhører en bestemt ejer (hvis du stadig vil lave "fetch én gang").
- */
 export const getUserItems = async (ownerId) => {
   try {
     const itemsRef = collection(db, "items");
@@ -63,9 +55,6 @@ export const getUserItems = async (ownerId) => {
   }
 };
 
-/**
- * Opdaterer et eksisterende item med ny data.
- */
 export const updateItem = async (itemId, updatedData) => {
   try {
     const itemDocRef = doc(db, "items", itemId);
@@ -77,9 +66,6 @@ export const updateItem = async (itemId, updatedData) => {
   }
 };
 
-/**
- * Sletter et item fra Firestore.
- */
 export const deleteItem = async (itemId) => {
   try {
     const itemDocRef = doc(db, "items", itemId);
@@ -91,25 +77,17 @@ export const deleteItem = async (itemId) => {
   }
 };
 
-/**
- * **NY**: Real-time subscription til items for en bestemt user:
- * Når der sker ændringer (opret, update, slet), kalder den `callback(items)`
- * med den nyeste liste. Returnerer en "unsubscribe" metode.
- */
 export const subscribeToUserItems = (ownerId, callback) => {
   const itemsRef = collection(db, "items");
   const q = query(itemsRef, where("ownerId", "==", ownerId));
 
-  // Opret "onSnapshot" lytter til Firestore:
   const unsubscribe = onSnapshot(q, (snapshot) => {
     const items = snapshot.docs.map((docSnap) => ({
       id: docSnap.id,
       ...docSnap.data(),
     }));
-    // Kalder callback med den aktuelle items-liste:
     callback(items);
   });
 
-  // Returnér unsubscribe, så vi kan stoppe lytteren, hvis nødvendigt.
   return unsubscribe;
 };

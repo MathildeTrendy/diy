@@ -1,7 +1,6 @@
 // screens/Popular.js
 import React from "react";
 import { View, StyleSheet, FlatList } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
 import { ScrollableMainContainer, StyledText, ProductCard } from "../components";
@@ -10,7 +9,6 @@ import { colors } from "../config/theme";
 const Popular = () => {
   const navigation = useNavigation();
 
-  // Hardcodede populære items med billed-URL'er
   const popularItems = [
     {
       id: "1",
@@ -19,7 +17,7 @@ const Popular = () => {
       description: "A beautiful vintage vase from the 19th century.",
       homepageUrl: "https://example.com/vase",
       image: "https://via.placeholder.com/300x200.png?text=Vintage+Vase",
-      ownerId: "zovZKrDeOPU1Gbluu6Ci", // Eksempel UID
+      ownerId: "zovZKrDeOPU1Gbluu6Ci",
     },
     {
       id: "2",
@@ -30,7 +28,6 @@ const Popular = () => {
       image: "https://via.placeholder.com/300x200.png?text=Antique+Clock",
       ownerId: "zovZKrDeOPU1Gbluu6Ci",
     },
-    // Tilføj flere items efter behov
   ];
 
   const renderItem = ({ item }) => (

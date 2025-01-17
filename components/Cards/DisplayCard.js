@@ -50,9 +50,9 @@ const DisplayCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: ScreenWidth * 0.6, // Mindre bredde
-    height: ScreenWidth * 0.4, // Justeret højde
-    minWidth: 220, // Minimum bredde reduceret
+    width: ScreenWidth * 0.6,
+    height: ScreenWidth * 0.4, 
+    minWidth: 220, 
     minHeight: 140,
     backgroundColor: colors.metallic + "cc",
     borderRadius: 20,
@@ -61,13 +61,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   details: {
-    width: "65%", // Reduceret bredde for tekstdetaljer
+    width: "65%", 
     padding: 10,
     justifyContent: "space-around",
   },
   productTitle: {
     color: colors.secondary,
-    fontSize: 14, // Mindre fontstørrelse
+    fontSize: 14, 
     marginBottom: 5,
   },
   productPrice: {
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   productImage: {
-    width: "35%", // Reduceret billedbredde
+    width: "35%", 
     height: "100%",
     borderRadius: 15,
   },

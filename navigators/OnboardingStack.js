@@ -1,6 +1,3 @@
-// OnboardingStack.js
-
-import { useContext } from "react";
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { Welcome } from "../screens";

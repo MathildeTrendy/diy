@@ -8,10 +8,10 @@ import {
   ProductCard,
 } from "../components";
 
-// Hent subscribeToUserItems
+
 import { subscribeToUserItems } from "../utils/itemService";
 
-// Dummy local data (som før):
+
 import {
   getUniqueFindItemData,
   getPopularItemData,
@@ -28,7 +28,6 @@ export default function Home() {
   useEffect(() => {
     if (!activeUser?.uid) return;
 
-    // Sæt real-time subscription for items ejet af "activeUser.uid"
     const unsubscribe = subscribeToUserItems(activeUser.uid, (items) => {
       setMyCollection(items);
     });
@@ -38,7 +37,6 @@ export default function Home() {
 
   return (
     <ScrollableMainContainer contentContainerStyle={styles.container}>
-      {/* Unique Finds - stadig dine hardcodede data */}
       <SectionHeader style={styles.header}>Unique Finds</SectionHeader>
       <FlatList
         data={getUniqueFindItemData({ popular: true })}
@@ -49,7 +47,6 @@ export default function Home() {
         contentContainerStyle={styles.flatListContainer}
       />
 
-      {/* Popular - stadig dine hardcodede data */}
       <SectionHeader
         style={styles.header}
         rightTextOnPress={() => {
@@ -67,7 +64,6 @@ export default function Home() {
         contentContainerStyle={[styles.flatListContainer, { marginBottom: 5 }]}
       />
 
-      {/* My Collection (live-data fra Firestore) */}
       <SectionHeader
         style={styles.header}
         rightTextOnPress={() => {

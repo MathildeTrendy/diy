@@ -3,7 +3,6 @@ import { Home, Details, Products } from "../screens";
 import { colors } from "../config/theme";
 import { onIOS } from "../config/constants";
 import { Feather } from "@expo/vector-icons";
-import { NavigationContainer } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 

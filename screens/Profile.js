@@ -12,28 +12,18 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
-import {
-  MainContainer,
-  StyledText,
-  ProfileInfo,
-  ProductCard,
-} from "../components";
+import { MainContainer, StyledText, ProfileInfo, ProductCard } from "../components";
 import { colors } from "../config/theme";
 import { UserContext } from "../utils/context";
+import { subscribeToUserItems, createItem } from "../utils/itemService";
 
-// Hent subscribeToUserItems og createItem (de andre kan stadig beholdes, hvis du bruger dem)
-import {
-  subscribeToUserItems,
-  createItem,
-} from "../utils/itemService";
+import { getAuth, signOut } from "firebase/auth";
 
-const uploadImage = async (image) => {
-  // Du kan lave en rigtig upload-løsning - men her returnerer vi blot URI'en som "upload".
-  return image.uri;
-};
+const uploadImage = async (image) => image.uri;
 
-const Profile = () => {
+export default function Profile() {
   const { activeUser } = useContext(UserContext);
+
   const [products, setProducts] = useState([]);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -44,20 +34,23 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  // Kører kun, når component mountes / activeUser ændres:
+  const handleLogout = async () => {
+    try {
+      await signOut(getAuth());
+    } catch (error) {
+      console.error("Error on logout:", error);
+    }
+  };
+
   useEffect(() => {
     if (!activeUser?.uid) return;
-
-    // Sæt "loading" mens vi lytter (kan fx sættes true indtil første snapshot)
     setLoading(true);
 
-    // Start real-time subscription:
     const unsubscribe = subscribeToUserItems(activeUser.uid, (items) => {
       setProducts(items);
       setLoading(false);
     });
 
-    // Ryd op, hvis vi forlader siden/unmounter:
     return () => unsubscribe();
   }, [activeUser]);
 
@@ -68,7 +61,6 @@ const Profile = () => {
       aspect: [4, 3],
       quality: 1,
     });
-
     if (!result.canceled) {
       const pickedImage = result.assets[0];
       setImage({
@@ -95,23 +87,18 @@ const Profile = () => {
         price: Number(price) || 0,
         homepageUrl,
         ownerId: activeUser.uid,
-        username: activeUser.displayName || "Unknown", // Dynamisk brugernavn
+        username: activeUser.displayName || "Unknown",
         image: imageUrl,
       };
 
-      // Opret item i Firestore
       await createItem(newItem);
 
-      // Ryd inputfelter
       setTitle("");
       setDescription("");
       setPrice("");
       setHomepageUrl("");
       setImage(null);
       setModalVisible(false);
-
-      // **Bemærk**: Vi behøver ikke kalde fetchProducts() længere,
-      // for Firestore subscription opdaterer automatisk (via setProducts).
     } catch (error) {
       console.warn("Error creating item:", error);
     }
@@ -119,10 +106,18 @@ const Profile = () => {
 
   return (
     <MainContainer style={styles.container}>
-      <StyledText style={styles.header} bold>
-        Account
-      </StyledText>
+      <View style={styles.headerRow}>
+        <StyledText style={styles.header} bold>
+          Account
+        </StyledText>
 
+        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
+          <AntDesign name="logout" size={18} color={"white"} />
+          <StyledText style={styles.logoutText}>Log Out</StyledText>
+        </TouchableOpacity>
+      </View>
+
+     
       <ProfileInfo icon="user" label="Username">
         {activeUser?.displayName || "N/A"}
       </ProfileInfo>
@@ -130,6 +125,7 @@ const Profile = () => {
         {activeUser?.email || "N/A"}
       </ProfileInfo>
 
+     
       <View style={styles.plusContainer}>
         <StyledText bold style={styles.subHeader}>
           Products
@@ -158,7 +154,7 @@ const Profile = () => {
                 description={item.description}
                 homepageUrl={item.homepageUrl}
                 image={item.image}
-                username={item.username} // Sender brugernavn til produktkort
+                username={item.username}
               />
             </View>
           )}
@@ -187,7 +183,11 @@ const Profile = () => {
               style={styles.closeIcon}
               onPress={() => setModalVisible(false)}
             >
-              <AntDesign name="closecircle" size={24} color={colors.metallic + "cc"} />
+              <AntDesign
+                name="closecircle"
+                size={24}
+                color={colors.metallic + "cc"}
+              />
             </TouchableOpacity>
 
             <StyledText bold style={styles.modalTitle}>
@@ -226,7 +226,10 @@ const Profile = () => {
             </TouchableOpacity>
 
             {image && (
-              <Image source={{ uri: image.uri }} style={styles.previewImage} />
+              <Image
+                source={{ uri: image.uri }}
+                style={styles.previewImage}
+              />
             )}
 
             <Button title="Create Item" onPress={handleCreate} />
@@ -235,16 +238,34 @@ const Profile = () => {
       </Modal>
     </MainContainer>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 25,
   },
-  header: {
+  headerRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginTop: 5,
     marginBottom: 15,
+  },
+  header: {
     color: colors.metallic + "cc",
+  },
+  logoutButton: {
+    flexDirection: "row",
+    backgroundColor: colors.metallic + "cc",
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    alignItems: "center",
+  },
+  logoutText: {
+    color: "white",
+    marginLeft: 5,
+    fontWeight: "bold",
   },
   subHeader: {
     fontSize: 18,
@@ -330,5 +351,3 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-
-export default Profile;
