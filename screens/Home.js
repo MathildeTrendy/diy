@@ -1,15 +1,22 @@
-// Home.js
 import React, { useContext, useState, useEffect } from "react";
 import { StyleSheet, FlatList } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import {
   ScrollableMainContainer,
   SectionHeader,
   DisplayCard,
   ProductCard,
 } from "../components";
-import { useNavigation } from "@react-navigation/native";
-import { getUserItems } from "../utils/itemService"; // Henter kun items for én bruger
-import { getUniqueFindItemData, getPopularItemData } from "../config/data"; // Din lokale data om deals/popular
+
+// Hent subscribeToUserItems
+import { subscribeToUserItems } from "../utils/itemService";
+
+// Dummy local data (som før):
+import {
+  getUniqueFindItemData,
+  getPopularItemData,
+} from "../config/data";
+
 import { UserContext } from "../utils/context";
 
 export default function Home() {
@@ -19,27 +26,21 @@ export default function Home() {
   const [myCollection, setMyCollection] = useState([]);
 
   useEffect(() => {
-    // Henter kun items fra Firestore, hvor ownerId == activeUser.uid
-    if (activeUser?.uid) {
-      fetchMyCollection();
-    }
-  }, [activeUser]);
+    if (!activeUser?.uid) return;
 
-  const fetchMyCollection = async () => {
-    try {
-      const userItems = await getUserItems(activeUser.uid);
-      setMyCollection(userItems);
-    } catch (error) {
-      console.error("Error fetching user items for My Collection:", error);
-    }
-  };
+    // Sæt real-time subscription for items ejet af "activeUser.uid"
+    const unsubscribe = subscribeToUserItems(activeUser.uid, (items) => {
+      setMyCollection(items);
+    });
+
+    return () => unsubscribe();
+  }, [activeUser]);
 
   return (
     <ScrollableMainContainer contentContainerStyle={styles.container}>
-      {/* Unique Finds */}
+      {/* Unique Finds - stadig dine hardcodede data */}
       <SectionHeader style={styles.header}>Unique Finds</SectionHeader>
       <FlatList
-        // Stadig din local data-fil: getItemData({ popular: true })
         data={getUniqueFindItemData({ popular: true })}
         renderItem={({ item }) => <DisplayCard {...item} />}
         keyExtractor={({ id }) => id.toString()}
@@ -48,7 +49,7 @@ export default function Home() {
         contentContainerStyle={styles.flatListContainer}
       />
 
-      {/* Popular */}
+      {/* Popular - stadig dine hardcodede data */}
       <SectionHeader
         style={styles.header}
         rightTextOnPress={() => {
@@ -66,7 +67,7 @@ export default function Home() {
         contentContainerStyle={[styles.flatListContainer, { marginBottom: 5 }]}
       />
 
-      {/* My Collection (viser kun items fra logged-in user) */}
+      {/* My Collection (live-data fra Firestore) */}
       <SectionHeader
         style={styles.header}
         rightTextOnPress={() => {

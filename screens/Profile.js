@@ -12,12 +12,23 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 
-import { MainContainer, StyledText, ProfileInfo, ProductCard } from "../components";
+import {
+  MainContainer,
+  StyledText,
+  ProfileInfo,
+  ProductCard,
+} from "../components";
 import { colors } from "../config/theme";
 import { UserContext } from "../utils/context";
-import { getUserItems, createItem } from "../utils/itemService";
+
+// Hent subscribeToUserItems og createItem (de andre kan stadig beholdes, hvis du bruger dem)
+import {
+  subscribeToUserItems,
+  createItem,
+} from "../utils/itemService";
 
 const uploadImage = async (image) => {
+  // Du kan lave en rigtig upload-løsning - men her returnerer vi blot URI'en som "upload".
   return image.uri;
 };
 
@@ -33,21 +44,21 @@ const Profile = () => {
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
 
-  const fetchProducts = async () => {
-    if (!activeUser?.uid) return;
-    setLoading(true);
-    try {
-      const items = await getUserItems(activeUser.uid);
-      setProducts(items);
-    } catch (error) {
-      console.error("Error fetching user items:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // Kører kun, når component mountes / activeUser ændres:
   useEffect(() => {
-    fetchProducts();
+    if (!activeUser?.uid) return;
+
+    // Sæt "loading" mens vi lytter (kan fx sættes true indtil første snapshot)
+    setLoading(true);
+
+    // Start real-time subscription:
+    const unsubscribe = subscribeToUserItems(activeUser.uid, (items) => {
+      setProducts(items);
+      setLoading(false);
+    });
+
+    // Ryd op, hvis vi forlader siden/unmounter:
+    return () => unsubscribe();
   }, [activeUser]);
 
   const handlePickImage = async () => {
@@ -57,6 +68,7 @@ const Profile = () => {
       aspect: [4, 3],
       quality: 1,
     });
+
     if (!result.canceled) {
       const pickedImage = result.assets[0];
       setImage({
@@ -87,15 +99,19 @@ const Profile = () => {
         image: imageUrl,
       };
 
+      // Opret item i Firestore
       await createItem(newItem);
-      await fetchProducts();
 
+      // Ryd inputfelter
       setTitle("");
       setDescription("");
       setPrice("");
       setHomepageUrl("");
       setImage(null);
       setModalVisible(false);
+
+      // **Bemærk**: Vi behøver ikke kalde fetchProducts() længere,
+      // for Firestore subscription opdaterer automatisk (via setProducts).
     } catch (error) {
       console.warn("Error creating item:", error);
     }
