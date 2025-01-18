@@ -24,12 +24,12 @@ export default function SignupScreen() {
       case 0:
       case 1:
       case 2:
-        return "Svagt";
+        return "Weak";
       case 3:
       case 4:
-        return "Mellem";
+        return "Medium";
       case 5:
-        return "Stærkt";
+        return "Strong";
       default:
         return "";
     }

@@ -3,6 +3,7 @@ import StyledText from "./StyledText";
 import { colors } from "../../config/theme";
 import { AntDesign } from "@expo/vector-icons";
 
+//Style for headers (Unique Finds, Popular and My Collection)
 const SectionHeader = ({ children, style, rightText, rightTextOnPress }) => {
   return (
     <View style={[styles.container, style]}>

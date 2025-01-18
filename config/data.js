@@ -9,7 +9,6 @@ export const getUniqueFindItemData = ({ itemId, searchTerm }) => {
       item.title?.toLowerCase().includes(st) ||
       item.description?.toLowerCase().includes(st);
   } else {
-    // Returner alle, hvis hverken itemId eller searchTerm er sat
     filterFunction = () => true;
   }
 
@@ -27,14 +26,12 @@ export const getPopularItemData = ({ itemId, searchTerm }) => {
       item.title?.toLowerCase().includes(st) ||
       item.description?.toLowerCase().includes(st);
   } else {
-    // Returner alle, hvis hverken itemId eller searchTerm er sat
     filterFunction = () => true;
   }
 
   return popularItemsData.filter(filterFunction);
 };
 
-// Items-data - svarende til dine felter i Profile.js
 export const uniqueFindItemsData = [
   {
     id: 1,
@@ -123,7 +120,6 @@ export const popularItemsData = [
   },
 ];
 
-// Onboarding-data forbliver uændret
 export const onboardingData = [
   {
     id: 1,

@@ -9,7 +9,6 @@ import { HeaderHeightContext } from "@react-navigation/elements";
 import { useNavigation } from "@react-navigation/native";
 import { storeData } from "./../utils/storage";
 import { OnboardingContext } from "../utils/context";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Welcome = ({ route }) => {
   const navigation = useNavigation();
@@ -26,19 +25,16 @@ const Welcome = ({ route }) => {
 
       setTimeout(() => {
         setIsDiyAppOnboarded(true);
-       // setCompletingOnboarding(false);
         navigation.navigate("PrivacyPolicy");
       }, 500);
     } catch (error) {
       console.warn(error);
-      setCompletingOnboarding(false); //hvis fejl, sætter vi denne
+      setCompletingOnboarding(false); 
     }
   };
 
   useEffect(() => {
-    //useEffect-hook
     if (onLastScreen) {
-      //checker om vi er på lastScreen(sidste billede)
       navigation.setOptions({
         headerRight: () => <></>,
       });
@@ -79,7 +75,7 @@ const Welcome = ({ route }) => {
                   name="checkbox-blank-circle"
                   size={15}
                   color={colors.metallic + "cc"}
-                  key={item.id} //hvilket id og hvilket item?
+                  key={item.id} 
                 />
               );
             }
@@ -88,8 +84,8 @@ const Welcome = ({ route }) => {
               <MaterialCommunityIcons
                 name="checkbox-blank-circle-outline"
                 size={15}
-                color={colors.tertiary + "33"} //hvad er tertiary?
-                key={item.id} //hvilket id og hvilket item?
+                color={colors.tertiary + "33"}
+                key={item.id} 
               />
             );
           })}
@@ -101,7 +97,7 @@ const Welcome = ({ route }) => {
             if (onLastScreen) {
               navigation.navigate("PrivacyPolicy");
             } else {
-            navigation.push("Welcome", { activeScreen: activeScreen + 1 }); //we want active screen to be increased by 1
+            navigation.push("Welcome", { activeScreen: activeScreen + 1 });
             }
           }}
         >

@@ -1,7 +1,7 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import LoginScreen from "../screens/LoginScreen";
-import SignupScreen from "../screens/SignUpScreen"; // Importer SignupScreen
+import SignupScreen from "../screens/SignUpScreen";
 import { colors } from "../config/theme";
 
 const Stack = createStackNavigator();
@@ -17,10 +17,11 @@ const AuthStack = () => {
       }}
     >
       <Stack.Screen 
-        name="Login" 
-        component={LoginScreen} 
-        options={{ headerTitle: "Login" }} 
-      />
+  name="LoginScreen" 
+  component={LoginScreen} 
+  options={{ headerTitle: "Login" }} 
+/>
+
       <Stack.Screen 
         name="Signup" 
         component={SignupScreen} 

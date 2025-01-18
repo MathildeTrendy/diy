@@ -13,7 +13,6 @@ const Tab = createBottomTabNavigator();
 const RootTabs = () => {
   const { cartItems } = useContext(CartContext);
 
-  // Beregn det samlede antal varer i kurven
   const totalCartItems = cartItems.reduce((total, item) => total + item.cartCount, 0);
 
   return (
@@ -56,7 +55,7 @@ const RootTabs = () => {
         name="Cart"
         component={CartStack}
         options={{
-          tabBarBadge: totalCartItems > 0 ? totalCartItems : null, // Vis badge kun, hvis der er varer
+          tabBarBadge: totalCartItems > 0 ? totalCartItems : null,
           tabBarBadgeStyle: {
             backgroundColor: colors.amber,
             color: colors.primary,

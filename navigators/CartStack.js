@@ -13,7 +13,7 @@ const CartStack = () => {
 
   const clearCart = async () => {
     try {
-      setCartItems([]); // Tømmer kurven
+      setCartItems([]); 
     } catch (error) {
       console.warn(error);
     }

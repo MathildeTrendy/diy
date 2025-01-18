@@ -7,6 +7,7 @@ import {
   getDocs,
   query,
   where,
+  onSnapshot,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -23,7 +24,6 @@ export const createItem = async (itemData) => {
   }
 };
 
-
 export const getAllItems = async () => {
   try {
     const itemsRef = collection(db, "items");
@@ -39,7 +39,6 @@ export const getAllItems = async () => {
   }
 };
 
-// Henter kun items ejet af én bruger (hvis du fortsat vil filtrere på ejer)
 export const getUserItems = async (ownerId) => {
   try {
     const itemsRef = collection(db, "items");
@@ -76,4 +75,19 @@ export const deleteItem = async (itemId) => {
     console.error("Error deleting item:", error);
     throw error;
   }
+};
+
+export const subscribeToUserItems = (ownerId, callback) => {
+  const itemsRef = collection(db, "items");
+  const q = query(itemsRef, where("ownerId", "==", ownerId));
+
+  const unsubscribe = onSnapshot(q, (snapshot) => {
+    const items = snapshot.docs.map((docSnap) => ({
+      id: docSnap.id,
+      ...docSnap.data(),
+    }));
+    callback(items);
+  });
+
+  return unsubscribe;
 };

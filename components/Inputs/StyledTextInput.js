@@ -2,7 +2,6 @@ import { useState } from "react";
 import { View, TextInput, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../config/theme";
-import { act } from "react-dom/test-utils";
 
 const StyledTextInput = ({ icon, style, ...props }) => {
   const [activeBackgroundColor, setActiveBackgroundColor] = useState("");

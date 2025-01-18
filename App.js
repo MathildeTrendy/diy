@@ -5,7 +5,12 @@ import * as SplashScreen from "expo-splash-screen";
 import RootTabs from "./navigators/RootTabs";
 import OnboardingStack from "./navigators/OnboardingStack";
 import AuthStack from "./navigators/AuthStack";
-import { OnboardingContext, CartContext, UserContext, SavedProductsContext } from "./utils/context";
+import {
+  OnboardingContext,
+  CartContext,
+  UserContext,
+  SavedProductsContext,
+} from "./utils/context";
 import { getData } from "./utils/storage";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./firebase";
@@ -24,14 +29,12 @@ export default function App() {
       const existingItem = prevItems.find((cartItem) => cartItem.id === item.id);
 
       if (existingItem) {
-        // Hvis varen allerede er i kurven, opdater dens `cartCount` baseret på det nye item
         return prevItems.map((cartItem) =>
           cartItem.id === item.id
             ? { ...cartItem, cartCount: cartItem.cartCount + item.cartCount }
             : cartItem
         );
       } else {
-        // Hvis varen ikke findes, tilføj den til kurven
         return [
           ...prevItems,
           {
@@ -40,7 +43,7 @@ export default function App() {
             price: item.price,
             currency: item.currency || "DKK",
             image: item.image,
-            cartCount: item.cartCount, // Brug det angivne antal
+            cartCount: item.cartCount,
           },
         ];
       }

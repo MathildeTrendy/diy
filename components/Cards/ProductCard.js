@@ -57,8 +57,8 @@ const ProductCard = ({
 
 const styles = StyleSheet.create({
   container: {
-    width: ScreenWidth * 0.3, // Mindre bredde
-    minWidth: 110, // Tilpasset minimum bredde
+    width: ScreenWidth * 0.3,
+    minWidth: 110, 
     backgroundColor: colors.secondary,
     borderRadius: 15,
     marginTop: 40,
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   containerPlus: {
-    width: ScreenWidth * 0.35, // Justeret bredde for større kort
+    width: ScreenWidth * 0.35,
     minWidth: 130,
     backgroundColor: colors.secondary,
     borderRadius: 15,
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: ScreenWidth * 0.3, // Justeret højde
+    height: ScreenWidth * 0.3, 
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
   },
@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: "center",
     alignItems: "center",
-    height: 85, // Passende højde til detaljer
+    height: 85,
   },
   text: {
     textAlign: "center",

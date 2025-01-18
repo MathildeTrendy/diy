@@ -4,7 +4,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { colors } from "../../config/theme";
 
 
-
+//Profile styling (username, email)
 const ProfileInfo = ({icon, label, children, style}) => {
     
     return (
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: colors.secondary,
         paddingHorizontal: 15,
-        paddingVertical: 15,
+        paddingVertical: 5,
         borderRadius: 15,
         marginBottom: 15
     },

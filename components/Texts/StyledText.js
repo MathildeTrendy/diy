@@ -1,7 +1,7 @@
 import { Text } from "react-native";
 import { colors } from "../../config/theme";
-//import { StyledText } from "../Texts/StyledText";
 
+//All text
 const StyledText = ({ children, small, big, bold, style, ...props }) => {
   return (
     <Text

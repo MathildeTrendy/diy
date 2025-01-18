@@ -13,29 +13,33 @@ import {
   Button,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import Icon from 'react-native-vector-icons/FontAwesome'; // Importér ikoner
+import Icon from "react-native-vector-icons/FontAwesome";
 import { StyledText } from "../components";
 import { colors } from "../config/theme";
 import { CartContext } from "../utils/context";
 import * as ImagePicker from "expo-image-picker";
 import { updateItem, deleteItem } from "../utils/itemService";
 
+import { useNavigation } from "@react-navigation/native";
+
 const Details = ({ route }) => {
   const { addItemToCart } = useContext(CartContext);
-  const item = route.params?.item; // Henter det aktuelle item fra navigationens route
+  const item = route.params?.item;
+
+  const navigation = useNavigation();
 
   const [quantity, setQuantity] = useState(1);
   const [isReportModalVisible, setReportModalVisible] = useState(false);
   const [selectedReportType, setSelectedReportType] = useState(null);
 
-  // Edit state
+
   const [isEditModalVisible, setEditModalVisible] = useState(false);
   const [titleEditValue, setTitleEditValue] = useState(item.title);
   const [descriptionEditValue, setDescriptionEditValue] = useState(item.description);
   const [priceEditValue, setPriceEditValue] = useState(item.price);
   const [homepageUrlEditValue, setHomepageUrlEditValue] = useState(item.homepageUrl);
   const [imageEditValue, setImageEditValue] = useState({
-    uri: item.image
+    uri: item.image,
   });
 
   if (!item) {
@@ -62,8 +66,7 @@ const Details = ({ route }) => {
   };
 
   const increaseQuantity = () => setQuantity((prev) => prev + 1);
-  const decreaseQuantity = () =>
-    setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
+  const decreaseQuantity = () => setQuantity((prev) => (prev > 1 ? prev - 1 : 1));
 
   const handleOpenURL = () => {
     if (item.homepageUrl) {
@@ -71,10 +74,6 @@ const Details = ({ route }) => {
     }
   };
 
-  // Brug `item.username` direkte, da det blev sat under oprettelse af item'et
-  const createdBy = item.username;
-
-  // Edit logic
   const handleChangeImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -112,20 +111,23 @@ const Details = ({ route }) => {
       };
 
       await updateItem(item.id, itemUpdateData);
-      // await fetchProducts();
-
-      setEditModalVisible(false)
+      setEditModalVisible(false);
     } catch (error) {
       console.warn("Error updating item:", error);
     }
   };
 
-  // Delete logic
   const handleDeleteItem = async () => {
-    await deleteItem(item.id)
-  }
+    try {
+      await deleteItem(item.id);
+      navigation.goBack();
+    } catch (error) {
+      console.warn("Error deleting item:", error);
+    }
+  };
 
-  // Report logic
+  const createdBy = item.username;
+
   const reportTypes = [
     "Spam",
     "Inappropriate Content",
@@ -138,7 +140,6 @@ const Details = ({ route }) => {
   const handleReport = (type) => {
     setSelectedReportType(type);
     setReportModalVisible(false);
-    // Her kan du håndtere rapporteringen, f.eks. sende til backend
     Alert.alert(
       "Report Submitted",
       `Thank you for reporting "${type}". We will review it shortly.`,
@@ -148,15 +149,23 @@ const Details = ({ route }) => {
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      {/* Øverste række med ikoner */}
       <View style={styles.iconRow}>
-        <TouchableOpacity onPress={() => setEditModalVisible(true)} style={styles.iconButton} accessibilityLabel="Rediger">
+        <TouchableOpacity
+          onPress={() => setEditModalVisible(true)}
+          style={styles.iconButton}
+          accessibilityLabel="Rediger"
+        >
           <Icon name="edit" size={24} color={colors.accent} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDeleteItem()} style={styles.iconButton} accessibilityLabel="Slet">
+
+        <TouchableOpacity
+          onPress={handleDeleteItem}
+          style={styles.iconButton}
+          accessibilityLabel="Slet"
+        >
           <Icon name="trash" size={24} color={colors.accent} />
         </TouchableOpacity>
-        {/* Flag Icon (Rød) */}
+
         <TouchableOpacity
           onPress={() => setReportModalVisible(true)}
           style={styles.iconButton}
@@ -171,7 +180,7 @@ const Details = ({ route }) => {
           data={item.images}
           renderItem={renderImage}
           horizontal
-          keyExtractor={(image, index) => index.toString()}
+          keyExtractor={(img, index) => index.toString()}
           showsHorizontalScrollIndicator={false}
           style={styles.carouselContainer}
         />
@@ -193,9 +202,7 @@ const Details = ({ route }) => {
         <StyledText style={styles.description}>
           {item.description || "No description available."}
         </StyledText>
-        <StyledText style={styles.username}>
-          {`Created by: ${createdBy}`} {/* Viser brugernavnet for opretteren */}
-        </StyledText>
+        <StyledText style={styles.username}>{`Created by: ${createdBy}`}</StyledText>
 
         {item.homepageUrl && (
           <TouchableOpacity onPress={handleOpenURL}>
@@ -222,7 +229,6 @@ const Details = ({ route }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Edit Modal */}
       <Modal
         visible={isEditModalVisible}
         transparent={true}
@@ -231,7 +237,6 @@ const Details = ({ route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            {/* Luk-knap (X) */}
             <TouchableOpacity
               onPress={() => {
                 setEditModalVisible(false);
@@ -242,7 +247,9 @@ const Details = ({ route }) => {
               <Icon name="times" size={24} color={colors.secondaryText} />
             </TouchableOpacity>
 
-            <StyledText big style={styles.modalTitle}>Edit {item.title || "Unnamed Item"}</StyledText>        
+            <StyledText big style={styles.modalTitle}>
+              Edit {item.title || "Unnamed Item"}
+            </StyledText>
 
             <TextInput
               placeholder="Title"
@@ -256,7 +263,7 @@ const Details = ({ route }) => {
               onChangeText={setDescriptionEditValue}
               style={styles.input}
             />
-            <TextInput 
+            <TextInput
               placeholder="Price"
               value={priceEditValue.toString()}
               onChangeText={setPriceEditValue}
@@ -276,7 +283,10 @@ const Details = ({ route }) => {
             </TouchableOpacity>
 
             {imageEditValue && (
-              <Image source={{ uri: imageEditValue.uri }} style={styles.previewImage} />
+              <Image
+                source={{ uri: imageEditValue.uri }}
+                style={styles.previewImage}
+              />
             )}
 
             <Button title="Update Item" onPress={handleUpdate} />
@@ -284,7 +294,6 @@ const Details = ({ route }) => {
         </View>
       </Modal>
 
-      {/* Report Modal */}
       <Modal
         visible={isReportModalVisible}
         transparent={true}
@@ -293,7 +302,6 @@ const Details = ({ route }) => {
       >
         <View style={styles.modalOverlay}>
           <View style={styles.modalContainer}>
-            {/* Luk-knap (X) */}
             <TouchableOpacity
               onPress={() => {
                 setReportModalVisible(false);
@@ -331,14 +339,14 @@ const styles = StyleSheet.create({
   },
   carouselImage: {
     width: 300,
-    height: 220, // Let større end tidligere (200)
+    height: 220,
     resizeMode: "contain",
     marginRight: 10,
     borderRadius: 8,
   },
   image: {
     width: "100%",
-    height: 280, // Let større end tidligere (250)
+    height: 280,
     resizeMode: "contain",
     marginBottom: 20,
   },
@@ -413,14 +421,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
     marginHorizontal: 60,
-    marginBottom: 20, // Sørger for, at der er plads til knappen
+    marginBottom: 20,
   },
   cartButtonText: {
     color: "white",
     fontSize: 16,
     fontWeight: "bold",
   },
-  // Tilføjede styles for ikonerne
+
   iconRow: {
     flexDirection: "row",
     justifyContent: "flex-end",
@@ -429,16 +437,16 @@ const styles = StyleSheet.create({
   iconButton: {
     marginLeft: 15,
   },
-  // Modal styles
+
   modalOverlay: {
     flex: 1,
-    backgroundColor: "rgba(0,0,0,0.7)", // Øget opacity for bedre kontrast
+    backgroundColor: "rgba(0,0,0,0.7)",
     justifyContent: "center",
     alignItems: "center",
   },
   modalContainer: {
     width: "80%",
-    backgroundColor: "#FFFFFF", // Solid hvid baggrund for høj kontrast
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
     padding: 20,
     alignItems: "stretch",
@@ -446,7 +454,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5, // For Android shadow
+    elevation: 5,
   },
   modalTitle: {
     textAlign: "center",
@@ -462,15 +470,15 @@ const styles = StyleSheet.create({
   },
   reportText: {
     fontSize: 16,
-    color: colors.primaryText, // Sørger for høj kontrast
+    color: colors.primaryText,
   },
-  // Luk-knap (X) styles
+
   closeButton: {
     position: "absolute",
     top: 10,
     right: 10,
     padding: 10,
-    zIndex: 1, // Sørger for, at knappen er øverst
+    zIndex: 1,
   },
   input: {
     borderWidth: 1,
