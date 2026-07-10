@@ -133,13 +133,13 @@ export const onboardingData = [
     summary:
       "Easily buy and sell unique DIY and upcycled items with ReTrove’s user-friendly marketplace. Discover handcrafted treasures or list your own creations effortlessly.",
     text: "",
-    image: require("/Users/Penneo/Documents/diy/assets/diy/upcycled-bag.jpg"),
+    image: require("../assets/diy/upcycled-bag.jpg"),
     
   },
   {
     id: 3,
     title: "Join our community 🩵",
     summary: "Unleash your creativity and join our community dedicated to upcycling and sustainable living. At ReTrove, we believe in the power of the circular economy to transform everyday items into unique, eco-friendly treasures.",
-    image: require("/Users/Penneo/Documents/diy/assets/onboarding/community.jpeg"),
+    image: require("../assets/onboarding/community.jpeg"),
   },
 ];
